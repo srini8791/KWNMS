@@ -1250,7 +1250,7 @@
    <webstart.dnameSt/>
    <webstart.dnameC/>
 
-   <updatePolicy>interval:60</updatePolicy> <!-- 60 minutes -->
+   <updatePolicy>never</updatePolicy> <!-- originally: interval:60 which means 60 minutes -->
    <maven.clover.licenseLocation>${user.home}/.m2/clover.license</maven.clover.licenseLocation>
 
     <!-- dependency versions -->
