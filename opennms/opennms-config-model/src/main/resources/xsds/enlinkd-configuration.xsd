@@ -87,6 +87,16 @@
 				</annotation>
 			</attribute>
 
+			<attribute name="use-kdp-discovery" type="boolean"
+				use="optional" default="true">
+				<annotation>
+					<documentation>
+						Whether links discovery process should use
+						K discovery protocol.
+					</documentation>
+				</annotation>
+			</attribute>
+
 			<attribute name="use-bridge-discovery" type="boolean"
 				use="optional" default="true">
 				<annotation>

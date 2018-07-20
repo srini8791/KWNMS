@@ -65,6 +65,7 @@ public class EnlinkdConfigurationTest extends XmlTestNoCastor<EnlinkdConfigurati
         config.setInitialSleepTime(60000L);
         config.setRescanInterval(86400000L);
         config.setUseCdpDiscovery(true);
+        config.setUseKdpDiscovery(true);
         config.setUseBridgeDiscovery(true);
         config.setUseLldpDiscovery(true);
         config.setUseOspfDiscovery(true);

@@ -94,6 +94,13 @@ public interface EnhancedLinkdConfig {
     boolean useCdpDiscovery();
 
     /**
+     * <p>useKdpDiscovery</p>
+     *
+     * @return a boolean.
+     */
+    boolean useKdpDiscovery();
+
+    /**
      * <p>useBridgeDiscovery</p>
      *
      * @return a boolean.

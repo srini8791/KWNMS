@@ -188,6 +188,12 @@ public class EnhancedLinkd extends AbstractServiceDaemon {
              snmpcolls.add(new NodeDiscoveryCdp(this, node));   	
         }
         
+        if (m_linkdConfig.useKdpDiscovery()) {
+            LOG.debug("getSnmpCollections: adding Kdp Discovery: {}",
+                    node);
+             snmpcolls.add(new NodeDiscoveryKdp(this, node));
+        }
+
         if (m_linkdConfig.useBridgeDiscovery()) {
         	LOG.debug("getSnmpCollections: adding IpNetToMedia Discovery: {}",
                     node);

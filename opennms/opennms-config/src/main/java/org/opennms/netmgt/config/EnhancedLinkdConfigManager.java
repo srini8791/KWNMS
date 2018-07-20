@@ -97,6 +97,16 @@ abstract public class EnhancedLinkdConfigManager implements EnhancedLinkdConfig 
     }
     
     /**
+     * <p>useKdpDiscovery</p>
+     *
+     * @return a boolean.
+     */
+    public boolean useKdpDiscovery() {
+        if (m_config.getUseKdpDiscovery() != null) return m_config.getUseKdpDiscovery();
+        return true;
+    }
+
+    /**
      * <p>useBridgeDiscovery</p>
      *
      * @return a boolean.

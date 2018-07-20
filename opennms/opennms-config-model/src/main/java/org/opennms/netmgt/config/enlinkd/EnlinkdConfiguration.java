@@ -96,6 +96,13 @@ public class EnlinkdConfiguration implements java.io.Serializable {
 
     /**
      * Whether links discovery process should use
+     *  K discovery protocol.
+     */
+    @XmlAttribute(name = "use-kdp-discovery")
+    private Boolean m_useKdpDiscovery;
+
+    /**
+     * Whether links discovery process should use
      *  Bridge mib data.
      */
     @XmlAttribute(name = "use-bridge-discovery")
@@ -181,6 +188,14 @@ public class EnlinkdConfiguration implements java.io.Serializable {
         m_useCdpDiscovery = useCdpDiscovery;
     }
 
+    public Boolean getUseKdpDiscovery() {
+        return m_useKdpDiscovery != null ? m_useKdpDiscovery : true;
+    }
+
+    public void setUseKdpDiscovery(final Boolean useKdpDiscovery) {
+        m_useKdpDiscovery = useKdpDiscovery;
+    }
+
     public Boolean getUseBridgeDiscovery() {
         return m_useBridgeDiscovery != null ? m_useBridgeDiscovery : true;
     }
@@ -223,7 +238,8 @@ public class EnlinkdConfiguration implements java.io.Serializable {
             m_maxBft, 
             m_discoveryBridgeThreads,
             m_useCdpDiscovery, 
-            m_useBridgeDiscovery, 
+            m_useKdpDiscovery,
+            m_useBridgeDiscovery,
             m_useLldpDiscovery, 
             m_useOspfDiscovery, 
             m_useIsisDiscovery);
@@ -245,6 +261,7 @@ public class EnlinkdConfiguration implements java.io.Serializable {
                 && Objects.equals(this.m_maxBft, that.m_maxBft)
                 && Objects.equals(this.m_discoveryBridgeThreads, that.m_discoveryBridgeThreads)
                 && Objects.equals(this.m_useCdpDiscovery, that.m_useCdpDiscovery)
+                && Objects.equals(this.m_useKdpDiscovery, that.m_useKdpDiscovery)
                 && Objects.equals(this.m_useBridgeDiscovery, that.m_useBridgeDiscovery)
                 && Objects.equals(this.m_useLldpDiscovery, that.m_useLldpDiscovery)
                 && Objects.equals(this.m_useOspfDiscovery, that.m_useOspfDiscovery)
