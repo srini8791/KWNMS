@@ -37,6 +37,7 @@
     <module>ipc</module>
     <module>jmx</module>
     <module>jstl-support</module>
+    <module>kwp</module>
     <module>lib</module>
     <module>logging-api</module>
     <module>profiler</module>
