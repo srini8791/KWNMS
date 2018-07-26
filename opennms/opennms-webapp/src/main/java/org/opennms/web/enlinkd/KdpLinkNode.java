@@ -28,34 +28,51 @@
 
 package org.opennms.web.enlinkd;
 
-import java.util.Collection;
-import java.util.List;
 
-public interface EnLinkdElementFactoryInterface {
+public class KdpLinkNode implements Comparable<KdpLinkNode> {
 
-	List<BridgeElementNode> getBridgeElements(int nodeId);
 
-	Collection<BridgeLinkNode> getBridgeLinks(int nodeId);
+    private String m_kdpLocalPort;
+    private String m_kdpLocalPortUrl;
 
-	Collection<NodeLinkBridge> getNodeLinks(int nodeId);
+    private String m_kdpCreateTime;
+    private String m_kdpLastPollTime;
 
-	IsisElementNode getIsisElement(int nodeId);
-	
-	List<IsisLinkNode> getIsisLinks(int nodeId);
+    public String getKdpLocalPort() {
+        return m_kdpLocalPort;
+    }
 
-	LldpElementNode getLldpElement(int nodeId);
-	
-	List<LldpLinkNode> getLldpLinks(int nodeId);
-	
-	OspfElementNode getOspfElement(int nodeId);
-	
-	List<OspfLinkNode> getOspfLinks(int nodeId);
+    public void setKdpLocalPort(String kdpLocalPort) {
+        this.m_kdpLocalPort = kdpLocalPort;
+    }
 
-        CdpElementNode getCdpElement(int nodeId);
-	        
-	List<CdpLinkNode> getCdpLinks(int nodeId);
+    public String getKdpLocalPortUrl() {
+        return m_kdpLocalPortUrl;
+    }
 
-	KdpElementNode getKdpElement(int nodeId);
+    public void setKdpLocalPortUrl(String kdpLocalPortUrl) {
+        this.m_kdpLocalPortUrl = kdpLocalPortUrl;
+    }
 
-	List<KdpLinkNode> getKdpLinks(int nodeId);
+    public String getKdpCreateTime() {
+        return m_kdpCreateTime;
+    }
+
+    public void setKdpCreateTime(String kdpCreateTime) {
+        this.m_kdpCreateTime = kdpCreateTime;
+    }
+
+    public String getKdpLastPollTime() {
+        return m_kdpLastPollTime;
+    }
+
+    public void setKdpLastPollTime(String kdpLastPollTime) {
+        this.m_kdpLastPollTime = kdpLastPollTime;
+    }
+
+    @Override
+    public int compareTo(KdpLinkNode o) {
+        return m_kdpLocalPort.compareTo(o.m_kdpLocalPort);
+    }
+
 }

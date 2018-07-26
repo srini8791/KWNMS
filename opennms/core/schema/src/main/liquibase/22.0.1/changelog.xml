@@ -16,4 +16,66 @@
     <addNotNullConstraint tableName="snmpinterface" columnName="hasflows"/>
   </changeSet>
 
+  <changeSet author="ndarbha" id="22.0.1-kdpelement">
+    <validCheckSum>ANY</validCheckSum>
+
+    <createTable tableName="kdpelement">
+      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
+        <constraints primaryKey="true" primaryKeyName="pk_kdpelement_id" nullable="false" />
+      </column>
+      <column name="nodeid" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="kdpnodecreatetime" type="DATETIME">
+        <constraints nullable="false" />
+      </column>
+      <column name="kdpnodelastpolltime" type="DATETIME">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_kdpelement_nodeid" onDelete="CASCADE" baseTableName="kdpelement" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <createIndex tableName="kdpelement" indexName="kdpelement_nodeid_idx">
+      <column name="nodeid" />
+    </createIndex>
+
+    <rollback>
+      <dropTable tableName="kdpelement" />
+    </rollback>
+
+  </changeSet>
+
+  <changeSet author="ndarbha" id="22.0.1-kdplink">
+    <validCheckSum>ANY</validCheckSum>
+
+    <createTable tableName="kdplink">
+      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
+        <constraints primaryKey="true" primaryKeyName="pk_kdplink_id" nullable="false" />
+      </column>
+      <column name="nodeid" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="kdpinterfacename" type="text">
+        <constraints nullable="false" />
+      </column>
+      <column name="kdplinkcreatetime" type="DATETIME">
+        <constraints nullable="false" />
+      </column>
+      <column name="kdplinklastpolltime" type="DATETIME">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_kdplink_nodeid" onDelete="CASCADE" baseTableName="kdpelement" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <createIndex tableName="kdplink" indexName="kdplink_nodeid_idx">
+      <column name="nodeid" />
+    </createIndex>
+
+    <rollback>
+      <dropTable tableName="kdplink" />
+    </rollback>
+
+  </changeSet>
+
+
 </databaseChangeLog>

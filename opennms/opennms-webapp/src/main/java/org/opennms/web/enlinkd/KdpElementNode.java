@@ -28,34 +28,24 @@
 
 package org.opennms.web.enlinkd;
 
-import java.util.Collection;
-import java.util.List;
+public class KdpElementNode {
 
-public interface EnLinkdElementFactoryInterface {
+    private String m_kdpCreateTime;
+    private String m_kdpLastPollTime;
 
-	List<BridgeElementNode> getBridgeElements(int nodeId);
+    public String getKdpCreateTime() {
+        return m_kdpCreateTime;
+    }
 
-	Collection<BridgeLinkNode> getBridgeLinks(int nodeId);
+    public void setKdpCreateTime(String kdpCreateTime) {
+        this.m_kdpCreateTime = kdpCreateTime;
+    }
 
-	Collection<NodeLinkBridge> getNodeLinks(int nodeId);
+    public String getKdpLastPollTime() {
+        return m_kdpLastPollTime;
+    }
 
-	IsisElementNode getIsisElement(int nodeId);
-	
-	List<IsisLinkNode> getIsisLinks(int nodeId);
-
-	LldpElementNode getLldpElement(int nodeId);
-	
-	List<LldpLinkNode> getLldpLinks(int nodeId);
-	
-	OspfElementNode getOspfElement(int nodeId);
-	
-	List<OspfLinkNode> getOspfLinks(int nodeId);
-
-        CdpElementNode getCdpElement(int nodeId);
-	        
-	List<CdpLinkNode> getCdpLinks(int nodeId);
-
-	KdpElementNode getKdpElement(int nodeId);
-
-	List<KdpLinkNode> getKdpLinks(int nodeId);
+    public void setKdpLastPollTime(String kdpLastPollTime) {
+        this.m_kdpLastPollTime = kdpLastPollTime;
+    }
 }

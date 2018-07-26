@@ -99,6 +99,8 @@ public interface EnhancedLinkdService {
 
     void reconcileCdp(int nodeId, Date now);
 
+    void reconcileKdp(int nodeId, Date now);
+
     void reconcileOspf(int nodeId, Date now);
 
     void reconcileIsis(int nodeId, Date now);
@@ -122,6 +124,10 @@ public interface EnhancedLinkdService {
     void store(int nodeId, CdpElement cdp);
 
     void store(int nodeId, CdpLink link);
+
+    void store(int nodeId, KdpElement cdp);
+
+    void store(int nodeId, KdpLink link);
 
     void store(int nodeId, IpNetToMedia link);
 

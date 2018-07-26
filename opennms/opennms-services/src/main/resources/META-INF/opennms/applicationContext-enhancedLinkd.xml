@@ -22,11 +22,13 @@
     <bean id="queryManager" class="org.opennms.netmgt.enlinkd.EnhancedLinkdServiceImpl">
       <property name="nodeDao" ref="nodeDao" />
       <property name="cdpLinkDao" ref="cdpLinkDao" />
+      <property name="kdpLinkDao" ref="kdpLinkDao" />
       <property name="lldpLinkDao" ref="lldpLinkDao" />
       <property name="ospfLinkDao" ref="ospfLinkDao" />
       <property name="isisLinkDao" ref="isisLinkDao" />
       <property name="bridgeStpLinkDao" ref="bridgeStpLinkDao" />
       <property name="cdpElementDao" ref="cdpElementDao" />
+      <property name="kdpElementDao" ref="kdpElementDao" />
       <property name="lldpElementDao" ref="lldpElementDao" />
       <property name="ospfElementDao" ref="ospfElementDao" />
       <property name="isisElementDao" ref="isisElementDao" />

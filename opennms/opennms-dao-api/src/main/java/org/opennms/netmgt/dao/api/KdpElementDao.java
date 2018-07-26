@@ -1,7 +1,7 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
  * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
@@ -26,36 +26,16 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.enlinkd;
+package org.opennms.netmgt.dao.api;
 
-import java.util.Collection;
-import java.util.List;
+import org.opennms.netmgt.model.KdpElement;
 
-public interface EnLinkdElementFactoryInterface {
+/**
+ * <p>KdpElementDao interface.</p>
+ */
+public interface KdpElementDao extends OnmsDao<KdpElement, Integer> {
 
-	List<BridgeElementNode> getBridgeElements(int nodeId);
+    public KdpElement findByNodeId(Integer id);
 
-	Collection<BridgeLinkNode> getBridgeLinks(int nodeId);
-
-	Collection<NodeLinkBridge> getNodeLinks(int nodeId);
-
-	IsisElementNode getIsisElement(int nodeId);
-	
-	List<IsisLinkNode> getIsisLinks(int nodeId);
-
-	LldpElementNode getLldpElement(int nodeId);
-	
-	List<LldpLinkNode> getLldpLinks(int nodeId);
-	
-	OspfElementNode getOspfElement(int nodeId);
-	
-	List<OspfLinkNode> getOspfLinks(int nodeId);
-
-        CdpElementNode getCdpElement(int nodeId);
-	        
-	List<CdpLinkNode> getCdpLinks(int nodeId);
-
-	KdpElementNode getKdpElement(int nodeId);
-
-	List<KdpLinkNode> getKdpLinks(int nodeId);
+    public void deleteByNodeId(Integer nodeId);
 }

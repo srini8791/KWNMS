@@ -54,6 +54,8 @@ import org.opennms.netmgt.dao.api.BridgeElementDao;
 import org.opennms.netmgt.dao.api.BridgeTopologyDao;
 import org.opennms.netmgt.dao.api.CdpElementDao;
 import org.opennms.netmgt.dao.api.CdpLinkDao;
+import org.opennms.netmgt.dao.api.KdpElementDao;
+import org.opennms.netmgt.dao.api.KdpLinkDao;
 import org.opennms.netmgt.dao.api.IpInterfaceDao;
 import org.opennms.netmgt.dao.api.IpNetToMediaDao;
 import org.opennms.netmgt.dao.api.IsIsElementDao;
@@ -71,6 +73,8 @@ import org.opennms.netmgt.model.CdpElement;
 import org.opennms.netmgt.model.CdpElement.CdpGlobalDeviceIdFormat;
 import org.opennms.netmgt.model.CdpLink;
 import org.opennms.netmgt.model.CdpLink.CiscoNetworkProtocolType;
+import org.opennms.netmgt.model.KdpElement;
+import org.opennms.netmgt.model.KdpLink;
 import org.opennms.netmgt.model.IpNetToMedia;
 import org.opennms.netmgt.model.IsIsElement;
 import org.opennms.netmgt.model.IsIsElement.IsisAdminState;
@@ -116,7 +120,13 @@ public class EnLinkdElementFactory implements InitializingBean,
     private CdpElementDao m_cdpElementDao;
 
     @Autowired
+    private KdpElementDao m_kdpElementDao;
+
+    @Autowired
     private CdpLinkDao m_cdpLinkDao;
+
+    @Autowired
+    private KdpLinkDao m_kdpLinkDao;
 
     @Autowired
     private BridgeElementDao m_bridgeElementDao;
@@ -307,6 +317,44 @@ public class EnLinkdElementFactory implements InitializingBean,
 
         linknode.setCdpCreateTime(Util.formatDateToUIString(link.getCdpLinkCreateTime()));
         linknode.setCdpLastPollTime(Util.formatDateToUIString(link.getCdpLinkLastPollTime()));
+        return linknode;
+    }
+
+    public KdpElementNode getKdpElement(int nodeId) {
+        return convertFromModel(m_kdpElementDao.findByNodeId(Integer.valueOf(nodeId)));
+    }
+
+    @SuppressWarnings("deprecation")
+    private KdpElementNode convertFromModel(KdpElement kdp) {
+        if (kdp == null)
+            return null;
+
+        KdpElementNode kdpNode = new KdpElementNode();
+        kdpNode.setKdpCreateTime(Util.formatDateToUIString(kdp.getKdpNodeCreateTime()));
+        kdpNode.setKdpLastPollTime(Util.formatDateToUIString(kdp.getKdpNodeLastPollTime()));
+
+        return kdpNode;
+    }
+
+    @Override
+    public List<KdpLinkNode> getKdpLinks(int nodeId) {
+        List<KdpLinkNode> nodelinks = new ArrayList<KdpLinkNode>();
+        for (KdpLink link : m_kdpLinkDao.findByNodeId(Integer.valueOf(nodeId))) {
+            nodelinks.add(convertFromModel(nodeId, link));
+        }
+        Collections.sort(nodelinks);
+        return nodelinks;
+    }
+
+    @Transactional
+    @SuppressWarnings("deprecation")
+    private KdpLinkNode convertFromModel(int nodeid, KdpLink link) {
+        KdpLinkNode linknode = new KdpLinkNode();
+        // todo:
+        // linknode.setKdpLocalPort(???);
+
+        linknode.setKdpCreateTime(Util.formatDateToUIString(link.getKdpLinkCreateTime()));
+        linknode.setKdpLastPollTime(Util.formatDateToUIString(link.getKdpLinkLastPollTime()));
         return linknode;
     }
 

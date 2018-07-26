@@ -93,6 +93,10 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
 
     private CdpElementDao m_cdpElementDao;
 
+    private KdpLinkDao m_kdpLinkDao;
+
+    private KdpElementDao m_kdpElementDao;
+
     private LldpLinkDao m_lldpLinkDao;
 
     private LldpElementDao m_lldpElementDao;
@@ -171,6 +175,11 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
         m_cdpLinkDao.deleteByNodeId(nodeId);
         m_cdpElementDao.flush();
         m_cdpLinkDao.flush();
+
+        m_kdpElementDao.deleteByNodeId(nodeId);
+        m_kdpLinkDao.deleteByNodeId(nodeId);
+        m_kdpElementDao.flush();
+        m_kdpLinkDao.flush();
 
         m_ospfElementDao.deleteByNodeId(nodeId);
         m_ospfLinkDao.deleteByNodeId(nodeId);
@@ -282,6 +291,18 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
     }
 
     @Override
+    public void reconcileKdp(int nodeId, Date now) {
+        KdpElement element = m_kdpElementDao.findByNodeId(nodeId);
+        if (element != null
+                && element.getKdpNodeLastPollTime().getTime() < now.getTime()) {
+            m_kdpElementDao.delete(element);
+            m_kdpElementDao.flush();
+        }
+        m_kdpLinkDao.deleteByNodeIdOlderThen(nodeId, now);
+        m_kdpLinkDao.flush();
+    }
+
+    @Override
     public void reconcileIpNetToMedia(int nodeId, Date now) {
         m_ipNetToMediaDao.deleteBySourceNodeIdOlderThen(nodeId, now);
         m_ipNetToMediaDao.flush();
@@ -292,6 +313,12 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
         if (link == null)
             return;
         saveCdpLink(nodeId, link);
+    }
+
+    public void store(int nodeId, KdpLink link) {
+        if (link == null)
+            return;
+        saveKdpLink(nodeId, link);
     }
 
     @Transactional
@@ -320,6 +347,39 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
                     return null;
                 saveMe.setNode(node);
                 saveMe.setCdpLinkLastPollTime(saveMe.getCdpLinkCreateTime());
+                m_dao.saveOrUpdate(saveMe);
+                m_dao.flush();
+                return saveMe;
+            }
+
+        }.execute();
+    }
+
+    @Transactional
+    protected void saveKdpLink(final int nodeId, final KdpLink saveMe) {
+        new UpsertTemplate<KdpLink, KdpLinkDao>(m_transactionManager,
+                m_kdpLinkDao) {
+
+            @Override
+            protected KdpLink query() {
+                return m_dao.get(nodeId, saveMe.getKdpInterfaceName());
+            }
+
+            @Override
+            protected KdpLink doUpdate(KdpLink dbKdpLink) {
+                dbKdpLink.merge(saveMe);
+                m_dao.update(dbKdpLink);
+                m_dao.flush();
+                return dbKdpLink;
+            }
+
+            @Override
+            protected KdpLink doInsert() {
+                final OnmsNode node = m_nodeDao.get(nodeId);
+                if (node == null)
+                    return null;
+                saveMe.setNode(node);
+                saveMe.setKdpLinkLastPollTime(saveMe.getKdpLinkCreateTime());
                 m_dao.saveOrUpdate(saveMe);
                 m_dao.flush();
                 return saveMe;
@@ -800,6 +860,14 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
 
     public void setCdpElementDao(CdpElementDao cdpElementDao) {
         m_cdpElementDao = cdpElementDao;
+    }
+
+    public KdpElementDao getKdpElementDao() {
+        return m_kdpElementDao;
+    }
+
+    public void setKdpElementDao(KdpElementDao kdpElementDao) {
+        m_kdpElementDao = kdpElementDao;
     }
 
     public LldpElementDao getLldpElementDao() {

@@ -382,6 +382,48 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
 
     }
 
+    public class KdpLinkDetail extends LinkDetail<KdpLink> {
+
+        public KdpLinkDetail(String id, Vertex source, KdpLink sourceLink, Vertex target, KdpLink targetLink) {
+            super(id, source, sourceLink, target, targetLink);
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((getSourceLink() == null) ? 0 : getSource().getNodeID().hashCode()) + ((getTargetLink() == null) ? 0 : getTarget().getNodeID().hashCode());
+            result = prime * result
+                    + ((getNamespace() == null) ? 0 : getNamespace().hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj instanceof KdpLinkDetail){
+                KdpLinkDetail objDetail = (KdpLinkDetail)obj;
+
+                return getId().equals(objDetail.getId());
+            } else  {
+                return false;
+            }
+        }
+
+        @Override
+        public Integer getSourceIfIndex() {
+            return null;
+        }
+
+        @Override
+        public Integer getTargetIfIndex() {
+            return null;
+        }
+
+        @Override
+        public String getType() { return "KDP"; }
+
+    }
+
     private static Logger LOG = LoggerFactory.getLogger(EnhancedLinkdTopologyProvider.class);
 
     static final String[] OPER_ADMIN_STATUS = new String[] {
@@ -398,6 +440,7 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
     private LldpLinkDao m_lldpLinkDao;
     private LldpElementDao m_lldpElementDao;
     private CdpLinkDao m_cdpLinkDao;
+    private KdpLinkDao m_kdpLinkDao;
     private CdpElementDao m_cdpElementDao;
     private OspfLinkDao m_ospfLinkDao;
     private IsIsLinkDao m_isisLinkDao;
@@ -421,6 +464,7 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
     private final Timer m_loadLldpLinksTimer;
     private final Timer m_loadOspfLinksTimer;
     private final Timer m_loadCdpLinksTimer;
+    private final Timer m_loadKdpLinksTimer;
     private final Timer m_loadIsisLinksTimer;
     private final Timer m_loadBridgeLinksTimer;
     private final Timer m_loadNoLinksTimer;
@@ -436,6 +480,7 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
         m_loadLldpLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "lldp"));
         m_loadOspfLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "ospf"));
         m_loadCdpLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "cdp"));
+        m_loadKdpLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "kdp"));
         m_loadIsisLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "isis"));
         m_loadBridgeLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "bridge"));
         m_loadNoLinksTimer = registry.timer(MetricRegistry.name("enlinkd", "load", "links", "none"));
@@ -584,7 +629,7 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
             context.stop();
         }
 
-        context = m_loadIsisLinksTimer.time();
+        context = m_loadCdpLinksTimer.time();
         try{
             LOG.info("Loading Cdp link");
             getCdpLinks(nodemap,nodesnmpmap,nodeipprimarymap,ipmap);
@@ -595,7 +640,18 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
             context.stop();
         }
 
-        context = m_loadCdpLinksTimer.time();
+        context = m_loadKdpLinksTimer.time();
+        try{
+            LOG.info("Loading Kdp link");
+            getKdpLinks(nodemap,nodesnmpmap,nodeipprimarymap,ipmap);
+            LOG.info("Kdp link loaded");
+        } catch (Exception e){
+            LOG.error("Exception getting Kdp link: "+e.getMessage(),e);
+        } finally {
+            context.stop();
+        }
+
+        context = m_loadIsisLinksTimer.time();
         try{
             LOG.info("Loading IsIs link");
             getIsIsLinks(nodemap,nodesnmpmap,nodeipprimarymap);
@@ -1282,6 +1338,14 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
 
     public void setCdpLinkDao(CdpLinkDao cdpLinkDao) {
         m_cdpLinkDao = cdpLinkDao;
+    }
+
+    public KdpLinkDao getKdpLinkDao() {
+        return m_kdpLinkDao;
+    }
+
+    public void setKdpLinkDao(KdpLinkDao kdpLinkDao) {
+        m_kdpLinkDao = kdpLinkDao;
     }
 
     public CdpElementDao getCdpElementDao() {

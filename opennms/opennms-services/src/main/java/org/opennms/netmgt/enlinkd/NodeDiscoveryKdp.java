@@ -37,6 +37,7 @@ import org.opennms.netmgt.model.CdpLink;
 import org.opennms.netmgt.model.OspfElement.TruthValue;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
 */
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,24 +55,24 @@ import java.util.concurrent.ExecutionException;
  * allows the collection to occur in a thread if necessary.
  */
 public final class NodeDiscoveryKdp extends NodeDiscovery {
-	private final static Logger LOG = LoggerFactory.getLogger(NodeDiscoveryKdp.class);
+    private final static Logger LOG = LoggerFactory.getLogger(NodeDiscoveryKdp.class);
 
-	/**
-	 * Constructs a new SNMP collector for Kdp Node Discovery.
-	 * The collection does not occur until the
+    /**
+     * Constructs a new SNMP collector for Kdp Node Discovery.
+     * The collection does not occur until the
      * <code>run</code> method is invoked.
      *
-	 * @param linkd EnhancedLinkd
-	 * @param node LinkableNode
-	 */
+     * @param linkd EnhancedLinkd
+     * @param node  LinkableNode
+     */
     public NodeDiscoveryKdp(final EnhancedLinkd linkd, final Node node) {
-    	super(linkd, node);
+        super(linkd, node);
     }
 
     protected void runNodeDiscovery() {
 
-    	final Date now = new Date();
-    	int nodeId = getNodeId();
+        final Date now = new Date();
+        int nodeId = getNodeId();
         InetAddress address = getPrimaryIpAddress();
         String location = getLocation();
         LOG.info("run: node: {}, address: {}, location: {}", nodeId, address, location);
@@ -141,9 +142,9 @@ public final class NodeDiscoveryKdp extends NodeDiscovery {
 */
     }
 
-	@Override
-	public String getName() {
-		return "NodeDiscoveryKdp";
-	}
+    @Override
+    public String getName() {
+        return "NodeDiscoveryKdp";
+    }
 
 }

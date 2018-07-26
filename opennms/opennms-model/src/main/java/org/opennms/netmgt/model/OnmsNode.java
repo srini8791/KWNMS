@@ -192,6 +192,9 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private CdpElement m_cdpElement;
 
     /** persistent field */
+    private KdpElement m_kdpElement;
+
+    /** persistent field */
     private Set<OnmsIpInterface> m_ipInterfaces = new LinkedHashSet<>();
 
     /** persistent field */
@@ -884,10 +887,29 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     /**
      * <p>setCdpElement</p>
      *
-     * @param asset a {@link org.opennms.netmgt.model.CdpElement} object.
+     * @param cdpElement a {@link org.opennms.netmgt.model.CdpElement} object.
      */
     public void setCdpElement(CdpElement cdpElement) {
         m_cdpElement = cdpElement;
+    }
+
+    /**
+     * The kdp element associated with this node
+     *
+     * @return a {@link org.opennms.netmgt.model.KdpElement} object.
+     */
+    @OneToOne(mappedBy="node", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    public KdpElement getKdpElement() {
+        return m_kdpElement;
+    }
+
+    /**
+     * <p>setKdpElement</p>
+     *
+     * @param kdpElement a {@link org.opennms.netmgt.model.KdpElement} object.
+     */
+    public void setKdpElement(KdpElement kdpElement) {
+        m_kdpElement = kdpElement;
     }
 
     /**

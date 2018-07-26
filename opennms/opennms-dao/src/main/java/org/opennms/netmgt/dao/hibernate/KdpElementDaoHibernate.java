@@ -1,7 +1,7 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
  * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
@@ -26,36 +26,42 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.enlinkd;
+package org.opennms.netmgt.dao.hibernate;
 
-import java.util.Collection;
+import org.opennms.netmgt.dao.api.KdpElementDao;
+import org.opennms.netmgt.model.KdpElement;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
-public interface EnLinkdElementFactoryInterface {
+public class KdpElementDaoHibernate extends AbstractDaoHibernate<KdpElement, Integer> implements KdpElementDao {
 
-	List<BridgeElementNode> getBridgeElements(int nodeId);
+    /**
+     * <p>
+     * Constructor for KdpElementDaoHibernate.
+     * </p>
+     */
+    public KdpElementDaoHibernate() {
+        super(KdpElement.class);
+    }
 
-	Collection<BridgeLinkNode> getBridgeLinks(int nodeId);
+    /**
+     * <p>
+     * findByNodeId
+     * </p>
+     *
+     * @param id a {@link Integer} object.
+     * @return a {@link org.opennms.netmgt.model.KdpElement} object.
+     */
+    @Override
+    public KdpElement findByNodeId(Integer id) {
+        return findUnique("from KdpElement rec where rec.node.id = ?", id);
+    }
 
-	Collection<NodeLinkBridge> getNodeLinks(int nodeId);
+    @Override
+    public void deleteByNodeId(Integer nodeId) {
+        getHibernateTemplate().bulkUpdate("delete from KdpElement rec where rec.node.id = ? ",
+                new Object[]{nodeId});
+    }
 
-	IsisElementNode getIsisElement(int nodeId);
-	
-	List<IsisLinkNode> getIsisLinks(int nodeId);
-
-	LldpElementNode getLldpElement(int nodeId);
-	
-	List<LldpLinkNode> getLldpLinks(int nodeId);
-	
-	OspfElementNode getOspfElement(int nodeId);
-	
-	List<OspfLinkNode> getOspfLinks(int nodeId);
-
-        CdpElementNode getCdpElement(int nodeId);
-	        
-	List<CdpLinkNode> getCdpLinks(int nodeId);
-
-	KdpElementNode getKdpElement(int nodeId);
-
-	List<KdpLinkNode> getKdpLinks(int nodeId);
 }

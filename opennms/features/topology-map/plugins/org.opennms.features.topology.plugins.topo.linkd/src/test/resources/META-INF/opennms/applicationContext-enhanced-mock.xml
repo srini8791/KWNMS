@@ -15,6 +15,14 @@
         <constructor-arg value="org.opennms.netmgt.dao.api.CdpElementDao"/>
     </bean>
 
+    <bean class="org.easymock.EasyMock" factory-method="createNiceMock" primary="true" id="kdpLinkDao">
+        <constructor-arg value="org.opennms.netmgt.dao.api.KdpLinkDao"/>
+    </bean>
+
+    <bean class="org.easymock.EasyMock" factory-method="createNiceMock" primary="true" id="kdpElementDao">
+        <constructor-arg value="org.opennms.netmgt.dao.api.KdpElementDao"/>
+    </bean>
+
     <bean class="org.easymock.EasyMock" factory-method="createNiceMock" primary="true" id="isisLinkDao">
         <constructor-arg value="org.opennms.netmgt.dao.api.IsIsLinkDao"/>
     </bean>
@@ -69,6 +77,8 @@
         <property name="bridgeTopologyDao" ref="bridgeTopologyDao" />
         <property name="cdpLinkDao" ref="cdpLinkDao" />
         <property name="cdpElementDao" ref="cdpElementDao" />
+        <property name="kdpLinkDao" ref="kdpLinkDao" />
+        <property name="kdpElementDao" ref="kdpElementDao" />
         <property name="isisLinkDao" ref="isisLinkDao" />
         <property name="isisElementDao" ref="isisElementDao" />
         <property name="lldpLinkDao" ref="lldpLinkDao" />
