@@ -37,6 +37,8 @@ import org.opennms.netmgt.model.BridgeElement;
 import org.opennms.netmgt.model.BridgeStpLink;
 import org.opennms.netmgt.model.CdpElement;
 import org.opennms.netmgt.model.CdpLink;
+import org.opennms.netmgt.model.KdpElement;
+import org.opennms.netmgt.model.KdpLink;
 import org.opennms.netmgt.model.IpNetToMedia;
 import org.opennms.netmgt.model.IsIsElement;
 import org.opennms.netmgt.model.IsIsLink;
@@ -125,7 +127,7 @@ public interface EnhancedLinkdService {
 
     void store(int nodeId, CdpLink link);
 
-    void store(int nodeId, KdpElement cdp);
+    void store(int nodeId, KdpElement kdp);
 
     void store(int nodeId, KdpLink link);
 

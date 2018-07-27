@@ -39,7 +39,7 @@ public interface KdpLinkDao extends OnmsDao<KdpLink, Integer> {
 
     KdpLink get(OnmsNode node);
 
-    KdpLink get(Integer nodeId);
+    KdpLink get(Integer nodeId, String interfaceName);
 
     List<KdpLink> findByNodeId(Integer nodeId);
 

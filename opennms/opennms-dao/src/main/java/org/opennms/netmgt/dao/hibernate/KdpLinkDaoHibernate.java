@@ -72,6 +72,16 @@ public class KdpLinkDaoHibernate extends AbstractDaoHibernate<KdpLink, Integer> 
      * {@inheritDoc}
      */
     @Override
+    public KdpLink get(Integer nodeId, String interfaceName) {
+        Assert.notNull(nodeId, "nodeId cannot be null");
+        Assert.notNull(nodeId, "interfaceName cannot be null");
+        return findUnique("from KdpLink as kdpLink where kdpLink.node.id = ? and kdpLink.kdpInterfaceName = ?", nodeId, interfaceName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<KdpLink> findByNodeId(Integer nodeId) {
         Assert.notNull(nodeId, "nodeId cannot be null");
         return find("from KdpLink kdpLink where kdpLink.node.id = ?", nodeId);

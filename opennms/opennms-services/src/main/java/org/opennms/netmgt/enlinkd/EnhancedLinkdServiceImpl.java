@@ -46,6 +46,8 @@ import org.opennms.netmgt.dao.api.BridgeStpLinkDao;
 import org.opennms.netmgt.dao.api.BridgeTopologyDao;
 import org.opennms.netmgt.dao.api.CdpElementDao;
 import org.opennms.netmgt.dao.api.CdpLinkDao;
+import org.opennms.netmgt.dao.api.KdpElementDao;
+import org.opennms.netmgt.dao.api.KdpLinkDao;
 import org.opennms.netmgt.dao.api.IpNetToMediaDao;
 import org.opennms.netmgt.dao.api.IsIsElementDao;
 import org.opennms.netmgt.dao.api.IsIsLinkDao;
@@ -59,6 +61,8 @@ import org.opennms.netmgt.model.BridgeElement;
 import org.opennms.netmgt.model.BridgeStpLink;
 import org.opennms.netmgt.model.CdpElement;
 import org.opennms.netmgt.model.CdpLink;
+import org.opennms.netmgt.model.KdpElement;
+import org.opennms.netmgt.model.KdpLink;
 import org.opennms.netmgt.model.IpNetToMedia;
 import org.opennms.netmgt.model.IsIsElement;
 import org.opennms.netmgt.model.IsIsLink;
@@ -315,6 +319,7 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
         saveCdpLink(nodeId, link);
     }
 
+    @Override
     public void store(int nodeId, KdpLink link) {
         if (link == null)
             return;
@@ -445,6 +450,29 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
             element.setNode(node);
             element.setCdpNodeLastPollTime(element.getCdpNodeCreateTime());
             node.setCdpElement(element);
+        }
+
+        m_nodeDao.saveOrUpdate(node);
+        m_nodeDao.flush();
+    }
+
+    @Override
+    @Transactional
+    public void store(int nodeId, KdpElement element) {
+        if (element == null)
+            return;
+        final OnmsNode node = m_nodeDao.get(nodeId);
+        if (node == null)
+            return;
+
+        KdpElement dbelement = node.getKdpElement();
+        if (dbelement != null) {
+            dbelement.merge(element);
+            node.setKdpElement(dbelement);
+        } else {
+            element.setNode(node);
+            element.setKdpNodeLastPollTime(element.getKdpNodeCreateTime());
+            node.setKdpElement(element);
         }
 
         m_nodeDao.saveOrUpdate(node);
@@ -820,6 +848,14 @@ public class EnhancedLinkdServiceImpl implements EnhancedLinkdService {
 
     public void setCdpLinkDao(CdpLinkDao cdpLinkDao) {
         m_cdpLinkDao = cdpLinkDao;
+    }
+
+    public KdpLinkDao getKdpLinkDao() {
+        return m_kdpLinkDao;
+    }
+
+    public void setKdpLinkDao(KdpLinkDao kdpLinkDao) {
+        m_kdpLinkDao = kdpLinkDao;
     }
 
     public LldpLinkDao getLldpLinkDao() {

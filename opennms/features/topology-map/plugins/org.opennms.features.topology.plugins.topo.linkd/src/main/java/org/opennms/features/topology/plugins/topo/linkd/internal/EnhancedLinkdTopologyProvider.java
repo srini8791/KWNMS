@@ -60,6 +60,7 @@ import org.opennms.features.topology.api.topo.VertexRef;
 import org.opennms.netmgt.dao.api.BridgeTopologyDao;
 import org.opennms.netmgt.dao.api.CdpElementDao;
 import org.opennms.netmgt.dao.api.CdpLinkDao;
+import org.opennms.netmgt.dao.api.KdpElementDao;
 import org.opennms.netmgt.dao.api.KdpLinkDao;
 import org.opennms.netmgt.dao.api.IpNetToMediaDao;
 import org.opennms.netmgt.dao.api.IsIsElementDao;
@@ -72,6 +73,7 @@ import org.opennms.netmgt.model.BridgeMacLink;
 import org.opennms.netmgt.model.CdpElement;
 import org.opennms.netmgt.model.CdpLink;
 import org.opennms.netmgt.model.CdpLink.CiscoNetworkProtocolType;
+import org.opennms.netmgt.model.KdpElement;
 import org.opennms.netmgt.model.KdpLink;
 import org.opennms.netmgt.model.IpNetToMedia;
 import org.opennms.netmgt.model.IsIsElement;
@@ -444,6 +446,7 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
     private CdpLinkDao m_cdpLinkDao;
     private KdpLinkDao m_kdpLinkDao;
     private CdpElementDao m_cdpElementDao;
+    private KdpElementDao m_kdpElementDao;
     private OspfLinkDao m_ospfLinkDao;
     private IsIsLinkDao m_isisLinkDao;
     private IsIsElementDao m_isisElementDao;
@@ -457,6 +460,7 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
     public final static String ISIS_EDGE_NAMESPACE = TOPOLOGY_NAMESPACE_LINKD + "::ISIS";
     public final static String BRIDGE_EDGE_NAMESPACE = TOPOLOGY_NAMESPACE_LINKD + "::BRIDGE";
     public final static String CDP_EDGE_NAMESPACE = TOPOLOGY_NAMESPACE_LINKD + "::CDP";
+    public final static String KDP_EDGE_NAMESPACE = TOPOLOGY_NAMESPACE_LINKD + "::KDP";
 
     private final Timer m_loadFullTimer;
     private final Timer m_loadNodesTimer;
@@ -960,6 +964,76 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
             edge.setTooltipText(getEdgeTooltipText(linkDetail,nodesnmpmap));
         }
     }
+
+    private void getKdpLinks(Map<Integer,OnmsNode> nodemap,Map<Integer, List<OnmsSnmpInterface>> nodesnmpmap,
+            Map<Integer, OnmsIpInterface> ipprimarymap, Map<InetAddress,OnmsIpInterface> ipmap) {
+        Map<Integer, KdpElement> kdpelementmap = new HashMap<Integer, KdpElement>();
+        for (KdpElement kdpelement: m_kdpElementDao.findAll()) {
+            kdpelementmap.put(kdpelement.getNode().getId(), kdpelement);
+        }
+
+        List<KdpLink> allLinks = m_kdpLinkDao.findAll();
+        Set<KdpLinkDetail> combinedLinkDetails = new HashSet<KdpLinkDetail>();
+        Set<Integer> parsed = new HashSet<Integer>();
+
+        for (KdpLink sourceLink : allLinks) {
+            if (parsed.contains(sourceLink.getId())) {
+                continue;
+            }
+            LOG.debug("loadtopology: kdp link with id '{}' link '{}' ", sourceLink.getId(), sourceLink);
+            KdpElement sourceKdpElement = kdpelementmap.get(sourceLink.getNode().getId());
+            KdpLink targetLink = null;
+            for (KdpLink link : allLinks) {
+                if (sourceLink.getId().intValue() == link.getId().intValue()|| parsed.contains(link.getId()))
+                    continue;
+                LOG.debug("loadtopology: checking kdp link with id '{}' link '{}' ", link.getId(), link);
+                KdpElement element = kdpelementmap.get(link.getNode().getId());
+                //Compare the remote data to the targetNode element data
+/*
+                if (sourceLink.getKdpInterfaceName().equals(link.getCdpCacheDevicePort()) && link.getCdpInterfaceName().equals(sourceLink.getCdpCacheDevicePort())) {
+                    targetLink=link;
+                    LOG.info("loadtopology: found cdp mutual link: '{}' and '{}' ", sourceLink,targetLink);
+                    break;
+                }
+*/
+            }
+
+/*
+            if (targetLink == null) {
+                if (sourceLink.getCdpCacheAddressType() == CiscoNetworkProtocolType.ip) {
+                    try {
+                        InetAddress targetAddress = InetAddressUtils.addr(sourceLink.getCdpCacheAddress());
+                        if (ipmap.containsKey(targetAddress)) {
+                            targetLink = reverseCdpLink(ipmap.get(targetAddress), sourceKdpElement, sourceLink );
+                            LOG.info("loadtopology: found cdp link using cdp cache address: '{}' and '{}'", sourceLink, targetLink);
+                        }
+                    } catch (Exception e) {
+                        LOG.warn("loadtopology: cannot convert ip address: {}", sourceLink.getCdpCacheAddress(), e);
+                    }
+                }
+            }
+*/
+
+            if (targetLink == null) {
+                LOG.info("loadtopology: cannot found target node for link: '{}'", sourceLink);
+                continue;
+            }
+
+            parsed.add(sourceLink.getId());
+            parsed.add(targetLink.getId());
+            Vertex source =  getOrCreateVertex(nodemap.get(sourceLink.getNode().getId()),ipprimarymap.get(sourceLink.getNode().getId()));
+            Vertex target = getOrCreateVertex(nodemap.get(targetLink.getNode().getId()),ipprimarymap.get(targetLink.getNode().getId()));
+            combinedLinkDetails.add(new KdpLinkDetail(Math.min(sourceLink.getId(), targetLink.getId()) + "|" + Math.max(sourceLink.getId(), targetLink.getId()),
+                                                       source, sourceLink, target, targetLink));
+
+        }
+
+        for (KdpLinkDetail linkDetail : combinedLinkDetails) {
+            LinkdEdge edge = connectVertices(linkDetail, KDP_EDGE_NAMESPACE);
+            edge.setTooltipText(getEdgeTooltipText(linkDetail,nodesnmpmap));
+        }
+    }
+
     private void getIsIsLinks(Map<Integer,OnmsNode> nodemap,Map<Integer, List<OnmsSnmpInterface>> nodesnmpmap, Map<Integer, OnmsIpInterface> ipprimarymap){
 
         Map<Integer, IsIsElement> elementmap = new HashMap<Integer, IsIsElement>();
@@ -1356,6 +1430,14 @@ public class EnhancedLinkdTopologyProvider extends AbstractLinkdTopologyProvider
 
     public void setCdpElementDao(CdpElementDao cdpElementDao) {
         m_cdpElementDao = cdpElementDao;
+    }
+
+    public KdpElementDao getKdpElementDao() {
+        return m_kdpElementDao;
+    }
+
+    public void setKdpElementDao(KdpElementDao kdpElementDao) {
+        m_kdpElementDao = kdpElementDao;
     }
 
     //Search Provider methods
