@@ -1,0 +1,39 @@
+<project name="Keywest" default="dist" basedir=".">
+    <description>Keywest Build</description>
+
+    <presetdef name="javac">
+        <javac includeantruntime="false" />
+    </presetdef>
+
+    <target name="clean" description="clean the build files">
+        <delete dir="dist" />
+        <ant antfile="KeyWestlib/build.xml" useNativeBasedir="true" target="clean"/>
+        <ant antfile="KeyWestServer/build.xml" useNativeBasedir="true" target="clean"/>
+        <ant antfile="KeyWestClient/build.xml" useNativeBasedir="true" target="clean"/>
+        <ant antfile="KeywestDemo/build.xml" useNativeBasedir="true" target="clean"/>
+    </target>
+
+    <target name="dist" description="generate the distribution">
+        <ant antfile="KeyWestlib/build.xml" useNativeBasedir="true" target="dist"/>
+        <ant antfile="KeyWestServer/build.xml" useNativeBasedir="true" target="dist"/>
+        <ant antfile="KeyWestClient/build.xml" useNativeBasedir="true" target="dist"/>
+        <ant antfile="KeywestDemo/build.xml" useNativeBasedir="true" target="dist"/>
+
+        <mkdir dir="dist" />
+        <copy todir="dist" file="KeyWestlib/dist/KeyWestlib.jar" />
+        <copy todir="dist" file="KeyWestServer/dist/KeyWestServer.jar" />
+        <copy todir="dist" file="KeyWestClient/dist/KeyWestClient.jar" />
+        <copy todir="dist" file="KeywestDemo/dist/KeywestDemo.jar" />
+    </target>
+ 
+    <target name="runApp">
+        <java dir="dist" classname="com.kw.demo.KeywestMainFrame" fork="true">
+            <classpath>
+                <pathelement location="dist/KeyWestlib.jar"/>
+                <pathelement location="dist/KeyWestClient.jar"/>
+                <pathelement location="dist/KeywestDemo.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+</project>

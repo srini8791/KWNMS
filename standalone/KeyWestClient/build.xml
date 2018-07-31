@@ -1,0 +1,24 @@
+<project name="KeyWestClient" default="dist" basedir=".">
+    <description>KeyWest Client Build</description>
+    <!-- set global properties for this build -->
+ 
+    <target name="clean" description="clean up">
+        <delete dir="bin" />
+        <delete dir="dist" />
+    </target>
+
+    <target name="init" depends="clean" description="initialize">
+        <mkdir dir="bin" />
+    </target>
+
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the java code  -->
+        <javac srcdir="src" destdir="bin" classpath="../KeyWestlib/dist/KeyWestlib.jar" />
+    </target>
+ 
+    <target name="dist" depends="compile" description="generate the distribution">
+        <mkdir dir="dist" />
+        <jar destfile="dist/KeyWestClient.jar" basedir="bin" />
+    </target>
+ 
+</project>
