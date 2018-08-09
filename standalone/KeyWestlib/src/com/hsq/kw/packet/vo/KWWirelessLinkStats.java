@@ -1,5 +1,6 @@
 package com.hsq.kw.packet.vo;
 
+import com.hsq.kw.packet.KeywestLTVPacket;
 import com.hsq.kw.packet.KeywestPacket;
 
 public class KWWirelessLinkStats {
@@ -18,6 +19,8 @@ public class KWWirelessLinkStats {
 	private static final byte LOCAL_SNR_A2_TYPE = 12;
 	private static final byte REMOTE_SNR_A1_TYPE = 13;
 	private static final byte REMOTE_SNR_A2_TYPE = 14;
+	private static final byte LOCAL_RATE = 15;
+	private static final byte REMOTE_RATE = 16;
 	
 	private int noOfLinks;
 	private int linkId;
@@ -33,6 +36,8 @@ public class KWWirelessLinkStats {
 	private int localSNRA2;
 	private int remoteSNRA1;
 	private int remoteSNRA2;
+	private int localRate;
+	private int remoteRate;
 	
 	
 	private KeywestPacket packet;
@@ -40,22 +45,64 @@ public class KWWirelessLinkStats {
 	public KWWirelessLinkStats() {
 	}
 	
+	
 	public KWWirelessLinkStats(KeywestPacket packet) {
 		this.packet = packet;
-		this.noOfLinks = this.packet.getLTVPacketByType((byte)NO_OF_LINKS_TYPE).getIntValue();
-		this.linkId = this.packet.getLTVPacketByType((byte)LINK_ID_TYPE).getShortValue();
-		this.macAddress = this.packet.getMacAddressFromLTV(WLAN_MAC_TYPE);
-		this.remoteIP = this.packet.getIPAddressBytesFromLTVByType(REMOTE_IP_TYPE);
-		this.remoteLat = this.packet.getStringValueFromLTVByType(REMOTE_LAT_TYPE);
-		this.remoteLong = this.packet.getStringValueFromLTVByType(REMOTE_LONG_TYPE);
-		this.localLat = this.packet.getStringValueFromLTVByType(LOCAL_LAT_TYPE);
-		this.localLong = this.packet.getStringValueFromLTVByType(LOCAL_LONG_TYPE);
-		this.txInput = this.packet.getLTVPacketByType(TX_INPUT_TYPE).getShortIntValue();
-		this.txInput = this.packet.getLTVPacketByType(RX_INPUT_TYPE).getShortIntValue();
-		this.localSNRA1 = this.packet.getLTVPacketByType(LOCAL_SNR_A1_TYPE).getShortValue();
-		this.localSNRA2 = this.packet.getLTVPacketByType(LOCAL_SNR_A2_TYPE).getShortValue();
-		this.remoteSNRA1 = this.packet.getLTVPacketByType(REMOTE_SNR_A1_TYPE).getShortValue();
-		this.remoteSNRA2 = this.packet.getLTVPacketByType(REMOTE_SNR_A2_TYPE).getShortValue();
+		if (packet.getLTVPacket() != null && packet.getLTVPacket().size() > 1) {
+			KeywestLTVPacket ltv = this.packet.getLTVPacketByType((byte)NO_OF_LINKS_TYPE);
+			if (ltv != null) {
+				this.noOfLinks = this.packet.getLTVPacketByType((byte)NO_OF_LINKS_TYPE).getUnsignedToInt();
+			}
+			ltv = this.packet.getLTVPacketByType((byte)LINK_ID_TYPE);
+			if (ltv != null) {
+				this.linkId = this.packet.getLTVPacketByType((byte)LINK_ID_TYPE).getUnsignedToInt();
+			}
+			
+			this.macAddress = this.packet.getMacAddressFromLTV(WLAN_MAC_TYPE);
+			this.remoteIP = this.packet.getIPAddressBytesFromLTVByType(REMOTE_IP_TYPE);
+			this.remoteLat = this.packet.getStringValueFromLTVByType(REMOTE_LAT_TYPE);
+			this.remoteLong = this.packet.getStringValueFromLTVByType(REMOTE_LONG_TYPE);
+			this.localLat = this.packet.getStringValueFromLTVByType(LOCAL_LAT_TYPE);
+			this.localLong = this.packet.getStringValueFromLTVByType(LOCAL_LONG_TYPE);
+			ltv = this.packet.getLTVPacketByType((byte)TX_INPUT_TYPE);
+			if (ltv != null) {
+				this.txInput = this.packet.getLTVPacketByType(TX_INPUT_TYPE).getShortIntValue();
+			}
+			ltv = this.packet.getLTVPacketByType((byte)RX_INPUT_TYPE);
+			if (ltv != null) {
+				this.rxInput = this.packet.getLTVPacketByType(RX_INPUT_TYPE).getShortIntValue();
+			}
+			
+			ltv = this.packet.getLTVPacketByType((byte)LOCAL_SNR_A1_TYPE);
+			if (ltv != null) {
+				this.localSNRA1 = this.packet.getLTVPacketByType(LOCAL_SNR_A1_TYPE).getUnsignedToInt();
+			}
+			
+			ltv = this.packet.getLTVPacketByType((byte)LOCAL_SNR_A2_TYPE);
+			if (ltv != null) {
+				this.localSNRA2 = this.packet.getLTVPacketByType(LOCAL_SNR_A2_TYPE).getUnsignedToInt();
+			}
+			ltv = this.packet.getLTVPacketByType((byte)REMOTE_SNR_A1_TYPE);
+			if (ltv != null) {
+				this.remoteSNRA1 = this.packet.getLTVPacketByType(REMOTE_SNR_A1_TYPE).getUnsignedToInt();
+			}
+			
+			ltv = this.packet.getLTVPacketByType((byte)REMOTE_SNR_A2_TYPE);
+			if (ltv != null) {
+				this.remoteSNRA2 = this.packet.getLTVPacketByType(REMOTE_SNR_A2_TYPE).getUnsignedToInt();
+			}
+			
+			ltv = this.packet.getLTVPacketByType((byte)LOCAL_RATE);
+			if (ltv != null) {
+				this.localRate = this.packet.getLTVPacketByType(LOCAL_RATE).getShortIntValue();
+			}
+			ltv = this.packet.getLTVPacketByType((byte)REMOTE_RATE);
+			if (ltv != null) {
+				this.remoteRate = this.packet.getLTVPacketByType(REMOTE_RATE).getShortIntValue();
+			}
+						
+		}
+		
 	}
 
 	public int getNoOfLinks() {
@@ -170,12 +217,37 @@ public class KWWirelessLinkStats {
 		this.remoteSNRA2 = remoteSNRA2;
 	}
 
+	public int getLocalRate() {
+		return localRate;
+	}
+
+	public void setLocalRate(int localRate) {
+		this.localRate = localRate;
+	}
+
+	public int getRemoteRate() {
+		return remoteRate;
+	}
+
+	public void setRemoteRate(int remoteRate) {
+		this.remoteRate = remoteRate;
+	}
+
 	public KeywestPacket getPacket() {
 		return packet;
 	}
 
 	public void setPacket(KeywestPacket packet) {
 		this.packet = packet;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("WirelessStats-->\n[No. of Links:" + noOfLinks + " linkId:" + linkId + "\nMAC:" + macAddress + "\nIP(R):" + remoteIP +  " Lat(R):" + remoteLat + " Long(r):" + remoteLong+ " SNR1(R):" + remoteSNRA1+ " SNR2(R):" + remoteSNRA2);
+		buffer.append("\nLat(L):" + localLat + " Long(L):" + localLong + " SNR1(L):" + localSNRA1+ " SNR2(L):" + localSNRA2);
+		buffer.append("txInput:" + txInput + " rxInput:" + rxInput + " Rate(L)" + localRate + " Rate(R)" + remoteRate +"]");
+		return buffer.toString();
 	}
 
 }

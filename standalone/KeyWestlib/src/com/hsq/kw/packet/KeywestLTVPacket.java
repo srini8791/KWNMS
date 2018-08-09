@@ -59,7 +59,9 @@ public class KeywestLTVPacket {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		stream.write(len);
 		stream.write(this.type);
-		stream.write(value);
+		if (value != null) {
+			stream.write(value);
+		}
 		return stream.toByteArray();
 	}
 	
@@ -80,13 +82,28 @@ public class KeywestLTVPacket {
 		return ConversionUtil.bytesToShort(value);
 	}
 	
+	public int getUnsignedToInt() {
+		if (value != null && value.length == 1) {
+			return ConversionUtil.unsignedByteToInt(value[0]);
+		} else {
+			return getShortIntValue();
+		}
+		
+	}
+	
 	
 	public String getStringValue() {
-		return new String(value);
+		if (value != null) {
+			return new String(value);
+		}
+		return "";
 	}
 	
 	public String getStringUTF8Value() throws UnsupportedEncodingException {
-		return new String(value,"UTF-8");
+		if (value != null) {
+			return new String(value,"UTF-8");
+		}
+		return "";
 	}
 	
 	/*public String toIntString() {
@@ -99,7 +116,7 @@ public class KeywestLTVPacket {
 		/*if (value.length == 4) {
 			return "LTV=[" + "Length=" +getLength() + ", Type=" + type + ",Value=" + ConversionUtil.byteToInt(value) +"]";
 		}*/
-		return "LTV=[" + "Length=" +length + ", Type=" + type + ",Value=" + new String(value) +"]";
+		return "LTV=[" + "Length=" +length + ", Type=" + type + ",Value=" + getStringValue() +"]";
 	}
 
 }

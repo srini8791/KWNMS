@@ -109,9 +109,12 @@ public class KeywestPacket {
 	
 	
 	protected int getIntValueFromPacket(byte[] data, int startIdx, int endIdx) {
-		byte[] arr  = Arrays.copyOfRange(data, 0, 4);
-		System.out.println("arr" + arr.length);
-		return getPacketLength(arr);
+		if (data != null) {
+			byte[] arr  = Arrays.copyOfRange(data, 0, 4);
+			System.out.println("arr" + arr.length);
+			return getPacketLength(arr);
+		}
+		return 0;
 	}
 	
 	/**
@@ -122,15 +125,21 @@ public class KeywestPacket {
 	 * @return
 	 */
 	protected short getShortValueFromPacket(byte[] data, int startIdx, int endIdx) {
-		byte[] arr  = Arrays.copyOfRange(data, 0, SIZE_OF_LENGTH);
-		System.out.println("arr" + arr.length);
-		return ConversionUtil.bytesToShort(arr);
+		if (data != null) {
+			byte[] arr  = Arrays.copyOfRange(data, 0, SIZE_OF_LENGTH);
+			System.out.println("arr" + arr.length);
+			return ConversionUtil.bytesToShort(arr);
+		}
+		return 0;
 	}
 	
 	private byte[] getHeader(byte[] data) {
-		
-		byte[] bytes = Arrays.copyOfRange(data, 0, SIZE_OF_HEADER);
-		System.out.println("packetLength" + bytes.length);
+		byte[] bytes = {0};
+		if (data != null) {
+			bytes = Arrays.copyOfRange(data, 0, SIZE_OF_HEADER);
+			System.out.println("packetLength" + bytes.length);
+			return bytes;
+		}
 		return bytes;
 	}
 	
@@ -147,9 +156,6 @@ public class KeywestPacket {
 		KeywestLTVPacket ltv = new KeywestLTVPacket();
 		
 		short length = getShortValueFromPacket(this.payload, 0, 2);
-		if (length == 0) {
-			return null;
-		}
 		ltv.setLength(length);
 		// retreve the ltv type
 		byte type = this.payload[2];
@@ -159,10 +165,13 @@ public class KeywestPacket {
 		this.payload = Arrays.copyOfRange(this.payload, 3 , this.payload.length);
 		// retreive the ltv data from the first byte to length
 		byte[] value = Arrays.copyOfRange(this.payload, 0 , length);
-		// after the LTV is retrevied discard the bytes from 0 to length
-		this.payload = Arrays.copyOfRange(this.payload, length , payload.length);
-		ltv.setValue(value);
-		System.out.println(ltv);
+		if (length != 0) {
+			// after the LTV is retrevied discard the bytes from 0 to length
+			this.payload = Arrays.copyOfRange(this.payload, length , payload.length);
+			ltv.setValue(value);
+			System.out.println(ltv);
+		}
+		
 		return ltv;
 	}
 	
@@ -243,11 +252,13 @@ public class KeywestPacket {
 		KeywestLTVPacket ltv = getLTVPacketByType(type);
 		byte[] bytes = ltv.getValue();
 		StringBuffer buffer = new StringBuffer();
-		for (int i = 0; i < bytes.length; i++) {
-			if (i != 0) {
-				buffer.append(".");
+		if (bytes != null) {
+			for (int i = 0; i < bytes.length; i++) {
+				if (i != 0) {
+					buffer.append(".");
+				}
+				buffer.append(ConversionUtil.unsignedByteToInt(bytes[i]));
 			}
-			buffer.append(ConversionUtil.unsignedByteToInt(bytes[i]));
 		}
 		return buffer.toString();
 	}
@@ -258,8 +269,10 @@ public class KeywestPacket {
 	public String getMacAddressFromLTV(short type) {
 		String macAddress = "";
 		byte[] arr = getValueFromLTVByType(type);
-		macAddress = ConversionUtil.byteArray2MAC(arr);
-		return macAddress == null ? "" : macAddress.trim().toUpperCase();
+		if (arr != null) {
+			macAddress = ConversionUtil.byteArray2MAC(arr);
+		}
+		return macAddress == null ? "" : macAddress.trim();
 	}
 	
 	public KeywestLTVPacket getOpCodeLTVPacket() {
@@ -302,8 +315,11 @@ public class KeywestPacket {
 	}
 	
 	protected int getIntValueInPacket(byte[] data, int startIdx, int endIdx) {
-		byte[] arr  = Arrays.copyOfRange(data, startIdx, endIdx);
-		return arr[0];
+		if (data != null) {
+			byte[] arr  = Arrays.copyOfRange(data, startIdx, endIdx);
+			return arr[0];
+		}
+		return 0;
 	}
 	
 	
