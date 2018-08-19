@@ -80,12 +80,12 @@
           </div>
           <div class="panel-body">
             <div class="row">
-              <div class="col-md-6 col-xs-6">
+              <div class="col-md-4 col-xs-6">
                 <ul class="list-unstyled">
                   <li><a href="asset/nodelist.jsp?column=_allNonEmpty">All nodes with asset info</a></li>
                 </ul>
               </div> <!-- column -->
-              <div class="col-md-6 col-xs-6">
+              <div class="col-md-8 col-xs-6">
                 <form role="form" class="form-inline text-right" action="asset/nodelist.jsp" method="get">
                   <div class="form-group">
                     <label for="input_searchvalue">Assets in category:</label>

@@ -96,7 +96,7 @@
       <jsp:param name="asset-type" value="css" />
     </jsp:include>
     <jsp:include page="/assets/load-assets.jsp" flush="false">
-      <jsp:param name="asset" value="opennms-theme" />
+      <jsp:param name="asset" value="kwnms-theme" />
       <jsp:param name="asset-media" value="screen" />
       <jsp:param name="asset-type" value="css" />
     </jsp:include>

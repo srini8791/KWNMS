@@ -34,6 +34,20 @@
 --%>
 <jsp:include page="/includes/mobile-app-promo.jsp" flush="false" />
 
+<style>
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+  #footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    color: #fff;
+  }
+</style>
+
 <%-- this form-login-page form is also used as the 
          form-error-page to ask for a login again.
          --%>
@@ -84,7 +98,5 @@
     </form>
   </div> <!-- End Column -->
 </div> <!-- End Row -->
-
-<hr />
 
 <jsp:include page="/includes/bootstrap-footer.jsp" flush="false" />
