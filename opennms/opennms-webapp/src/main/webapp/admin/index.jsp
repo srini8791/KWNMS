@@ -200,6 +200,17 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
+        <h3 class="panel-title">Profile Management</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-unstyled">
+          <li><a href="admin/profile/index.jsp">Manage Device Profiles</a></li>
+        </ul>
+      </div> <!-- panel-body -->
+    </div> <!-- panel -->
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <h3 class="panel-title">Service Monitoring</h3>
       </div>
       <div class="panel-body">
@@ -306,6 +317,9 @@
         </p>
 
         <p><b>Customize Event Configurations</b>: Add and edit configuration files for events definitions.</p>
+
+        <p><b>Manage Device Profiles</b>: Retrieve profile of golden devivce, profiles by node type, and
+            apply a profile to a device.</p>
 
         <p><b>Notification Status</b>: Notifications will be sent out only if this setting is switched to <em>On</em>.
             This is a system-wide setting. As long as this is <em>Off</em>, OpenNMS will not create notifications.
