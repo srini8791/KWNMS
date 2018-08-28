@@ -92,24 +92,56 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
 </jsp:include>
 
 <script type="text/javascript">
+
+function toggleRange() {
+    var isByMask = document.getElementById("bymask");
+    if (isByMask && isByMask.checked) {
+        document.getElementById("bymask").value = "true";
+        document.getElementById("ipBlock").style.display = "none";
+        document.getElementById("maskBlock").style.display = "block";
+    } else {
+        document.getElementById("bymask").value = "false";
+        document.getElementById("ipBlock").style.display = "block";
+        document.getElementById("maskBlock").style.display = "none";
+    }
+}
+
 function doAddIncludeRange(){
-	if(!isValidIPAddress(document.getElementById("base").value)){
-		alert("Network Address not valid.");
-		document.getElementById("base").focus();
-		return;
-	}
 
-	if(!isValidIPAddress(document.getElementById("end").value)){
-		alert("End IP not valid.");
-		document.getElementById("end").focus();
-		return;
-	}
+    if (document.getElementById("bymask").checked == false) {
 
-	if(!checkIpRange(document.getElementById("base").value, document.getElementById("end").value)){
-		alert("Address Range not valid.");
-		document.getElementById("end").focus();
-		return;
-	}
+	    if(!isValidIPAddress(document.getElementById("base").value)){
+		    alert("Network Address not valid.");
+		    document.getElementById("base").focus();
+		    return;
+	    }
+
+	    if(!isValidIPAddress(document.getElementById("end").value)){
+		    alert("End IP not valid.");
+		    document.getElementById("end").focus();
+		    return;
+	    }
+
+	    if(!checkIpRange(document.getElementById("base").value, document.getElementById("end").value)){
+		    alert("Address Range not valid.");
+		    document.getElementById("end").focus();
+		    return;
+	    }
+
+    } else {
+
+	    if(!isValidIPAddress(document.getElementById("netip").value)){
+		    alert("IP address not valid.");
+		    document.getElementById("netip").focus();
+		    return;
+	    }
+
+	    if(!isValidIPAddress(document.getElementById("netmask").value)){
+		    alert("Mask address not valid.");
+		    document.getElementById("netmask").focus();
+		    return;
+	    }
+    }
 
 	if(isNaN(document.getElementById("timeout").value)){
 		alert("Timeout not valid.");
@@ -123,6 +155,9 @@ function doAddIncludeRange(){
 		return;		
 	}	
 
+	opener.document.getElementById("irbymask").value=document.getElementById("bymask").value;
+	opener.document.getElementById("irnetip").value=document.getElementById("netip").value;
+	opener.document.getElementById("irnetmask").value=document.getElementById("netmask").value;
 	opener.document.getElementById("irbase").value=document.getElementById("base").value;
 	opener.document.getElementById("irend").value=document.getElementById("end").value;
 	opener.document.getElementById("irtimeout").value=document.getElementById("timeout").value;
@@ -144,22 +179,36 @@ function doAddIncludeRange(){
       </div>
       <div class="panel-body">
         <p>Add a range of IP addresses to include in discovery.<br/>
-        Begin and End IP addresses are required.<br/>
+        Begin and End IP addresses are required if Range By Netmask is not checked.<br/>
         <br/>
         You can set the number of <i>Retries</i> and <i>Timeout</i>.
         If these parameters are not set, default values will be used.
         </p>
         <form role="form" class="form-horizontal">
           <div class="form-group">
-            <label for="base" class="control-label col-sm-2">Begin IP Address:</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="base" name="base"  value=''/>
+            <div class="col-sm-12">
+              <input type="checkbox" id="bymask" name="bymask" value="false" onchange="toggleRange()" />
+              <label for="bymask" class="control-label">Range by NetMask</label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="ipBlock">
+            <label for="base" class="control-label col-sm-2">Begin IP Address:</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="base" name="base"  value=''/>
+            </div>
             <label for="end" class="control-label col-sm-2">End IP Address:</label>
-            <div class="col-sm-10">
+            <div class="col-sm-4">
               <input type="text" class="form-control" id="end" name="end" value=''/>
+            </div>
+          </div>
+          <div class="form-group" id="maskBlock" style="display: none">
+            <label for="base" class="control-label col-sm-2">IP Address:</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="netip" name="netip"  value=''/>
+            </div>
+            <label for="end" class="control-label col-sm-2">Subnet Mask:</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="netmask" name="netmask" value=''/>
             </div>
           </div>
           <div class="form-group">
