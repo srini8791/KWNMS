@@ -28,10 +28,6 @@
 
 package org.opennms.core.utils;
 
-import org.opennms.core.xml.JaxbUtils;
-import org.opennms.netmgt.config.discovery.DiscoveryConfiguration;
-import org.opennms.netmgt.config.discovery.IncludeRange;
-
 import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

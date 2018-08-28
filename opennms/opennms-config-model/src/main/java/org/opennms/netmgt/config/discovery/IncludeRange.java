@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.opennms.core.xml.ValidateUsing;
 import org.opennms.netmgt.config.utils.ConfigUtils;
+import org.opennms.core.utils.SubnetUtils;
+
 
 @XmlRootElement(name = "include-range")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -73,6 +75,22 @@ public class IncludeRange implements Serializable {
 
     @XmlAttribute(name = "foreign-source")
     private String m_foreignSource;
+
+
+    @XmlElement(name = "by-net-mask")
+    private Boolean m_byNetMask;
+
+    /**
+     * IP Address
+     */
+    @XmlElement(name = "net-ip")
+    private String m_netIp;
+
+    /**
+     * Subnet Mask Address
+     */
+    @XmlElement(name = "net-mask")
+    private String m_netMask;
 
     /**
      * Starting address of the range.
@@ -131,20 +149,62 @@ public class IncludeRange implements Serializable {
         m_foreignSource = ConfigUtils.normalizeString(foreignSource);
     }
 
+    public Boolean getByNetMask() {
+        return m_byNetMask;
+    }
+
+    public void setByNetMask(Boolean byNetMask) {
+        this.m_byNetMask = byNetMask;
+    }
+
+    public String getNetIp() {
+        return m_netIp;
+    }
+
+    public void setNetIp(String netIp) {
+        if (m_byNetMask) {
+            this.m_netIp = ConfigUtils.assertNotEmpty(netIp, "net-ip");
+        }
+    }
+
+    public String getNetMask() {
+        return m_netMask;
+    }
+
+    public void setNetMask(String netMask) {
+        if (m_byNetMask) {
+            this.m_netMask = ConfigUtils.assertNotEmpty(netMask, "net-mask");
+        }
+    }
+
     public String getBegin() {
-        return m_begin;
+        if (getByNetMask()) {
+            SubnetUtils su = new SubnetUtils(m_netIp, m_netMask);
+            return su.getInfo().getLowAddress();
+        } else {
+            return m_begin;
+        }
     }
 
     public void setBegin(final String begin) {
-        m_begin = ConfigUtils.assertNotEmpty(begin, "begin");
+        if (!m_byNetMask) {
+            m_begin = ConfigUtils.assertNotEmpty(begin, "begin");
+        }
     }
 
     public String getEnd() {
-        return m_end;
+        if (getByNetMask()) {
+            SubnetUtils su = new SubnetUtils(m_netIp, m_netMask);
+            return su.getInfo().getHighAddress();
+        } else {
+            return m_end;
+        }
     }
 
     public void setEnd(final String end) {
-        m_end = ConfigUtils.assertNotEmpty(end, "end");
+        if (!m_byNetMask) {
+            m_end = ConfigUtils.assertNotEmpty(end, "end");
+        }
     }
 
     @Override

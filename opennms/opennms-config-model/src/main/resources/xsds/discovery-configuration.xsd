@@ -164,21 +164,43 @@
     </annotation>
 
     <complexType>
-      <sequence>
-        <element maxOccurs="1" minOccurs="1" name="begin" type="string">
-          <annotation>
-            <documentation>Starting address of the range.</documentation>
-          </annotation>
-        </element>
+      <choice>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="by-net-mask" type="boolean">
+            <annotation>
+              <documentation>Option to discover based on Subnet Mask.</documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="1" name="net-ip" type="string">
+            <annotation>
+              <documentation>Subnet IP address.</documentation>
+            </annotation>
+          </element>
 
-        <element maxOccurs="1" minOccurs="1" name="end" type="string">
-          <annotation>
-            <documentation>Ending address of the range. If the starting
-            address is greater than the ending address, they are
-            swapped.</documentation>
-          </annotation>
-        </element>
-      </sequence>
+          <element maxOccurs="1" minOccurs="1" name="net-mask" type="string">
+            <annotation>
+              <documentation>Subnet Mask IP address.</documentation>
+            </annotation>
+          </element>
+        </sequence>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="by-net-mask" type="boolean"/>
+          <element maxOccurs="1" minOccurs="1" name="begin" type="string">
+            <annotation>
+              <documentation>Starting address of the range.</documentation>
+            </annotation>
+          </element>
+
+          <element maxOccurs="1" minOccurs="1" name="end" type="string">
+            <annotation>
+              <documentation>Ending address of the range. If the starting
+                address is greater than the ending address, they are
+                swapped.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </choice>
 
       <attribute name="location" type="string" use="optional">
         <annotation>
