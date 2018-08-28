@@ -159,6 +159,10 @@ public class ActionDiscoveryServlet extends HttpServlet {
         //add an 'Include Range'
         if(action.equals(addIncludeRangeAction)){
             LOG.debug("Adding Include Range");
+            String byMaskStr = request.getParameter("irbymask");
+            Boolean byNetMask = byMaskStr == null ? Boolean.FALSE : Boolean.parseBoolean(byMaskStr);
+            String netIpAddress = request.getParameter("irnetip");
+            String netMaskAddress = request.getParameter("irnetmask");
             String ipAddrBase = request.getParameter("irbase");
             String ipAddrEnd = request.getParameter("irend");
             String timeout = request.getParameter("irtimeout");
@@ -166,8 +170,14 @@ public class ActionDiscoveryServlet extends HttpServlet {
             String foreignSource = request.getParameter("irforeignsource");
             String location = request.getParameter("irlocation");
             IncludeRange newIR = new IncludeRange();
-            newIR.setBegin(ipAddrBase);
-            newIR.setEnd(ipAddrEnd);
+            newIR.setByNetMask(byNetMask);
+            if (byNetMask) {
+                newIR.setNetIp(netIpAddress);
+                newIR.setNetMask(netMaskAddress);
+            } else {
+                newIR.setBegin(ipAddrBase);
+                newIR.setEnd(ipAddrEnd);
+            }
             if(timeout!=null && !"".equals(timeout.trim()) && !timeout.equals(String.valueOf(config.getTimeout().orElse(null)))){
                 newIR.setTimeout(WebSecurityUtils.safeParseLong(timeout));
             }

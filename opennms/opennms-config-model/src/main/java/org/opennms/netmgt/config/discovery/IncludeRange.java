@@ -77,7 +77,7 @@ public class IncludeRange implements Serializable {
     private String m_foreignSource;
 
 
-    @XmlElement(name = "by-net-mask")
+    @XmlAttribute(name = "by-net-mask")
     private Boolean m_byNetMask;
 
     /**
@@ -95,7 +95,7 @@ public class IncludeRange implements Serializable {
     /**
      * Starting address of the range.
      */
-    @XmlElement(name = "begin", required = true)
+    @XmlElement(name = "begin")
     private String m_begin;
 
     /**
@@ -103,7 +103,7 @@ public class IncludeRange implements Serializable {
      *  address is greater than the ending address, they are
      *  swapped.
      */
-    @XmlElement(name = "end", required = true)
+    @XmlElement(name = "end")
     private String m_end;
 
     public IncludeRange() {
@@ -150,7 +150,7 @@ public class IncludeRange implements Serializable {
     }
 
     public Boolean getByNetMask() {
-        return m_byNetMask;
+        return m_byNetMask == null ? Boolean.FALSE : m_byNetMask;
     }
 
     public void setByNetMask(Boolean byNetMask) {
@@ -162,7 +162,7 @@ public class IncludeRange implements Serializable {
     }
 
     public void setNetIp(String netIp) {
-        if (m_byNetMask) {
+        if (getByNetMask()) {
             this.m_netIp = ConfigUtils.assertNotEmpty(netIp, "net-ip");
         }
     }
@@ -172,7 +172,7 @@ public class IncludeRange implements Serializable {
     }
 
     public void setNetMask(String netMask) {
-        if (m_byNetMask) {
+        if (getByNetMask()) {
             this.m_netMask = ConfigUtils.assertNotEmpty(netMask, "net-mask");
         }
     }
@@ -187,7 +187,7 @@ public class IncludeRange implements Serializable {
     }
 
     public void setBegin(final String begin) {
-        if (!m_byNetMask) {
+        if (!getByNetMask()) {
             m_begin = ConfigUtils.assertNotEmpty(begin, "begin");
         }
     }
@@ -202,7 +202,7 @@ public class IncludeRange implements Serializable {
     }
 
     public void setEnd(final String end) {
-        if (!m_byNetMask) {
+        if (!getByNetMask()) {
             m_end = ConfigUtils.assertNotEmpty(end, "end");
         }
     }
