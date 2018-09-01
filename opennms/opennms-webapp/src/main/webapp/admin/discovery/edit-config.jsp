@@ -115,6 +115,12 @@ function restartDiscovery(){
 	document.modifyDiscoveryConfig.action=document.modifyDiscoveryConfig.action+"?action=<%=DiscoveryServletConstants.saveAndRestartAction%>";
 	return true;
 }
+
+function uploadFile() {
+	document.modifyDiscoveryConfig.action=document.modifyDiscoveryConfig.action+"?action=<%=DiscoveryServletConstants.uploadIncludeRangeAction%>";
+	document.modifyDiscoveryConfig.submit();
+}
+
 </script>
 
 <%!
@@ -156,7 +162,7 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
 
 %>
 
-<form role="form" class="form-horizontal" method="post" id="modifyDiscoveryConfig" name="modifyDiscoveryConfig" action="<%= Util.calculateUrlBase(request, "admin/discovery/actionDiscovery") %>" onsubmit="return restartDiscovery();">
+<form role="form" class="form-horizontal" method="post" id="modifyDiscoveryConfig" name="modifyDiscoveryConfig" action="<%= Util.calculateUrlBase(request, "admin/discovery/actionDiscovery") %>" enctype="multipart/form-data" onsubmit="return restartDiscovery();">
 
 <input type="hidden" id="specificipaddress" name="specificipaddress" value=""/>
 <input type="hidden" id="specifictimeout" name="specifictimeout" value=""/>
@@ -259,172 +265,170 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
       </div>
     </div> <!-- panel -->
   </div> <!-- column -->
-</div> <!-- row -->
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Specific Addresses</h3>
+          </div>
+          <%if(currConfig.getSpecifics().size()>0){
+                Specific[] specs = currConfig.getSpecifics().toArray(new Specific[0]);
+          %>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+              <th class="col-xs-4">IP&nbsp;Address</th>
+              <th class="col-xs-2">Timeout&nbsp;(milliseconds)</th>
+              <th class="col-xs-2">Retries</th>
+              <th class="col-xs-2">Foreign&nbsp;Source</th>
+              <th class="col-xs-2">Location</th>
+              <th>Action</th>
+                  </tr>
+                  <%for(int i=0; i<specs.length; i++){%>
+               <tr class="text-center">
+                <td><%=specs[i].getAddress()%></td>
+                <td><%=specs[i].getTimeout().isPresent() ? "" + specs[i].getTimeout().get() : "<i>Use Default</i>" %></td>
+                <td><%=specs[i].getRetries().isPresent() ? "" + specs[i].getRetries().get() : "<i>Use Default</i>" %></td>
+                <td><%=specs[i].getForeignSource().isPresent() ? specs[i].getForeignSource().get() : "<i>Use Default</i>" %></td>
+                <td><%=specs[i].getLocation().isPresent() ? specs[i].getLocation().get() : "<i>Use Default</i>" %></td>
+                <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteSpecific(<%=i%>);">Delete</button></td>
+              </tr>
+                  <%} // end for%>
+                 </table>
+          <% } else { // end if currConfig.getSpecificsCount()>0 %>
+          <div class="panel-body">
+            <strong>No specifics found.</strong>
+          </div>
+          <% } %>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-default" onclick="addSpecific();">Add New</button>
+          </div>
+        </div> <!-- panel -->
+      </div> <!-- column -->
+    </div> <!-- row -->
 
-<div class="row">
-  <div class="col-xs-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Specific Addresses</h3>
-      </div>
-      <%if(currConfig.getSpecifics().size()>0){
-            Specific[] specs = currConfig.getSpecifics().toArray(new Specific[0]);
-      %>
-				    <table class="table table-bordered table-condensed">
-				      <tr>
-					<th class="col-xs-4">IP&nbsp;Address</th>
-					<th class="col-xs-2">Timeout&nbsp;(milliseconds)</th>
-					<th class="col-xs-2">Retries</th>
-					<th class="col-xs-2">Foreign&nbsp;Source</th>
-					<th class="col-xs-2">Location</th>
-					<th>Action</th>
-				      </tr>
-				      <%for(int i=0; i<specs.length; i++){%>
-					 <tr class="text-center">
-					  <td><%=specs[i].getAddress()%></td>
-					  <td><%=specs[i].getTimeout().isPresent() ? "" + specs[i].getTimeout().get() : "<i>Use Default</i>" %></td>
-					  <td><%=specs[i].getRetries().isPresent() ? "" + specs[i].getRetries().get() : "<i>Use Default</i>" %></td>
-					  <td><%=specs[i].getForeignSource().isPresent() ? specs[i].getForeignSource().get() : "<i>Use Default</i>" %></td>
-					  <td><%=specs[i].getLocation().isPresent() ? specs[i].getLocation().get() : "<i>Use Default</i>" %></td>
-					  <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteSpecific(<%=i%>);">Delete</button></td>
-					</tr>
-				      <%} // end for%>
-				     </table>
-      <% } else { // end if currConfig.getSpecificsCount()>0 %>
-      <div class="panel-body">
-        <strong>No specifics found.</strong>
-      </div>
-      <% } %>
-      <div class="panel-footer">
-        <button type="button" class="btn btn-default" onclick="addSpecific();">Add New</button>
-      </div>
-    </div> <!-- panel -->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Upload Include Ranges File</h3>
+          </div>
+          <div class="panel-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Timeout&nbsp;(milliseconds)</th>
+                  <th>Retries</th>
+                  <th>Foreign&nbsp;Source</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" class="form-control" id="uptimeout" name="uptimeout"  value=''/></td>
+                  <td><input type="text" class="form-control" id="upretries" name="upretries"  value=''/></td>
+                  <td><input type="text" class="form-control" id="upforeignsource" name="upforeignsource"  value=''/></td>
+                  <td><input type="text" class="form-control" id="uplocation" name="uplocation"  value=''/></td>
+                </tr>
+                <tr>
+                  <td colspan="4"><input type="file" name="upfile" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-default" onclick="uploadFile();">Upload</button>
+          </div>
+        </div> <!-- panel -->
+      </div> <!-- column -->
+    </div> <!-- row -->
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Include Ranges</h3>
+          </div>
+                <%if(currConfig.getIncludeRanges().size()>0){
+                  IncludeRange[] irange = currConfig.getIncludeRanges().toArray(new IncludeRange[0]);
+                %>
+                  <table class="table table-bordered table-condensed">
+                    <tr>
+                <th class="col-xs-2">Begin&nbsp;Address</th>
+                <th class="col-xs-2">End&nbsp;Address</th>
+                <th class="col-xs-2">Timeout&nbsp;(milliseconds)</th>
+                <th class="col-xs-2">Retries</th>
+                <th class="col-xs-2">Foreign&nbsp;Source</th>
+                <th class="col-xs-2">Location</th>
+                <th>Action</th>
+                    </tr>
+                    <%for(int i=0; i<irange.length; i++){
+
+                    %>
+                 <tr class="text-center">
+                  <td><%=irange[i].getBegin()%></td>
+                  <td><%=irange[i].getEnd()%></td>
+                  <td><%=irange[i].getTimeout().isPresent() ? "" + irange[i].getTimeout().get() : "<i>Use Default</i>" %></td>
+                  <td><%=irange[i].getRetries().isPresent() ? "" + irange[i].getRetries().get() : "<i>Use Default</i>" %></td>
+                  <td><%=irange[i].getForeignSource().isPresent() ? irange[i].getForeignSource().get() : "<i>Use Default</i>" %></td>
+                  <td><%=irange[i].getLocation().isPresent() ? irange[i].getLocation().get() : "<i>Use Default</i>" %></td>
+                  <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteIR(<%=i%>);">Delete</button></td>
+                </tr>
+                    <%} // end for%>
+                   </table>
+          <% } else { // end if currConfig.getIncludeRange()>0 %>
+          <div class="panel-body">
+            <strong>No include ranges found.</strong>
+          </div>
+          <% } %>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-default" onclick="addIncludeRange();">Add New</button>
+          </div>
+        </div> <!-- panel -->
+      </div> <!-- column -->
+    </div> <!-- row -->
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Exclude Ranges</h3>
+          </div>
+              <%if(currConfig.getExcludeRanges().size()>0){
+                ExcludeRange[] irange = currConfig.getExcludeRanges().toArray(new ExcludeRange[0]);
+              %>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+              <th class="col-xs-6">Begin</th>
+              <th class="col-xs-6">End</th>
+              <th>Action</th>
+                  </tr>
+                  <%for(int i=0; i<irange.length; i++){
+
+                  %>
+               <tr class="text-center">
+                <td><%=irange[i].getBegin()%></td>
+                <td><%=irange[i].getEnd()%></td>
+                <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteER(<%=i%>);">Delete</button></td>
+              </tr>
+                  <%} // end for%>
+
+                 </table>
+          <% } else { // end if currConfig.getExcludeRangeCount()>0 %>
+          <div class="panel-body">
+            <strong>No exclude ranges found.</strong>
+          </div>
+          <% } %>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-default" onclick="addExcludeRange();">Add New</button>
+          </div>
+        </div> <!-- panel -->
+      </div> <!-- column -->
+    </div> <!-- row -->
+
   </div> <!-- column -->
 </div> <!-- row -->
 
-<div class="row">
-  <div class="col-xs-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Include URLs</h3>
-      </div>
-			    <%if(currConfig.getIncludeUrls().size()>0){
-			        IncludeUrl[] urls = currConfig.getIncludeUrls().toArray(new IncludeUrl[0]);
-			    %>
-				    <table class="table table-bordered table-condensed">
-				      <tr>
-					<th class="col-xs-4">URL</th>
-					<th class="col-xs-2">Timeout&nbsp;(milliseconds)</th>
-					<th class="col-xs-2">Retries</th> 
-					<th class="col-xs-2">Foreign&nbsp;Source</th>
-					<th class="col-xs-2">Location</th>
-					<th>Action</th>
-				      </tr>
-				      <%for(int i=0; i<urls.length; i++){%>
-					 <tr class="text-center">
-					  <td><%=urls[i].getUrl()%></td>
-					  <td><%=urls[i].getTimeout().isPresent() ? "" + urls[i].getTimeout().get() : "<i>Use Default</i>" %></td>
-					  <td><%=urls[i].getRetries().isPresent() ? "" + urls[i].getRetries().get() : "<i>Use Default</i>" %></td>
-					  <td><%=urls[i].getForeignSource().isPresent() ? urls[i].getForeignSource().get() : "<i>Use Default</i>" %></td>
-					  <td><%=urls[i].getLocation().isPresent() ? urls[i].getLocation().get() : "<i>Use Default</i>" %></td>
-					  <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteIncludeUrl(<%=i%>);">Delete</button></td>
-					</tr>
-				      <%} // end for%>
-				     </table>
-      <% } else { // end if currConfig.getIncludeUrlCount()>0 %>
-      <div class="panel-body">
-        <strong>No include URLs found.</strong>
-      </div>
-      <% } %>
-      <div class="panel-footer">
-        <button type="button" class="btn btn-default" onclick="addIncludeUrl();">Add New</button>
-      </div>
-    </div> <!-- panel -->
-  </div> <!-- column -->
-</div> <!-- row -->
-
-<div class="row">
-  <div class="col-xs-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Include Ranges</h3>
-      </div>
-				    <%if(currConfig.getIncludeRanges().size()>0){
-					    IncludeRange[] irange = currConfig.getIncludeRanges().toArray(new IncludeRange[0]);
-				    %>
-					    <table class="table table-bordered table-condensed">
-					      <tr>
-						<th class="col-xs-2">Begin&nbsp;Address</th>
-						<th class="col-xs-2">End&nbsp;Address</th>
-						<th class="col-xs-2">Timeout&nbsp;(milliseconds)</th>
-						<th class="col-xs-2">Retries</th>
-						<th class="col-xs-2">Foreign&nbsp;Source</th>
-						<th class="col-xs-2">Location</th>
-						<th>Action</th>
-					      </tr>
-					      <%for(int i=0; i<irange.length; i++){
-
-					      %>
-						 <tr class="text-center">
-						  <td><%=irange[i].getBegin()%></td>
-						  <td><%=irange[i].getEnd()%></td>
-						  <td><%=irange[i].getTimeout().isPresent() ? "" + irange[i].getTimeout().get() : "<i>Use Default</i>" %></td>
-						  <td><%=irange[i].getRetries().isPresent() ? "" + irange[i].getRetries().get() : "<i>Use Default</i>" %></td>
-						  <td><%=irange[i].getForeignSource().isPresent() ? irange[i].getForeignSource().get() : "<i>Use Default</i>" %></td>
-						  <td><%=irange[i].getLocation().isPresent() ? irange[i].getLocation().get() : "<i>Use Default</i>" %></td>
-						  <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteIR(<%=i%>);">Delete</button></td>
-						</tr>
-					      <%} // end for%>
-					     </table>
-      <% } else { // end if currConfig.getIncludeRange()>0 %>
-      <div class="panel-body">
-        <strong>No include ranges found.</strong>
-      </div>
-      <% } %>
-      <div class="panel-footer">
-        <button type="button" class="btn btn-default" onclick="addIncludeRange();">Add New</button>
-      </div>
-    </div> <!-- panel -->
-  </div> <!-- column -->
-</div> <!-- row -->
-
-<div class="row">
-  <div class="col-xs-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Exclude Ranges</h3>
-      </div>
-			    <%if(currConfig.getExcludeRanges().size()>0){
-				    ExcludeRange[] irange = currConfig.getExcludeRanges().toArray(new ExcludeRange[0]);
-			    %>
-				    <table class="table table-bordered table-condensed">
-				      <tr>
-					<th class="col-xs-6">Begin</th>
-					<th class="col-xs-6">End</th>
-					<th>Action</th>
-				      </tr>
-				      <%for(int i=0; i<irange.length; i++){
-
-				      %>
-					 <tr class="text-center">
-					  <td><%=irange[i].getBegin()%></td>
-					  <td><%=irange[i].getEnd()%></td>
-					  <td width="1%"><button type="button" class="btn btn-xs btn-default" onclick="deleteER(<%=i%>);">Delete</button></td>
-					</tr>
-				      <%} // end for%>
-
-				     </table>
-      <% } else { // end if currConfig.getExcludeRangeCount()>0 %>
-      <div class="panel-body">
-        <strong>No exclude ranges found.</strong>
-      </div>
-      <% } %>
-      <div class="panel-footer">
-        <button type="button" class="btn btn-default" onclick="addExcludeRange();">Add New</button>
-      </div>
-    </div> <!-- panel -->
-  </div> <!-- column -->
-</div> <!-- row -->
 
 <button type="submit" class="btn btn-default">Save and Restart Discovery</button>
 

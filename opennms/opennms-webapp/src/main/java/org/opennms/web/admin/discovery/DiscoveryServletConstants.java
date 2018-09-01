@@ -54,6 +54,9 @@ public class DiscoveryServletConstants {
     /** Constant <code>removeIncludeRangeAction="RemoveIncludeRange"</code> */
     public static final String removeIncludeRangeAction = "RemoveIncludeRange";
 
+    /** Constant <code>uploadIncludeRangeAction="UploadIncludeRange"</code> */
+    public static final String uploadIncludeRangeAction = "UploadIncludeRange";
+
     /** Constant <code>addIncludeUrlAction="AddIncludeUrl"</code> */
     public static final String addIncludeUrlAction = "AddIncludeUrl";
     /** Constant <code>removeIncludeUrlAction="RemoveIncludeUrl"</code> */

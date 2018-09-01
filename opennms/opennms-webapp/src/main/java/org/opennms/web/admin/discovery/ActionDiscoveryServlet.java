@@ -29,6 +29,7 @@
 package org.opennms.web.admin.discovery;
 
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.addExcludeRangeAction;
+import static org.opennms.web.admin.discovery.DiscoveryServletConstants.uploadIncludeRangeAction;
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.addIncludeRangeAction;
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.addIncludeUrlAction;
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.addSpecificAction;
@@ -38,15 +39,16 @@ import static org.opennms.web.admin.discovery.DiscoveryServletConstants.removeIn
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.removeSpecificAction;
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.saveAndRestartAction;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import org.opennms.core.utils.WebSecurityUtils;
 import org.opennms.core.xml.JaxbUtils;
@@ -155,6 +157,30 @@ public class ActionDiscoveryServlet extends HttpServlet {
             LOG.debug("Removing Specific result = {}", result);
         } 
 
+        // upload file of include ranges
+        if(action.equals(uploadIncludeRangeAction)) {
+            LOG.debug("Uploading File to Include Range");
+            String uptimeout = request.getParameter("uptimeout");
+            String upretries = request.getParameter("upretries");
+            String upforeignSource = request.getParameter("upforeignsource");
+            String uplocation = request.getParameter("uplocation");
+
+            Part filePart = request.getPart("upfile");
+            final boolean csvFile = filePart.getName().endsWith(".csv");
+            Stream<String> lines = new BufferedReader(new InputStreamReader(filePart.getInputStream(), StandardCharsets.UTF_8)).lines();
+            final DiscoveryConfiguration _config = config;
+            lines.forEach(line -> {
+                if (csvFile) {
+                    String[] data = line.split(",");
+                    boolean byNetMask = Integer.parseInt(data[0].trim()) == 1 ? true : false;
+                    prepareAndSetIncludeRange(_config, byNetMask,
+                            data[1].trim(), data[2].trim(),
+                            data[1].trim(), data[2].trim(),
+                            uptimeout, upretries,
+                            upforeignSource, uplocation);
+                }
+            });
+        }
 
         //add an 'Include Range'
         if(action.equals(addIncludeRangeAction)){
@@ -169,32 +195,11 @@ public class ActionDiscoveryServlet extends HttpServlet {
             String retries = request.getParameter("irretries");
             String foreignSource = request.getParameter("irforeignsource");
             String location = request.getParameter("irlocation");
-            IncludeRange newIR = new IncludeRange();
-            newIR.setByNetMask(byNetMask);
-            if (byNetMask) {
-                newIR.setNetIp(netIpAddress);
-                newIR.setNetMask(netMaskAddress);
-            } else {
-                newIR.setBegin(ipAddrBase);
-                newIR.setEnd(ipAddrEnd);
-            }
-            if(timeout!=null && !"".equals(timeout.trim()) && !timeout.equals(String.valueOf(config.getTimeout().orElse(null)))){
-                newIR.setTimeout(WebSecurityUtils.safeParseLong(timeout));
-            }
-
-            if(retries!=null && !"".equals(retries.trim()) && !retries.equals(String.valueOf(config.getRetries().orElse(null)))){
-                newIR.setRetries(WebSecurityUtils.safeParseInt(retries));
-            }
-
-            if(foreignSource!=null && !"".equals(foreignSource.trim()) && !foreignSource.equals(config.getForeignSource().orElse(null))){
-                newIR.setForeignSource(foreignSource);
-            }
-
-            if(location!=null && !"".equals(location.trim()) && !location.equals(config.getLocation().orElse(MonitoringLocationDao.DEFAULT_MONITORING_LOCATION_ID))){
-                newIR.setLocation(location);
-            }
-
-            config.addIncludeRange(newIR);
+            prepareAndSetIncludeRange(config, byNetMask,
+                    netIpAddress, netMaskAddress,
+                    ipAddrBase, ipAddrEnd,
+                    timeout, retries,
+                    foreignSource, location);
         }
 
         //remove 'Include Range' from configuration
@@ -316,5 +321,43 @@ public class ActionDiscoveryServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
+    }
+
+
+    /**
+     * Utility method to prepare an IncludeRange object
+     * @return IncludeRange object
+     */
+    private void prepareAndSetIncludeRange(DiscoveryConfiguration config, boolean byNetMask,
+                                            String netIpAddress, String netMaskAddress,
+                                            String ipAddrBase, String ipAddrEnd,
+                                            String timeout, String retries,
+                                            String foreignSource, String location) {
+        IncludeRange newIR = new IncludeRange();
+        newIR.setByNetMask(byNetMask);
+        if (byNetMask) {
+            newIR.setNetIp(netIpAddress);
+            newIR.setNetMask(netMaskAddress);
+        } else {
+            newIR.setBegin(ipAddrBase);
+            newIR.setEnd(ipAddrEnd);
+        }
+        if(timeout!=null && !"".equals(timeout.trim()) && !timeout.equals(String.valueOf(config.getTimeout().orElse(null)))){
+            newIR.setTimeout(WebSecurityUtils.safeParseLong(timeout));
+        }
+
+        if(retries!=null && !"".equals(retries.trim()) && !retries.equals(String.valueOf(config.getRetries().orElse(null)))){
+            newIR.setRetries(WebSecurityUtils.safeParseInt(retries));
+        }
+
+        if(foreignSource!=null && !"".equals(foreignSource.trim()) && !foreignSource.equals(config.getForeignSource().orElse(null))){
+            newIR.setForeignSource(foreignSource);
+        }
+
+        if(location!=null && !"".equals(location.trim()) && !location.equals(config.getLocation().orElse(MonitoringLocationDao.DEFAULT_MONITORING_LOCATION_ID))){
+            newIR.setLocation(location);
+        }
+
+        config.addIncludeRange(newIR);
     }
 }
