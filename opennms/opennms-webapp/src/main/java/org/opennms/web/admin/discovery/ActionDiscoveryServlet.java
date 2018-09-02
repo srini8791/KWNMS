@@ -166,20 +166,26 @@ public class ActionDiscoveryServlet extends HttpServlet {
             String uplocation = request.getParameter("uplocation");
 
             Part filePart = request.getPart("upfile");
-            final boolean csvFile = filePart.getName().endsWith(".csv");
-            Stream<String> lines = new BufferedReader(new InputStreamReader(filePart.getInputStream(), StandardCharsets.UTF_8)).lines();
-            final DiscoveryConfiguration _config = config;
-            lines.forEach(line -> {
-                if (csvFile) {
-                    String[] data = line.split(",");
-                    boolean byNetMask = Integer.parseInt(data[0].trim()) == 1 ? true : false;
-                    prepareAndSetIncludeRange(_config, byNetMask,
-                            data[1].trim(), data[2].trim(),
-                            data[1].trim(), data[2].trim(),
-                            uptimeout, upretries,
-                            upforeignSource, uplocation);
+            String uploadedFileName = filePart.getSubmittedFileName();
+            boolean csvFile = uploadedFileName.endsWith(".csv") || uploadedFileName.endsWith(".txt");
+            if (csvFile) {
+                try (BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(filePart.getInputStream(), StandardCharsets.UTF_8))) {
+                    String line = null;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        if (line.trim().length() == 0 || line.split(",").length < 3) {
+                            continue;
+                        }
+                        String[] data = line.split(",");
+                        boolean byNetMask = "1".equals(data[0].trim());
+                        prepareAndSetIncludeRange(config, byNetMask,
+                                data[1].trim(), data[2].trim(),
+                                data[1].trim(), data[2].trim(),
+                                uptimeout, upretries,
+                                upforeignSource, uplocation);
+                    }
                 }
-            });
+            }
         }
 
         //add an 'Include Range'
@@ -358,6 +364,8 @@ public class ActionDiscoveryServlet extends HttpServlet {
             newIR.setLocation(location);
         }
 
-        config.addIncludeRange(newIR);
+        if (!config.getIncludeRanges().contains(newIR)) {
+            config.addIncludeRange(newIR);
+        }
     }
 }

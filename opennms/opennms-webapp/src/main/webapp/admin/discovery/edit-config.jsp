@@ -325,10 +325,23 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
               </thead>
               <tbody>
                 <tr>
-                  <td><input type="text" class="form-control" id="uptimeout" name="uptimeout"  value=''/></td>
-                  <td><input type="text" class="form-control" id="upretries" name="upretries"  value=''/></td>
-                  <td><input type="text" class="form-control" id="upforeignsource" name="upforeignsource"  value=''/></td>
-                  <td><input type="text" class="form-control" id="uplocation" name="uplocation"  value=''/></td>
+                  <td><input type="text" class="form-control" id="uptimeout" name="uptimeout"  value="<%=currConfig.getTimeout().orElse(DiscoveryConfigFactory.DEFAULT_TIMEOUT)%>"/></td>
+                  <td><input type="text" class="form-control" id="upretries" name="upretries"  value="<%=currConfig.getRetries().orElse(DiscoveryConfigFactory.DEFAULT_RETRIES)%>"/></td>
+                  <td>
+                    <select id="upforeignsource" class="form-control" name="upforeignsource">
+                      <option value="" <%if (!currConfig.getForeignSource().isPresent()) out.print("selected");%>>None selected</option>
+                      <% for (String key : foreignsources.keySet()) { %>
+                        <option value="<%=key%>" <%if(key.equals(currConfig.getForeignSource().orElse(null))) out.print("selected");%>><%=foreignsources.get(key)%></option>
+                      <% } %>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="uplocation" class="form-control" name="uplocation">
+                      <% for (String key : locations.keySet()) { %>
+                        <option value="<%=key%>" <%if(key.equals(currConfig.getLocation().orElse(MonitoringLocationDao.DEFAULT_MONITORING_LOCATION_ID))) out.print("selected");%>><%=locations.get(key)%></option>
+                      <% } %>
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                   <td colspan="4"><input type="file" name="upfile" /></td>
