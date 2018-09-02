@@ -39,12 +39,10 @@ import static org.opennms.web.admin.discovery.DiscoveryServletConstants.removeIn
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.removeSpecificAction;
 import static org.opennms.web.admin.discovery.DiscoveryServletConstants.saveAndRestartAction;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -63,6 +61,7 @@ import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.model.events.EventBuilder;
 import org.opennms.web.api.Util;
+import org.opennms.web.utils.ExcelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,24 +166,27 @@ public class ActionDiscoveryServlet extends HttpServlet {
 
             Part filePart = request.getPart("upfile");
             String uploadedFileName = filePart.getSubmittedFileName();
-            boolean csvFile = uploadedFileName.endsWith(".csv") || uploadedFileName.endsWith(".txt");
-            if (csvFile) {
-                try (BufferedReader bufferedReader = new BufferedReader(
-                        new InputStreamReader(filePart.getInputStream(), StandardCharsets.UTF_8))) {
-                    String line = null;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        if (line.trim().length() == 0 || line.split(",").length < 3) {
-                            continue;
-                        }
-                        String[] data = line.split(",");
-                        boolean byNetMask = "1".equals(data[0].trim());
-                        prepareAndSetIncludeRange(config, byNetMask,
-                                data[1].trim(), data[2].trim(),
-                                data[1].trim(), data[2].trim(),
-                                uptimeout, upretries,
-                                upforeignSource, uplocation);
-                    }
+            List<String> lines = null;
+            InputStream inputStream = filePart.getInputStream();
+            if (uploadedFileName.endsWith(".xls")) {
+                lines = readAllLinesFromExcelWorkbook(inputStream, false);
+            } else if (uploadedFileName.endsWith(".xlsx")) {
+                lines = readAllLinesFromExcelWorkbook(inputStream, true);
+            } else if (uploadedFileName.endsWith(".csv") || uploadedFileName.endsWith(".txt")) {
+                lines = readAllLinesFromCSV(inputStream);
+            }
+
+            for (String line : lines) {
+                if (line.trim().length() == 0 || line.split(",").length < 3) {
+                    continue;
                 }
+                String[] data = line.split(",");
+                boolean byNetMask = "1".equals(data[0].trim()) || "1.0".equals(data[0].trim());
+                prepareAndSetIncludeRange(config, byNetMask,
+                        data[1].trim(), data[2].trim(),
+                        data[1].trim(), data[2].trim(),
+                        uptimeout, upretries,
+                        upforeignSource, uplocation);
             }
         }
 
@@ -331,7 +333,32 @@ public class ActionDiscoveryServlet extends HttpServlet {
 
 
     /**
-     * Utility method to prepare an IncludeRange object
+     * Method to read a XSL / XLSX file stream, and return a list of each line
+     * @return list of lines in a CSV format
+     */
+    private List<String> readAllLinesFromExcelWorkbook(InputStream inputStream, boolean openFormat) {
+        return new ExcelUtils(inputStream, openFormat).readAllLines();
+    }
+
+
+    /**
+     * Method to read a CSV file stream, and return a list of each line
+     * @return list of lines
+     */
+    private List<String> readAllLinesFromCSV(InputStream inputStream) throws IOException {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+        return lines;
+    }
+
+    /**
+     * Method to prepare an IncludeRange object
      * @return IncludeRange object
      */
     private void prepareAndSetIncludeRange(DiscoveryConfiguration config, boolean byNetMask,
@@ -364,8 +391,20 @@ public class ActionDiscoveryServlet extends HttpServlet {
             newIR.setLocation(location);
         }
 
-        if (!config.getIncludeRanges().contains(newIR)) {
-            config.addIncludeRange(newIR);
+        // reload newIR if it is by netmask
+        if (byNetMask) {
+            String beginAddr = newIR.getBegin();
+            String endAddr = newIR.getEnd();
+            newIR.setBegin(beginAddr);
+            newIR.setEnd(endAddr);
         }
+
+        config.addIncludeRange(newIR);
+
+        // todo: need to check for duplicates...fix the following and uncomment
+        // following code is not working, need to make changes in IncludeRange
+        //if (!config.getIncludeRanges().contains(newIR)) {
+        //    config.addIncludeRange(newIR);
+        //}
     }
 }
