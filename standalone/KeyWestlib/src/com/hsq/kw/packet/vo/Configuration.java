@@ -21,6 +21,9 @@ public class Configuration {
 	public static final byte DEVICE_MAC = 8;
 	public static final byte COUNTRY_CODE = 9;
 	public static final byte GATEWAY_IP = 10;
+	public static final byte NETMASK_IP = 11;
+	public static final byte CUSTOMER_NAME = 12;
+	public static final byte LINK_ID = 13;
 	
 	
 	
@@ -43,6 +46,12 @@ public class Configuration {
 	private int countryCode = 0;
 	
 	private String gatewayIp = "";
+	
+	private String netMask = "";
+	
+	private String custName = "";
+	
+	private int linkId = -1;
 	
 	
 	
@@ -88,6 +97,14 @@ public class Configuration {
 			this.countryCode = ltv.getShortIntValue();
 		}
 		this.gatewayIp = packet.getIPAddressBytesFromLTVByType(GATEWAY_IP);
+		this.netMask = packet.getIPAddressBytesFromLTVByType(NETMASK_IP);
+		this.custName = packet.getStringValueFromLTVByType(CUSTOMER_NAME);
+		ltv = packet.getLTVPacketByType(LINK_ID);
+		if (ltv != null) {
+			this.linkId = ltv.getUnsignedToInt();
+		}
+		
+		
 	}
 
 
@@ -189,6 +206,36 @@ public class Configuration {
 	}
 
 
+	public String getNetMask() {
+		return netMask;
+	}
+
+
+	public void setNetMask(String netMask) {
+		this.netMask = netMask;
+	}
+
+
+	public String getCustName() {
+		return custName;
+	}
+
+
+	public void setCustName(String custName) {
+		this.custName = custName;
+	}
+
+
+	public int getLinkId() {
+		return linkId;
+	}
+
+
+	public void setLinkId(int linkId) {
+		this.linkId = linkId;
+	}
+
+
 	public KeywestPacket buildPacketFromUI() {
 		KeywestPacket setPacket = new KeywestPacket((byte)1,(byte)3,(byte)1);
 		setPacket.addLTVToPacket(new KeywestLTVPacket(SSID_TYPE, this.ssid));
@@ -200,6 +247,9 @@ public class Configuration {
 		setPacket.addLTVToPacket(new KeywestLTVPacket(DEVICE_MODE, ConversionUtil.intToSingleByte(this.deviceMode)));
 		setPacket.addLTVToPacket(new KeywestLTVPacket(COUNTRY_CODE, ConversionUtil.intToShortBytes(this.countryCode)));
 		setPacket.addLTVToPacket(new KeywestLTVPacket(GATEWAY_IP, ConversionUtil.convertIPAddressToBytes(gatewayIp)));
+		setPacket.addLTVToPacket(new KeywestLTVPacket(NETMASK_IP, ConversionUtil.convertIPAddressToBytes(netMask)));
+		setPacket.addLTVToPacket(new KeywestLTVPacket(CUSTOMER_NAME, this.custName));
+		setPacket.addLTVToPacket(new KeywestLTVPacket(LINK_ID, ConversionUtil.intToSingleByte(this.linkId)));
 		return setPacket;
 	}
 	
