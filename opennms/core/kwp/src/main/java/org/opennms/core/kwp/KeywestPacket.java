@@ -76,6 +76,12 @@ public class KeywestPacket {
         this.length = this.payload.length;
     }
 
+    public void setHeader(KeywestPacketHeader header) {
+        this.header = header;
+        this.header.setLength((short)this.payload.length);
+        this.length = this.payload.length;
+    }
+
     /**
      * Constructing from DatagramPacket
      *
