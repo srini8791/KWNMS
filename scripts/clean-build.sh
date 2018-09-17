@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 pushd .
 cd ../opennms
 sudo ./clean.pl

@@ -64,9 +64,15 @@
       <column name="kdplinklastpolltime" type="DATETIME">
         <constraints nullable="false" />
       </column>
+      <column name="kdplinkmacaddress" type="varchar(20)">
+        <constraints nullable="true" />
+      </column>
+      <column name="kdplinkremoteaddress" type="varchar(20)">
+        <constraints nullable="true" />
+      </column>
     </createTable>
 
-    <addForeignKeyConstraint constraintName="fk_kdplink_nodeid" onDelete="CASCADE" baseTableName="kdpelement" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <addForeignKeyConstraint constraintName="fk_kdplink_nodeid" onDelete="CASCADE" baseTableName="kdplink" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
     <createIndex tableName="kdplink" indexName="kdplink_nodeid_idx">
       <column name="nodeid" />
     </createIndex>
@@ -77,5 +83,152 @@
 
   </changeSet>
 
+  <changeSet author="ndarbha" id="22.0.1-nodeinfo">
+    <validCheckSum>ANY</validCheckSum>
+
+    <createTable tableName="nodeinfo">
+      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
+        <constraints primaryKey="true" primaryKeyName="pk_nodeinfo_id" nullable="false" />
+      </column>
+      <column name="nodeid" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="macaddress" type="varchar(20)">
+        <constraints nullable="false" />
+      </column>
+      <column name="serialnumber" type="varchar(30)">
+        <constraints nullable="true" />
+      </column>
+      <column name="model" type="varchar(30)">
+        <constraints nullable="true" />
+      </column>
+      <column name="firmware" type="varchar(30)">
+        <constraints nullable="true" />
+      </column>
+      <column name="ipaddress" type="varchar(30)">
+        <constraints nullable="true" />
+      </column>
+      <column name="systemname" type="varchar(30)">
+        <constraints nullable="true" />
+      </column>
+      <column name="frequencychannel" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="bandwidth" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="ethernetspeed" type="varchar(5)">
+        <constraints nullable="true" />
+      </column>
+      <column name="iobandwidthlimit" type="varchar(5)">
+        <constraints nullable="true" />
+      </column>
+      <column name="modulation" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="opmode" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="provisioned" type="boolean" defaultValue="false">
+        <constraints nullable="false" />
+      </column>
+      <column name="active" type="boolean" defaultValue="true">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_nodeinfo_nodeid" onDelete="CASCADE" baseTableName="nodeinfo" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <createIndex tableName="nodeinfo" indexName="nodeinfo_nodeid_idx">
+      <column name="nodeid" />
+    </createIndex>
+
+    <rollback>
+      <dropTable tableName="nodeinfo" />
+    </rollback>
+
+  </changeSet>
+
+
+  <changeSet author="ndarbha" id="22.0.1-ethernetstats">
+    <validCheckSum>ANY</validCheckSum>
+
+    <createTable tableName="ethernetstats">
+      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
+        <constraints primaryKey="true" primaryKeyName="pk_ethernetstats_id" nullable="false" />
+      </column>
+      <column name="nodeid" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="txpackets" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="rxpackets" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="txbytes" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="rxbytes" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="txerrors" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="rxerrors" type="integer">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_ethernetstats_nodeid" onDelete="CASCADE" baseTableName="ethernetstats" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <createIndex tableName="ethernetstats" indexName="ethernetstats_nodeid_idx">
+      <column name="nodeid" />
+    </createIndex>
+
+    <rollback>
+      <dropTable tableName="ethernetstats" />
+    </rollback>
+
+  </changeSet>
+
+  <changeSet author="ndarbha" id="22.0.1-wirelessstats">
+    <validCheckSum>ANY</validCheckSum>
+
+    <createTable tableName="wirelessstats">
+      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
+        <constraints primaryKey="true" primaryKeyName="pk_wirelessstats_id" nullable="false" />
+      </column>
+      <column name="nodeid" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="txpackets" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="rxpackets" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="txmgmtpackets" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="rxmgmtpackets" type="bigint">
+        <constraints nullable="true" />
+      </column>
+      <column name="mpduerrors" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="physicalerrors" type="integer">
+        <constraints nullable="true" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_wirelessstats_nodeid" onDelete="CASCADE" baseTableName="wirelessstats" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <createIndex tableName="wirelessstats" indexName="wirelessstats_nodeid_idx">
+      <column name="nodeid" />
+    </createIndex>
+
+    <rollback>
+      <dropTable tableName="wirelessstats" />
+    </rollback>
+
+  </changeSet>
 
 </databaseChangeLog>

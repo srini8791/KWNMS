@@ -1,0 +1,10 @@
+KeyWestClient/bin
+KeyWestClient/dist/
+KeyWestServer/bin/
+KeyWestServer/dist/
+KeyWestlib/bin/
+KeyWestlib/dist/
+KeywestDemo/bin/
+KeywestDemo/dist/
+dist/
+

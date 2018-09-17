@@ -48,6 +48,8 @@ public class KdpLink implements Serializable, Topology {
 
     private Date m_kdpLinkCreateTime = new Date();
     private Date m_kdpLinkLastPollTime;
+    private String m_kdpLinkMacAddress;
+    private String m_kdpLinkRemoteAddress;
 
     public KdpLink() {
     }
@@ -103,9 +105,29 @@ public class KdpLink implements Serializable, Topology {
         m_kdpLinkLastPollTime = kdpLinkLastPollTime;
     }
 
+    @Column(name = "kdpLinkMacAddress", length = 20, nullable = true)
+    public String getKdpLinkMacAddress() {
+        return m_kdpLinkMacAddress;
+    }
+
+    public void setKdpLinkMacAddress(String kdpLinkMacAddress) {
+        m_kdpLinkMacAddress = kdpLinkMacAddress;
+    }
+
+    @Column(name = "kdpLinkRemoteAddress", length = 20, nullable = true)
+    public String getKdpLinkRemoteAddress() {
+        return m_kdpLinkRemoteAddress;
+    }
+
+    public void setKdpLinkRemoteAddress(String kdpLinkRemoteAddress) {
+        m_kdpLinkRemoteAddress = kdpLinkRemoteAddress;
+    }
+
     public void merge(KdpLink link) {
         if (link == null) return;
         setKdpLinkLastPollTime(link.getKdpLinkCreateTime());
+        setKdpLinkMacAddress(link.getKdpLinkMacAddress());
+        setKdpLinkRemoteAddress(link.getKdpLinkRemoteAddress());
     }
 
     /**
@@ -120,6 +142,8 @@ public class KdpLink implements Serializable, Topology {
         return new ToStringBuilder(this)
                 .append("NodeId", nodeid)
                 .append("kdpInterfaceName", m_kdpInterfaceName)
+                .append("kdpLinkMacAddress", m_kdpLinkMacAddress)
+                .append("kdpLinkRemoteAddress", m_kdpLinkRemoteAddress)
                 .append("createTime", m_kdpLinkCreateTime)
                 .append("lastPollTime", m_kdpLinkLastPollTime)
                 .toString();
@@ -132,6 +156,10 @@ public class KdpLink implements Serializable, Topology {
         strb.append(getNode().getId());
         strb.append("], interfacename:[");
         strb.append(getKdpInterfaceName());
+        strb.append("], macaddress:[");
+        strb.append(getKdpLinkMacAddress());
+        strb.append("], remoteaddress:[");
+        strb.append(getKdpLinkRemoteAddress());
         strb.append("]");
 
         return strb.toString();
