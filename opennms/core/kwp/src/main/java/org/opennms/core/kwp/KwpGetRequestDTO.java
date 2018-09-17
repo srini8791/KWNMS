@@ -30,24 +30,24 @@ package org.opennms.core.kwp;
 
 import org.opennms.core.rpc.api.RpcRequest;
 
-public class KdpGetRequestDTO implements RpcRequest {
+public class KwpGetRequestDTO implements RpcRequest {
 
-    private KeywestPacket packet;
+    private KwpPacket packet;
 
     private String host;
 
-    public KdpGetRequestDTO() {
+    public KwpGetRequestDTO() {
 
     }
 
-    public void buildGetRequest(KeywestPacketHeader header) {
+    public void buildGetRequest(KwpPacketHeader header) {
         if (this.packet == null) {
-            this.packet = new KeywestPacket();
+            this.packet = new KwpPacket();
         }
         this.packet.setHeader(header);
     }
 
-    public KeywestPacket getPacket() {
+    public KwpPacket getPacket() {
         return packet;
     }
 
@@ -59,7 +59,7 @@ public class KdpGetRequestDTO implements RpcRequest {
         this.host = host;
     }
 
-    public void setPacket(KeywestPacket packet) {
+    public void setPacket(KwpPacket packet) {
         this.packet = packet;
     }
 

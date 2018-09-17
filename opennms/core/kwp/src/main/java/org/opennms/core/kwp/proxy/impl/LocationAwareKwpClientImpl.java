@@ -28,32 +28,49 @@
 
 package org.opennms.core.kwp.proxy.impl;
 
-import org.opennms.core.kwp.KeywestPacket;
-import org.opennms.core.kwp.proxy.KdpRequestBuilder;
+import org.opennms.core.kwp.KwpGetRequestDTO;
+import org.opennms.core.kwp.KwpLTVPacket;
+import org.opennms.core.kwp.KwpPacket;
+import org.opennms.core.kwp.KwpPacketHeader;
+import org.opennms.core.kwp.proxy.KwpRequestBuilder;
+import org.opennms.core.kwp.proxy.LocationAwareKwpClient;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
-public class KdpRequestBuilderImpl implements KdpRequestBuilder {
-
+public class LocationAwareKwpClientImpl implements LocationAwareKwpClient {
 
 
     @Override
-    public KdpRequestBuilder withLocation(String location) {
+    public KwpRequestBuilder<KwpPacket> get(String host, byte id, byte type, byte subType) {
+
         return null;
     }
 
     @Override
-    public KdpRequestBuilder buildRequest() {
-        return null;
+    public KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header) {
+        KwpGetRequestDTO getRequestDTO = new KwpGetRequestDTO();
+        getRequestDTO.buildGetRequest(header);
+        return new KwpRequestBuilderImpl();
     }
 
     @Override
-    public CompletableFuture execute() {
+    public KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header, List<KwpLTVPacket> ltvs) {
         return null;
     }
 
+    /*
     @Override
-    public KeywestPacket processResponse() {
-        return null;
-    }
+    public KwpRequestBuilder<KwpPacket> get(String host,) {
+        return new KwpRequestBuilder<KwpPacket>() {
+            @Override
+            public KwpRequestBuilder<KwpPacket> withLocation(String location) {
+                return null;
+            }
+
+            @Override
+            public CompletableFuture<KwpPacket> execute() {
+                return null;
+            }
+        };
+    }*/
 }

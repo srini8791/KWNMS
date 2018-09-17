@@ -35,23 +35,23 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.CompletableFuture;
 
-public class KDPAsyncClient {
+public class KwpAsyncClient {
     private String host;
     private int port = 7861;
     private AsynchronousSocketChannel client = null;
 
-    public KDPAsyncClient(String host, int port) {
+    public KwpAsyncClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
-    public KDPAsyncClient() {
+    public KwpAsyncClient() {
     }
 
 
-    public CompletableFuture<KdpGetResponseDTO> sendAndReceive(KdpGetRequestDTO request) throws IOException {
+    public CompletableFuture<KwpGetResponseDTO> sendAndReceive(KwpGetRequestDTO request) throws IOException {
         this.host = request.getHost();
-        CompletableFuture<KdpGetResponseDTO> result = new CompletableFuture<>();
+        CompletableFuture<KwpGetResponseDTO> result = new CompletableFuture<>();
         client = AsynchronousSocketChannel.open();
         client.connect(new InetSocketAddress(host, port),null, new CompletionHandler<Void, Void>() {
             @Override
@@ -82,7 +82,7 @@ public class KDPAsyncClient {
                                         byte[] responseBytes = new byte[readBuffer.position()];
                                         readBuffer.position(0);
                                         readBuffer.get(responseBytes);
-                                        KdpGetResponseDTO responseDTO = new KdpGetResponseDTO(responseBytes);
+                                        KwpGetResponseDTO responseDTO = new KwpGetResponseDTO(responseBytes);
                                         result.complete(responseDTO);
                                     }
                                 }
@@ -111,7 +111,7 @@ public class KDPAsyncClient {
         return result;
     }
 
-    public CompletableFuture<KdpGetResponseDTO> send(KdpGetRequestDTO request) {
+    public CompletableFuture<KwpGetResponseDTO> send(KwpGetRequestDTO request) {
         return null;
     }
 }

@@ -28,18 +28,18 @@
 
 package org.opennms.core.kwp.proxy;
 
-import org.opennms.core.kwp.KeywestPacket;
+import org.opennms.core.kwp.KwpPacket;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface KdpRequestBuilder<T> {
+public interface KwpRequestBuilder<T> {
 
-    KdpRequestBuilder<T> withLocation(String location);
+    KwpRequestBuilder<T> withLocation(String location);
 
-    KdpRequestBuilder<T> buildRequest();
+    KwpRequestBuilder<T> buildRequest();
 
     CompletableFuture<T> execute();
 
-    KeywestPacket processResponse();
+    KwpPacket processResponse();
 
 }

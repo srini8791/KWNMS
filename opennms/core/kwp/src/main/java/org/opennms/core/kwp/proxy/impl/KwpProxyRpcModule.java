@@ -26,22 +26,52 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp.proxy;
+package org.opennms.core.kwp.proxy.impl;
 
-import org.opennms.core.kwp.KeywestLTVPacket;
-import org.opennms.core.kwp.KeywestPacket;
-import org.opennms.core.kwp.KeywestPacketHeader;
-import org.opennms.core.kwp.proxy.KdpRequestBuilder;
+import org.opennms.core.rpc.api.RpcModule;
+import org.opennms.core.rpc.api.RpcRequest;
+import org.opennms.core.rpc.api.RpcResponse;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public interface LocationAwareKdpClient {
+public class KwpProxyRpcModule<S extends RpcRequest,T extends RpcResponse> implements RpcModule<S, T> {
 
-    KdpRequestBuilder<KeywestPacket> get(String host, byte id, byte type, byte subType);
-
-    KdpRequestBuilder<KeywestPacket> get(String host, KeywestPacketHeader header);
-
-    KdpRequestBuilder<KeywestPacket> get(String host, KeywestPacketHeader header, List<KeywestLTVPacket> ltvs);
+    public static final KwpProxyRpcModule INSTANCE = new KwpProxyRpcModule();
+    public static final String KDP_MODULE_ID = "KDP";
 
 
+    @Override
+    public String getId() {
+        return null;
+    }
+
+    @Override
+    public String marshalRequest(S request) {
+        return null;
+    }
+
+    @Override
+    public S unmarshalRequest(String request) {
+        return null;
+    }
+
+    @Override
+    public String marshalResponse(T response) {
+        return null;
+    }
+
+    @Override
+    public T unmarshalResponse(String response) {
+        return null;
+    }
+
+    @Override
+    public T createResponseWithException(Throwable ex) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<T> execute(S request) {
+        return null;
+    }
 }

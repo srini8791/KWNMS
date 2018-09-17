@@ -30,7 +30,7 @@ package org.opennms.core.kwp.util;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class KeywestConversionUtil {
+public class KwpConversionUtil {
 
     /**
      * Converts integer to 4 bytes

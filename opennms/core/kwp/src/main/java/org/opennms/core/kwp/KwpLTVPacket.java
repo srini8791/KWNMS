@@ -27,14 +27,14 @@
  *******************************************************************************/
 package org.opennms.core.kwp;
 
-import org.opennms.core.kwp.util.KeywestConversionUtil;
+import org.opennms.core.kwp.util.KwpConversionUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-public class KeywestLTVPacket {
+public class KwpLTVPacket {
 
     private short length;
     private byte type;
@@ -43,7 +43,7 @@ public class KeywestLTVPacket {
     /**
      * Default constructor
      */
-    public KeywestLTVPacket() {
+    public KwpLTVPacket() {
     }
 
     /**
@@ -51,7 +51,7 @@ public class KeywestLTVPacket {
      *
      * @param type data type
      */
-    public KeywestLTVPacket(byte type) {
+    public KwpLTVPacket(byte type) {
         this.type = type;
     }
 
@@ -61,7 +61,7 @@ public class KeywestLTVPacket {
      * @param type data type
      * @param value data as byte array
      */
-    public KeywestLTVPacket(byte type, byte[] value) {
+    public KwpLTVPacket(byte type, byte[] value) {
         this.type = type;
         this.value = value;
         this.length = (short) value.length;
@@ -73,7 +73,7 @@ public class KeywestLTVPacket {
      * @param type data type
      * @param value data as string
      */
-    public KeywestLTVPacket(byte type, String value) {
+    public KwpLTVPacket(byte type, String value) {
         this(type,value.getBytes());
     }
 
@@ -106,7 +106,7 @@ public class KeywestLTVPacket {
 
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        stream.write(KeywestConversionUtil.shortToBytes(this.length)); // L
+        stream.write(KwpConversionUtil.shortToBytes(this.length)); // L
         stream.write(this.type); // T
         stream.write(this.value); // V
         return stream.toByteArray();
@@ -119,7 +119,7 @@ public class KeywestLTVPacket {
     }
 
     public int getIntValue() {
-        return KeywestConversionUtil.byteToInt(value);
+        return KwpConversionUtil.byteToInt(value);
     }
 
     public String getStringValue() {
@@ -132,7 +132,7 @@ public class KeywestLTVPacket {
 
     @Override
     public String toString() {
-        return "KeywestLTVPacket {" +
+        return "KwpLTVPacket {" +
                 "length=" + length +
                 ", type=" + type +
                 ", value=" + Arrays.toString(value) +

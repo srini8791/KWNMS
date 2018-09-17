@@ -27,14 +27,14 @@
  *******************************************************************************/
 package org.opennms.core.kwp;
 
-import org.opennms.core.kwp.util.KeywestConversionUtil;
+import org.opennms.core.kwp.util.KwpConversionUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Header data in the {@link KeywestPacket}
+ * Header data in the {@link KwpPacket}
  * <p>
  * Size of the total header is      6 bytes
  * =========================================
@@ -45,7 +45,7 @@ import java.util.Arrays;
  * Structure or text file           1 byte
  * =========================================
  */
-public class KeywestPacketHeader {
+public class KwpPacketHeader {
 
 
     /**
@@ -84,7 +84,7 @@ public class KeywestPacketHeader {
     /**
      * Default constructor
      */
-    public KeywestPacketHeader() {
+    public KwpPacketHeader() {
     }
 
     /**
@@ -92,7 +92,7 @@ public class KeywestPacketHeader {
      *
      * @param headerData
      */
-    public KeywestPacketHeader(byte[] headerData) {
+    public KwpPacketHeader(byte[] headerData) {
         if (headerData == null || headerData.length != 6) {
             throw new IllegalArgumentException("Invalid header data.");
         }
@@ -111,7 +111,7 @@ public class KeywestPacketHeader {
      * @param requestType
      * @param contentType
      */
-    public KeywestPacketHeader(byte id, byte ifType, byte requestType, byte contentType) {
+    public KwpPacketHeader(byte id, byte ifType, byte requestType, byte contentType) {
         this.id = id;
         this.ifType = ifType;
         this.requestType = requestType;
@@ -152,11 +152,11 @@ public class KeywestPacketHeader {
     }
 
     public void setLength(short length) {
-        this.length = KeywestConversionUtil.shortToBytes(length);
+        this.length = KwpConversionUtil.shortToBytes(length);
     }
 
     public short getLength() {
-        return KeywestConversionUtil.bytesToShort(this.length);
+        return KwpConversionUtil.bytesToShort(this.length);
     }
 
     /**
@@ -177,7 +177,7 @@ public class KeywestPacketHeader {
 
     @Override
     public String toString() {
-        return "KeywestPacketHeader {id : " + id + ", length: " + getLength() + "}";
+        return "KwpPacketHeader {id : " + id + ", length: " + getLength() + "}";
     }
 
 }

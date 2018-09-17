@@ -26,21 +26,34 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp;
+package org.opennms.core.kwp.proxy.impl;
 
-import org.opennms.core.rpc.api.RpcResponse;
+import org.opennms.core.kwp.KwpPacket;
+import org.opennms.core.kwp.proxy.KwpRequestBuilder;
 
-public class KdpGetResponseDTO implements RpcResponse {
+import java.util.concurrent.CompletableFuture;
 
-    private KeywestPacket packet;
+public class KwpRequestBuilderImpl implements KwpRequestBuilder {
 
-    public KdpGetResponseDTO(byte[] responseBytes) {
-        this.packet = new KeywestPacket(responseBytes);
 
+
+    @Override
+    public KwpRequestBuilder withLocation(String location) {
+        return null;
     }
 
     @Override
-    public String getErrorMessage() {
+    public KwpRequestBuilder buildRequest() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture execute() {
+        return null;
+    }
+
+    @Override
+    public KwpPacket processResponse() {
         return null;
     }
 }

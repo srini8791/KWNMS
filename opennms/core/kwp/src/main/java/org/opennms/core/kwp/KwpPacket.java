@@ -27,7 +27,7 @@
  *******************************************************************************/
 package org.opennms.core.kwp;
 
-import org.opennms.core.kwp.util.KeywestConversionUtil;
+import org.opennms.core.kwp.util.KwpConversionUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,7 +40,7 @@ import java.util.List;
  * Keywest packet which is used as a protocol
  * for transferring data from KW device to NMS/APP
  */
-public class KeywestPacket {
+public class KwpPacket {
 
     private static final int PACKET_MAX_SIZE = 1307;
 
@@ -53,14 +53,14 @@ public class KeywestPacket {
 
     private int length = 0;
 
-    private KeywestPacketHeader header = null;
+    private KwpPacketHeader header = null;
 
-    private List<KeywestLTVPacket> ltvPackets = new ArrayList<>();
+    private List<KwpLTVPacket> ltvPackets = new ArrayList<>();
 
     /**
      * Default constructor
      */
-    public KeywestPacket() {
+    public KwpPacket() {
     }
 
     /**
@@ -70,13 +70,13 @@ public class KeywestPacket {
      * @param requestType
      * @param contentType
      */
-    public KeywestPacket(byte id, byte requestType, byte contentType) {
-        this.header = new KeywestPacketHeader(id, (byte) 1, requestType, contentType);
+    public KwpPacket(byte id, byte requestType, byte contentType) {
+        this.header = new KwpPacketHeader(id, (byte) 1, requestType, contentType);
         this.header.setLength((short) this.payload.length);
         this.length = this.payload.length;
     }
 
-    public void setHeader(KeywestPacketHeader header) {
+    public void setHeader(KwpPacketHeader header) {
         this.header = header;
         this.header.setLength((short)this.payload.length);
         this.length = this.payload.length;
@@ -87,12 +87,12 @@ public class KeywestPacket {
      *
      * @param packet {@link DatagramPacket}
      */
-    public KeywestPacket(DatagramPacket packet) {
+    public KwpPacket(DatagramPacket packet) {
         this.packet = packet;
         initialize(packet.getData());
     }
 
-    public KeywestPacket(byte[] packetData) {
+    public KwpPacket(byte[] packetData) {
         initialize(packetData);
     }
 
@@ -105,19 +105,19 @@ public class KeywestPacket {
     }
 
     private void populateHeader(byte[] packetData) {
-        this.header = new KeywestPacketHeader(getHeader(packetData));
+        this.header = new KwpPacketHeader(getHeader(packetData));
     }
 
     private void populatePayload(byte[] packetData) {
         this.payload = Arrays.copyOfRange(
                 packetData,
-                KeywestPacketHeader.HEADER_SIZE,
+                KwpPacketHeader.HEADER_SIZE,
                 packetData.length);
     }
 
     private void populateLTVPackets() {
         while (this.payload.length > 0) {
-            KeywestLTVPacket ltv = getLTVFromPacket();
+            KwpLTVPacket ltv = getLTVFromPacket();
             if (ltv == null) {
                 break;
             }
@@ -161,14 +161,14 @@ public class KeywestPacket {
      */
     protected short getShortValueFromPacket(byte[] payloadData, int startIndex, int endIndex) {
         byte[] arr = Arrays.copyOfRange(payloadData, startIndex, endIndex);
-        return KeywestConversionUtil.bytesToShort(arr);
+        return KwpConversionUtil.bytesToShort(arr);
     }
 
     private byte[] getHeader(byte[] data) {
-        return Arrays.copyOfRange(data, 0, KeywestPacketHeader.HEADER_SIZE);
+        return Arrays.copyOfRange(data, 0, KwpPacketHeader.HEADER_SIZE);
     }
 
-    public KeywestPacketHeader getHeader() {
+    public KwpPacketHeader getHeader() {
         return this.header;
     }
 
@@ -177,8 +177,8 @@ public class KeywestPacket {
      *
      * @return
      */
-    protected KeywestLTVPacket getLTVFromPacket() {
-        KeywestLTVPacket ltv = new KeywestLTVPacket();
+    protected KwpLTVPacket getLTVFromPacket() {
+        KwpLTVPacket ltv = new KwpLTVPacket();
 
         short length = getShortValueFromPacket(this.payload, 0, 2);
         if (length == 0) {
@@ -207,8 +207,8 @@ public class KeywestPacket {
      * @param type
      * @return
      */
-    public KeywestLTVPacket getLTVPacketByType(int type) {
-        for (KeywestLTVPacket ltv : ltvPackets) {
+    public KwpLTVPacket getLTVPacketByType(int type) {
+        for (KwpLTVPacket ltv : ltvPackets) {
             if (ltv.getType() == type) {
                 return ltv;
             }
@@ -217,7 +217,7 @@ public class KeywestPacket {
     }
 
     public byte[] getValueFromLTVByType(int type) {
-        KeywestLTVPacket ltv = getLTVPacketByType(type);
+        KwpLTVPacket ltv = getLTVPacketByType(type);
         if (ltv != null && ltv.getValue() != null && ltv.getValue().length > 0) {
             return ltv.getValue();
         }
@@ -225,7 +225,7 @@ public class KeywestPacket {
     }
 
     public String getStringValueFromLTVByType(int type) {
-        KeywestLTVPacket ltv = getLTVPacketByType(type);
+        KwpLTVPacket ltv = getLTVPacketByType(type);
         if (ltv != null && ltv.getValue() != null && ltv.getValue().length > 0) {
             return new String(ltv.getValue());
         }
@@ -241,22 +241,22 @@ public class KeywestPacket {
 	}
 */
 
-    public KeywestLTVPacket getOpCodeLTVPacket() {
+    public KwpLTVPacket getOpCodeLTVPacket() {
         return ltvPackets.get(0);
     }
 
-    public List<KeywestLTVPacket> getLTVPacket() {
+    public List<KwpLTVPacket> getLTVPacket() {
         return ltvPackets;
     }
 
-    public void addLTVToPacket(KeywestLTVPacket ltv) {
+    public void addLTVToPacket(KwpLTVPacket ltv) {
         ltvPackets.add(ltv);
     }
 
     public byte[] toByteArray() throws IOException {
         int totalLength = 0;
         if (ltvPackets != null && ltvPackets.size() > 0) {
-            for (KeywestLTVPacket ltv : ltvPackets) {
+            for (KwpLTVPacket ltv : ltvPackets) {
                 totalLength += ltv.getTotalLength();
             }
         } else {
@@ -268,7 +268,7 @@ public class KeywestPacket {
         stream.write(this.header.getHeader());
 
         if (ltvPackets != null && ltvPackets.size() > 0) {
-            for (KeywestLTVPacket ltv : ltvPackets) {
+            for (KwpLTVPacket ltv : ltvPackets) {
                 stream.write(ltv.toByteArray());
             }
         } else {
@@ -280,7 +280,7 @@ public class KeywestPacket {
 
     @Override
     public String toString() {
-        return "KeywestPacket {" +
+        return "KwpPacket {" +
                 "packet=" + packet +
                 ", payload=" + Arrays.toString(payload) +
                 ", length=" + length +
