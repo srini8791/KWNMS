@@ -26,20 +26,34 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp.proxy;
+package org.opennms.netmgt.kwp.proxy.impl;
 
-import org.opennms.core.kwp.KwpPacket;
+import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.kwp.proxy.KwpRequestBuilder;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface KwpRequestBuilder<T> {
+public class KwpRequestBuilderImpl implements KwpRequestBuilder {
 
-    KwpRequestBuilder<T> withLocation(String location);
 
-    KwpRequestBuilder<T> buildRequest();
 
-    CompletableFuture<T> execute();
+    @Override
+    public KwpRequestBuilder withLocation(String location) {
+        return null;
+    }
 
-    KwpPacket processResponse();
+    @Override
+    public KwpRequestBuilder buildRequest() {
+        return null;
+    }
 
+    @Override
+    public CompletableFuture execute() {
+        return null;
+    }
+
+    @Override
+    public KwpPacket processResponse() {
+        return null;
+    }
 }

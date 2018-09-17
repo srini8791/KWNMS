@@ -49,6 +49,7 @@ import org.opennms.netmgt.provision.persist.ForeignSourceRepository;
 import org.opennms.netmgt.provision.persist.foreignsource.PluginConfig;
 import org.opennms.netmgt.provision.persist.requisition.Requisition;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
+import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
 import org.springframework.core.io.Resource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -239,6 +240,8 @@ public interface ProvisionService {
     LocationAwareDetectorClient getLocationAwareDetectorClient();
 
     LocationAwareSnmpClient getLocationAwareSnmpClient();
+
+    LocationAwareKwpClient getLocationAwareKwpClient();
 
     LocationAwareDnsLookupClient getLocationAwareDnsLookupClient();
 }

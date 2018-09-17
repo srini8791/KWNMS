@@ -98,6 +98,7 @@ import org.opennms.netmgt.provision.persist.requisition.RequisitionInterface;
 import org.opennms.netmgt.provision.persist.requisition.RequisitionInterfaceCollection;
 import org.opennms.netmgt.provision.persist.requisition.RequisitionNode;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
+import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -191,6 +192,9 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
 
     @Autowired
     private LocationAwareSnmpClient m_locationAwareSnmpClient;
+
+    @Autowired
+    private LocationAwareKwpClient m_locationAwareKwpClient;
 
     private final ThreadLocal<Map<String, OnmsServiceType>> m_typeCache = new ThreadLocal<Map<String, OnmsServiceType>>();
     private final ThreadLocal<Map<String, OnmsCategory>> m_categoryCache = new ThreadLocal<Map<String, OnmsCategory>>();
@@ -1375,6 +1379,11 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
     @Override
     public LocationAwareSnmpClient getLocationAwareSnmpClient() {
         return m_locationAwareSnmpClient;
+    }
+
+    @Override
+    public LocationAwareKwpClient getLocationAwareKwpClient() {
+        return m_locationAwareKwpClient;
     }
 
     @Override

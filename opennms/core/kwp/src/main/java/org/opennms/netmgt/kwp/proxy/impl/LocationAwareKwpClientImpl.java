@@ -26,14 +26,14 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp.proxy.impl;
+package org.opennms.netmgt.kwp.proxy.impl;
 
-import org.opennms.core.kwp.KwpGetRequestDTO;
-import org.opennms.core.kwp.KwpLTVPacket;
-import org.opennms.core.kwp.KwpPacket;
-import org.opennms.core.kwp.KwpPacketHeader;
-import org.opennms.core.kwp.proxy.KwpRequestBuilder;
-import org.opennms.core.kwp.proxy.LocationAwareKwpClient;
+import org.opennms.netmgt.kwp.KwpGetRequestDTO;
+import org.opennms.netmgt.kwp.KwpLTVPacket;
+import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.kwp.KwpPacketHeader;
+import org.opennms.netmgt.kwp.proxy.KwpRequestBuilder;
+import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
 
 import java.util.List;
 

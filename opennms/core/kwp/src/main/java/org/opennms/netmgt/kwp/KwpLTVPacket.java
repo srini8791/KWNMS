@@ -25,9 +25,9 @@
  *     http://www.opennms.org/
  *     http://www.opennms.com/
  *******************************************************************************/
-package org.opennms.core.kwp;
+package org.opennms.netmgt.kwp;
 
-import org.opennms.core.kwp.util.KwpConversionUtil;
+import org.opennms.netmgt.kwp.util.KwpConversionUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

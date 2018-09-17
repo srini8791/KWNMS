@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp;
+package org.opennms.netmgt.kwp;
 
 import org.opennms.core.rpc.api.RpcResponse;
 

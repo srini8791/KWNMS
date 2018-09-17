@@ -26,58 +26,20 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp;
+package org.opennms.netmgt.kwp.proxy;
 
-import org.opennms.core.rpc.api.RpcRequest;
+import org.opennms.netmgt.kwp.KwpPacket;
 
-public class KwpGetRequestDTO implements RpcRequest {
+import java.util.concurrent.CompletableFuture;
 
-    private KwpPacket packet;
+public interface KwpRequestBuilder<T> {
 
-    private String host;
+    KwpRequestBuilder<T> withLocation(String location);
 
-    public KwpGetRequestDTO() {
+    KwpRequestBuilder<T> buildRequest();
 
-    }
+    CompletableFuture<T> execute();
 
-    public void buildGetRequest(KwpPacketHeader header) {
-        if (this.packet == null) {
-            this.packet = new KwpPacket();
-        }
-        this.packet.setHeader(header);
-    }
+    KwpPacket processResponse();
 
-    public KwpPacket getPacket() {
-        return packet;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void setPacket(KwpPacket packet) {
-        this.packet = packet;
-    }
-
-    private byte getRequestId = 1;
-
-
-    @Override
-    public String getLocation() {
-        return null;
-    }
-
-    @Override
-    public String getSystemId() {
-        return null;
-    }
-
-    @Override
-    public Long getTimeToLiveMs() {
-        return null;
-    }
 }

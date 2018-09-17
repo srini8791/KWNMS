@@ -25,7 +25,7 @@
  *     http://www.opennms.org/
  *     http://www.opennms.com/
  *******************************************************************************/
-package org.opennms.core.kwp.util;
+package org.opennms.netmgt.kwp.util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

@@ -26,11 +26,11 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp.proxy;
+package org.opennms.netmgt.kwp.proxy;
 
-import org.opennms.core.kwp.KwpLTVPacket;
-import org.opennms.core.kwp.KwpPacket;
-import org.opennms.core.kwp.KwpPacketHeader;
+import org.opennms.netmgt.kwp.KwpLTVPacket;
+import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.kwp.KwpPacketHeader;
 
 import java.util.List;
 

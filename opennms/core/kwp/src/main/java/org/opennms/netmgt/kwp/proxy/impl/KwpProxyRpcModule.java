@@ -26,34 +26,52 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp.proxy.impl;
+package org.opennms.netmgt.kwp.proxy.impl;
 
-import org.opennms.core.kwp.KwpPacket;
-import org.opennms.core.kwp.proxy.KwpRequestBuilder;
+import org.opennms.core.rpc.api.RpcModule;
+import org.opennms.core.rpc.api.RpcRequest;
+import org.opennms.core.rpc.api.RpcResponse;
 
 import java.util.concurrent.CompletableFuture;
 
-public class KwpRequestBuilderImpl implements KwpRequestBuilder {
+public class KwpProxyRpcModule<S extends RpcRequest,T extends RpcResponse> implements RpcModule<S, T> {
 
+    public static final KwpProxyRpcModule INSTANCE = new KwpProxyRpcModule();
+    public static final String KDP_MODULE_ID = "KDP";
 
 
     @Override
-    public KwpRequestBuilder withLocation(String location) {
+    public String getId() {
         return null;
     }
 
     @Override
-    public KwpRequestBuilder buildRequest() {
+    public String marshalRequest(S request) {
         return null;
     }
 
     @Override
-    public CompletableFuture execute() {
+    public S unmarshalRequest(String request) {
         return null;
     }
 
     @Override
-    public KwpPacket processResponse() {
+    public String marshalResponse(T response) {
+        return null;
+    }
+
+    @Override
+    public T unmarshalResponse(String response) {
+        return null;
+    }
+
+    @Override
+    public T createResponseWithException(Throwable ex) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<T> execute(S request) {
         return null;
     }
 }

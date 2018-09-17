@@ -39,6 +39,11 @@
       <artifactId>org.opennms.core.daemon</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.opennms.core</groupId>
+      <artifactId>org.opennms.core.kwp</artifactId>
+      <version>22.0.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.opennms</groupId>
       <artifactId>opennms-dao</artifactId>
     </dependency>

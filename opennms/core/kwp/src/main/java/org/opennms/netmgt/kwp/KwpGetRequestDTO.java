@@ -26,52 +26,58 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp.proxy.impl;
+package org.opennms.netmgt.kwp;
 
-import org.opennms.core.rpc.api.RpcModule;
 import org.opennms.core.rpc.api.RpcRequest;
-import org.opennms.core.rpc.api.RpcResponse;
 
-import java.util.concurrent.CompletableFuture;
+public class KwpGetRequestDTO implements RpcRequest {
 
-public class KwpProxyRpcModule<S extends RpcRequest,T extends RpcResponse> implements RpcModule<S, T> {
+    private KwpPacket packet;
 
-    public static final KwpProxyRpcModule INSTANCE = new KwpProxyRpcModule();
-    public static final String KDP_MODULE_ID = "KDP";
+    private String host;
+
+    public KwpGetRequestDTO() {
+
+    }
+
+    public void buildGetRequest(KwpPacketHeader header) {
+        if (this.packet == null) {
+            this.packet = new KwpPacket();
+        }
+        this.packet.setHeader(header);
+    }
+
+    public KwpPacket getPacket() {
+        return packet;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setPacket(KwpPacket packet) {
+        this.packet = packet;
+    }
+
+    private byte getRequestId = 1;
 
 
     @Override
-    public String getId() {
+    public String getLocation() {
         return null;
     }
 
     @Override
-    public String marshalRequest(S request) {
+    public String getSystemId() {
         return null;
     }
 
     @Override
-    public S unmarshalRequest(String request) {
-        return null;
-    }
-
-    @Override
-    public String marshalResponse(T response) {
-        return null;
-    }
-
-    @Override
-    public T unmarshalResponse(String response) {
-        return null;
-    }
-
-    @Override
-    public T createResponseWithException(Throwable ex) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<T> execute(S request) {
+    public Long getTimeToLiveMs() {
         return null;
     }
 }

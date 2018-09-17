@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.core.kwp;
+package org.opennms.netmgt.kwp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
