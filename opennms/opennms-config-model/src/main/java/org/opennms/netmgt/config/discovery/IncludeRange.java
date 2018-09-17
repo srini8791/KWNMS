@@ -230,8 +230,8 @@ public class IncludeRange implements Serializable {
                     && Objects.equals(temp.m_retries, m_retries)
                     && Objects.equals(temp.m_timeout, m_timeout)
                     && Objects.equals(temp.m_foreignSource, m_foreignSource)
-                    && Objects.equals(temp.m_begin, m_begin)
-                    && Objects.equals(temp.m_end, m_end);
+                    && Objects.equals(temp.getBegin(), getBegin())
+                    && Objects.equals(temp.getEnd(), getEnd());
         }
         return false;
     }

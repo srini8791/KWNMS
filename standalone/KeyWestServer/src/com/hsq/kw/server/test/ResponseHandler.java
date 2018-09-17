@@ -14,7 +14,7 @@ public class ResponseHandler {
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.IPADDRESS_TYPE, b));
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.SSID_TYPE, "SifyWERTYU"));
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.MODE_TYPE, "11AC".getBytes()));
-		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.BANDWIDTY_TYPE, "HT20".getBytes()));
+		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.BANDWIDTH_TYPE, "HT20".getBytes()));
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.CHANNEL_TYPE, ConversionUtil.shortToSingleByte((short)1)));
 		return packet;
 	}

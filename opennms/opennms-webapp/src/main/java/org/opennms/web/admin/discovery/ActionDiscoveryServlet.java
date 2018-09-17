@@ -391,20 +391,8 @@ public class ActionDiscoveryServlet extends HttpServlet {
             newIR.setLocation(location);
         }
 
-        // reload newIR if it is by netmask
-        if (byNetMask) {
-            String beginAddr = newIR.getBegin();
-            String endAddr = newIR.getEnd();
-            newIR.setBegin(beginAddr);
-            newIR.setEnd(endAddr);
+        if (!config.getIncludeRanges().contains(newIR)) {
+            config.addIncludeRange(newIR);
         }
-
-        config.addIncludeRange(newIR);
-
-        // todo: need to check for duplicates...fix the following and uncomment
-        // following code is not working, need to make changes in IncludeRange
-        //if (!config.getIncludeRanges().contains(newIR)) {
-        //    config.addIncludeRange(newIR);
-        //}
     }
 }

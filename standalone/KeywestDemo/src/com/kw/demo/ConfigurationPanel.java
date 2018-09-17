@@ -83,8 +83,8 @@ public class ConfigurationPanel extends JPanel {
         Configuration config = new Configuration(rKwPacket);
         socket.close();
         ssid.setText(config.getSsid());
-        bandwidth.setText(config.getChannelBW());
-        mode.setText(config.getMode());
+        bandwidth.setText(String.valueOf(config.getChannelBW()));
+        mode.setText(String.valueOf(config.getMode()));
         channel.setText(config.getChannel()+"");
         //ssid.setText(rKwPacket.);
     }
