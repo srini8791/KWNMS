@@ -28,16 +28,37 @@
 
 package org.opennms.netmgt.kwp.proxy.impl;
 
-import org.opennms.netmgt.kwp.KwpGetRequestDTO;
-import org.opennms.netmgt.kwp.KwpLTVPacket;
-import org.opennms.netmgt.kwp.KwpPacket;
-import org.opennms.netmgt.kwp.KwpPacketHeader;
+import org.opennms.core.rpc.api.RpcClient;
+import org.opennms.core.rpc.api.RpcClientFactory;
+import org.opennms.netmgt.kwp.*;
 import org.opennms.netmgt.kwp.proxy.KwpRequestBuilder;
 import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
-public class LocationAwareKwpClientImpl implements LocationAwareKwpClient {
+public class LocationAwareKwpClientImpl implements LocationAwareKwpClient, InitializingBean {
+
+    @Autowired
+    private RpcClientFactory rpcClientFactory;
+
+    private RpcClient<KwpGetRequestDTO, KwpGetResponseDTO> delegate;
+
+
+    public LocationAwareKwpClientImpl(RpcClientFactory rpcClientFactory) {
+        this.rpcClientFactory = Objects.requireNonNull(rpcClientFactory);
+        afterPropertiesSet();
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        delegate = rpcClientFactory.getClient(KwpProxyRpcModule.INSTANCE);
+    }
 
 
     @Override
@@ -48,29 +69,29 @@ public class LocationAwareKwpClientImpl implements LocationAwareKwpClient {
 
     @Override
     public KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header) {
-        KwpGetRequestDTO getRequestDTO = new KwpGetRequestDTO();
-        getRequestDTO.buildGetRequest(header);
-        return new KwpRequestBuilderImpl();
+        //KwpGetRequestDTO getRequestDTO = new KwpGetRequestDTO();
+        //getRequestDTO.buildGetRequest(header);
+        return new KwpRequestBuilderImpl<KwpPacket>(this,host,header).buildRequest();
     }
 
     @Override
     public KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header, List<KwpLTVPacket> ltvs) {
+        try {
+            InetAddress address = InetAddress.getByName(host);
+            return new KwpRequestBuilderImpl<KwpPacket>(this,address,header,ltvs).buildRequest();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    /*
     @Override
-    public KwpRequestBuilder<KwpPacket> get(String host,) {
-        return new KwpRequestBuilder<KwpPacket>() {
-            @Override
-            public KwpRequestBuilder<KwpPacket> withLocation(String location) {
-                return null;
-            }
+    public KwpRequestBuilder<KwpPacket> get(InetAddress host, KwpPacketHeader header) {
 
-            @Override
-            public CompletableFuture<KwpPacket> execute() {
-                return null;
-            }
-        };
-    }*/
+        return new KwpRequestBuilderImpl(this,host,header).buildRequest();
+    }
+
+    public CompletableFuture<KwpGetResponseDTO> execute(KwpGetRequestDTO request) {
+        return delegate.execute(request);
+    }
 }
