@@ -28,14 +28,29 @@
 
 package org.opennms.netmgt.kwp.proxy.impl;
 
-import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.kwp.*;
 import org.opennms.netmgt.kwp.proxy.KwpRequestBuilder;
+import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class KwpRequestBuilderImpl implements KwpRequestBuilder {
+public class KwpRequestBuilderImpl<T> extends AbstractKwpRequestBuilder<T> {
 
 
+    public KwpRequestBuilderImpl(LocationAwareKwpClientImpl client, InetAddress host, KwpPacketHeader header) {
+        super(client,host,header);
+    }
+
+    public KwpRequestBuilderImpl(LocationAwareKwpClientImpl client, String host, KwpPacketHeader header) {
+        super(client,host,header);
+    }
+
+    public KwpRequestBuilderImpl(LocationAwareKwpClientImpl client, InetAddress host, KwpPacketHeader header,List<KwpLTVPacket> ltvPacketList) {
+        super(client,host,header,ltvPacketList);
+    }
 
     @Override
     public KwpRequestBuilder withLocation(String location) {
@@ -44,16 +59,19 @@ public class KwpRequestBuilderImpl implements KwpRequestBuilder {
 
     @Override
     public KwpRequestBuilder buildRequest() {
-        return null;
+        return this;
     }
 
     @Override
-    public CompletableFuture execute() {
-        return null;
+    public CompletableFuture<T> execute() {
+        KwpGetRequestDTO requestDTO = new KwpGetRequestDTO();
+        requestDTO.setHost(this.host.getHostAddress());
+        requestDTO.buildGetRequest(this.header);
+        return m_client.execute(requestDTO).thenApply(this::processResponse);
     }
 
     @Override
-    public KwpPacket processResponse() {
+    protected T processResponse(KwpGetResponseDTO response) {
         return null;
     }
 }
