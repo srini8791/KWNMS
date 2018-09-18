@@ -40,6 +40,6 @@ public interface KwpRequestBuilder<T> {
 
     CompletableFuture<T> execute();
 
-    KwpPacket processResponse();
+    //KwpPacket processResponse();
 
 }
