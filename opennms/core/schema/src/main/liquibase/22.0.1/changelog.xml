@@ -171,6 +171,13 @@
     </rollback>
   </changeSet>
 
+  <changeSet author="ndarbha" id="22.0.1-region-location-link">
+    <addColumn tableName="monitoringlocations">
+      <column name="region" type="integer" />
+    </addColumn>
+    <addForeignKeyConstraint constraintName="fk_region_locations" baseTableName="monitoringlocations" baseColumnNames="region" referencedTableName="regions" referencedColumnNames="id" />
+  </changeSet>
+
   <changeSet author="ndarbha" id="22.0.1-ethernetstats">
     <validCheckSum>ANY</validCheckSum>
 

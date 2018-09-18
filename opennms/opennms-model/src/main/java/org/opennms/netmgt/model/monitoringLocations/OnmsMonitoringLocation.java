@@ -34,13 +34,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -50,6 +44,7 @@ import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.opennms.netmgt.model.OnmsRegion;
 
 /**
  * <p>
@@ -117,6 +112,8 @@ public class OnmsMonitoringLocation implements Serializable {
      * The priority of the location. (1=highest)
      */
     private Long m_priority;
+
+    private OnmsRegion m_region;
 
     private List<String> m_tags;
 
@@ -254,6 +251,29 @@ public class OnmsMonitoringLocation implements Serializable {
     public void setPriority(final Long priority) {
         m_priority = priority;
     }
+
+
+    /**
+     * The region associated with this location
+     *
+     * @return a {@link org.opennms.netmgt.model.OnmsRegion} object.
+     */
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "region")
+    @XmlElement(name="region")
+    public OnmsRegion getRegion() {
+        return m_region;
+    }
+
+    /**
+     * <p>setRegion</p>
+     *
+     * @param region a {@link org.opennms.netmgt.model.OnmsRegion} object.
+     */
+    public void setRegion(OnmsRegion region) {
+        m_region = region;
+    }
+
 
     @XmlElementWrapper(name="tags")
     @XmlElement(name="tag")
