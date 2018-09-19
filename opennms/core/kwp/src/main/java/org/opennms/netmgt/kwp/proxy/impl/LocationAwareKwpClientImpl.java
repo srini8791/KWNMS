@@ -49,6 +49,8 @@ public class LocationAwareKwpClientImpl implements LocationAwareKwpClient, Initi
 
     private RpcClient<KwpGetRequestDTO, KwpGetResponseDTO> delegate;
 
+    public LocationAwareKwpClientImpl() {}
+
 
     public LocationAwareKwpClientImpl(RpcClientFactory rpcClientFactory) {
         this.rpcClientFactory = Objects.requireNonNull(rpcClientFactory);
