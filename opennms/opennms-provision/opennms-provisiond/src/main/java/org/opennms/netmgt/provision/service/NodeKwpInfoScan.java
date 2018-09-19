@@ -28,7 +28,6 @@
 
 package org.opennms.netmgt.provision.service;
 
-import com.sun.javafx.image.IntPixelGetter;
 import org.opennms.core.tasks.BatchTask;
 import org.opennms.core.tasks.RunInBatch;
 import org.opennms.netmgt.kwp.KwpPacketHeader;
