@@ -31,14 +31,13 @@ package org.opennms.netmgt.kwp;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.CompletionHandler;
+import java.nio.channels.DatagramChannel;
 import java.util.concurrent.CompletableFuture;
 
 public class KwpAsyncClient {
     private String host;
     private int port = 7861;
-    private AsynchronousSocketChannel client = null;
+    private DatagramChannel client = null;
 
     public KwpAsyncClient(String host, int port) {
         this.host = host;
@@ -49,65 +48,47 @@ public class KwpAsyncClient {
     }
 
 
-    public CompletableFuture<KwpGetResponseDTO> sendAndReceive(KwpGetRequestDTO request) throws IOException {
+    public CompletableFuture<KwpGetResponseDTO> sendAndReceive(KwpGetRequestDTO request){
         this.host = request.getHost();
         CompletableFuture<KwpGetResponseDTO> result = new CompletableFuture<>();
-        client = AsynchronousSocketChannel.open();
-        client.connect(new InetSocketAddress(host, port),null, new CompletionHandler<Void, Void>() {
-            @Override
-            public void completed(Void v, Void attachment) {
-                byte[] bytes = null;
-                try {
-                    bytes = request.getPacket().toByteArray();
 
-                } catch (Exception ex) {
+        try {
+            client = DatagramChannel.open();
+            //client.setOption()
+            client.bind(null);
+        } catch (IOException e) {
+            result.completeExceptionally(e);
+        }
+        byte[] bytes = null;
+        try {
+            bytes = request.getPacket().toByteArray();
+        } catch (IOException e) {
+            result.completeExceptionally(e);
+        }
 
-                }
-                ByteBuffer buffer = ByteBuffer.wrap(bytes);
-                client.write(buffer, null, new CompletionHandler<Integer, Void>() {
+        if (client != null && client.isOpen()) {
+            ByteBuffer buffer = ByteBuffer.wrap(bytes);
+            InetSocketAddress serverAddress = new InetSocketAddress(this.host, this.port);
 
-                    @Override
-                    public void completed(Integer length, Void attachment) {
-                        if (buffer.remaining() > 0) {
-                            client.write(buffer, null, this);
-                        } else {
-                            ByteBuffer readBuffer = ByteBuffer.allocate(1306);
-                            client.read(readBuffer, null, new CompletionHandler<Integer, Void>() {
-
-                                @Override
-                                public void completed(Integer length, Void attachment) {
-                                    if (length > 0 && readBuffer.hasRemaining()) {
-                                        client.read(readBuffer, null, this);
-                                    } else {
-                                        byte[] responseBytes = new byte[readBuffer.position()];
-                                        readBuffer.position(0);
-                                        readBuffer.get(responseBytes);
-                                        KwpGetResponseDTO responseDTO = new KwpGetResponseDTO(responseBytes);
-                                        result.complete(responseDTO);
-                                    }
-                                }
-
-                                @Override
-                                public void failed(Throwable exc, Void attachment) {
-                                    result.completeExceptionally(exc);
-                                }
-                            });
-                        }
-
-                    }
-
-                    @Override
-                    public void failed(Throwable exc, Void attachment) {
-                        result.completeExceptionally(exc);
-                    }
-                });
+            try {
+                client.connect(serverAddress);
+                client.send(buffer, serverAddress);
+                buffer.clear();
+                client.socket().setSoTimeout(3000);
+                client.receive(buffer);
+                buffer.flip();
+                int limits = buffer.limit();
+                bytes = new byte[limits];
+                buffer.get(bytes, 0, limits);
+                KwpGetResponseDTO responseDTO = new KwpGetResponseDTO(bytes);
+                result.complete(responseDTO);
+                client.disconnect();
+            } catch (IOException e) {
+                result.completeExceptionally(e);
             }
+        }
 
-            @Override
-            public void failed(Throwable exc, Void attachment) {
-                result.completeExceptionally(exc);
-            }
-        });
+
         return result;
     }
 

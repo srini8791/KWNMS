@@ -34,7 +34,7 @@ import org.opennms.core.rpc.api.RpcResponse;
 import org.opennms.netmgt.kwp.KwpAsyncClient;
 import org.opennms.netmgt.kwp.KwpGetRequestDTO;
 
-import java.io.IOException;
+
 import java.util.concurrent.CompletableFuture;
 
 public class KwpProxyRpcModule<S extends RpcRequest,T extends RpcResponse> implements RpcModule<S, T> {
@@ -79,11 +79,6 @@ public class KwpProxyRpcModule<S extends RpcRequest,T extends RpcResponse> imple
         req.getHost();
         req.getPacket();
         KwpAsyncClient client = new KwpAsyncClient();
-        try {
-            return (CompletableFuture<T>) client.sendAndReceive(req);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (CompletableFuture<T>) client.sendAndReceive(req);
     }
 }
