@@ -42,7 +42,7 @@ import java.util.Set;
 @Table(name = "regions")
 @XmlRootElement(name = "region")
 @XmlAccessorType(XmlAccessType.NONE)
-public class OnmsRegion implements Serializable, Comparable<OnmsRegion> {
+public class OnmsRegion implements Serializable {
 
     private static final long serialVersionUID = -8906476327527789591L;
 
@@ -127,17 +127,6 @@ public class OnmsRegion implements Serializable, Comparable<OnmsRegion> {
      */
     public void addMonitoringLocation(OnmsMonitoringLocation location) {
         getMonitoringLocations().add(location);
-    }
-
-    /**
-     * <p>compareTo</p>
-     *
-     * @param o a {@link OnmsRegion} object.
-     * @return a int.
-     */
-    @Override
-    public int compareTo(OnmsRegion o) {
-        return getName().compareToIgnoreCase(o.getName());
     }
 
     /**

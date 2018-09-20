@@ -84,67 +84,29 @@
   </changeSet>
 
 
-  <changeSet author="ndarbha" id="22.0.1-nodeinfo">
+  <changeSet author="ndarbha" id="22.0.1-add-columns-to-node">
     <validCheckSum>ANY</validCheckSum>
 
-    <createTable tableName="nodeinfo">
-      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
-        <constraints primaryKey="true" primaryKeyName="pk_nodeinfo_id" nullable="false" />
-      </column>
-      <column name="nodeid" type="integer">
-        <constraints nullable="false" />
-      </column>
-      <column name="macaddress" type="varchar(20)">
-        <constraints nullable="false" />
-      </column>
-      <column name="serialnumber" type="varchar(30)">
-        <constraints nullable="true" />
-      </column>
-      <column name="model" type="varchar(30)">
-        <constraints nullable="true" />
-      </column>
-      <column name="firmware" type="varchar(30)">
-        <constraints nullable="true" />
-      </column>
-      <column name="ipaddress" type="varchar(30)">
-        <constraints nullable="true" />
-      </column>
-      <column name="systemname" type="varchar(30)">
-        <constraints nullable="true" />
-      </column>
-      <column name="frequencychannel" type="integer">
-        <constraints nullable="true" />
-      </column>
-      <column name="bandwidth" type="integer">
-        <constraints nullable="true" />
-      </column>
-      <column name="ethernetspeed" type="varchar(5)">
-        <constraints nullable="true" />
-      </column>
-      <column name="iobandwidthlimit" type="varchar(5)">
-        <constraints nullable="true" />
-      </column>
-      <column name="modulation" type="integer">
-        <constraints nullable="true" />
-      </column>
-      <column name="opmode" type="integer">
-        <constraints nullable="true" />
-      </column>
-      <column name="provisioned" type="boolean" defaultValueBoolean="false">
-        <constraints nullable="false" />
-      </column>
-      <column name="active" type="boolean" defaultValueBoolean="true">
-        <constraints nullable="false" />
-      </column>
-    </createTable>
+    <preConditions onFail="MARK_RAN">
+      <not><columnExists tableName="node" columnName="active" /></not>
+    </preConditions>
 
-    <addForeignKeyConstraint constraintName="fk_nodeinfo_nodeid" onDelete="CASCADE" baseTableName="nodeinfo" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
-    <createIndex tableName="nodeinfo" indexName="nodeinfo_nodeid_idx">
-      <column name="nodeid" />
-    </createIndex>
+    <addColumn tableName="node">
+      <column name="ssid"       type="text" />
+      <column name="macaddress" type="text" />
+      <column name="opmode"     type="integer" />
+      <column name="bandwidth"  type="integer" />
+      <column name="channel"    type="integer" />
+      <column name="active"     type="boolean" />
+    </addColumn>
 
     <rollback>
-      <dropTable tableName="nodeinfo" />
+      <dropColumn tableName="node" columnName="ssid" />
+      <dropColumn tableName="node" columnName="macaddress" />
+      <dropColumn tableName="node" columnName="opmode" />
+      <dropColumn tableName="node" columnName="bandwidth" />
+      <dropColumn tableName="node" columnName="channel" />
+      <dropColumn tableName="node" columnName="active" />
     </rollback>
 
   </changeSet>

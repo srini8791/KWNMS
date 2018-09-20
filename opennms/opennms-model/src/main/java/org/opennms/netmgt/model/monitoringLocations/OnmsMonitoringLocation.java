@@ -108,8 +108,6 @@ public class OnmsMonitoringLocation implements Serializable {
      */
     private Long m_priority;
 
-    @XmlIDREF
-    @XmlAttribute(name="region")
     @JsonBackReference
     private OnmsRegion m_region;
 
@@ -124,10 +122,9 @@ public class OnmsMonitoringLocation implements Serializable {
      * 
      * @param locationName
      * @param monitoringArea
-     * @param pollingPackageName
      */
     public OnmsMonitoringLocation(final String locationName, final String monitoringArea) {
-        this(locationName, monitoringArea, null, null, null, null, null, null, null);
+        this(locationName, monitoringArea, null, null, null, null, null, null);
     }
 
     /**
@@ -138,10 +135,10 @@ public class OnmsMonitoringLocation implements Serializable {
      * @param pollingPackageName
      */
     public OnmsMonitoringLocation(final String locationName, final String monitoringArea, final String pollingPackageName) {
-        this(locationName, monitoringArea, null, new String[] { pollingPackageName }, null, null, null, null, null);
+        this(locationName, monitoringArea, null, new String[] { pollingPackageName }, null, null, null, null);
     }
 
-    public OnmsMonitoringLocation(final String locationName, final String monitoringArea, final String[] pollingPackageNames, final String[] collectionPackageNames, final String geolocation, final Float latitude, final Float longitude, final Long priority, final OnmsRegion region, final String... tags) {
+    public OnmsMonitoringLocation(final String locationName, final String monitoringArea, final String[] pollingPackageNames, final String[] collectionPackageNames, final String geolocation, final Float latitude, final Float longitude, final Long priority, final String... tags) {
         m_locationName = locationName;
         m_monitoringArea = monitoringArea;
         m_pollingPackageNames = (pollingPackageNames == null ? Collections.emptyList() : Arrays.asList(pollingPackageNames));
@@ -150,7 +147,6 @@ public class OnmsMonitoringLocation implements Serializable {
         m_latitude = latitude;
         m_longitude = longitude;
         m_priority = priority;
-        m_region = region;
         // Because tags is a vararg, if you have no arguments for it, it comes in as String[0]
         m_tags = ((tags == null || tags.length == 0) ? Collections.emptyList() : Arrays.asList(tags));
     }
@@ -257,6 +253,8 @@ public class OnmsMonitoringLocation implements Serializable {
      *
      * @return a {@link org.opennms.netmgt.model.OnmsRegion} object.
      */
+    @XmlIDREF
+    @XmlAttribute(name="region")
     @ManyToOne
     @JoinColumn(name = "region")
     public OnmsRegion getRegion() {
