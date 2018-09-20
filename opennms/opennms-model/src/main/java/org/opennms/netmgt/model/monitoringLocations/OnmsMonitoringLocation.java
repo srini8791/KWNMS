@@ -28,23 +28,18 @@
 
 package org.opennms.netmgt.model.monitoringLocations;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
+import org.opennms.netmgt.model.OnmsRegion;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.opennms.netmgt.model.OnmsRegion;
 
 /**
  * <p>
@@ -113,6 +108,9 @@ public class OnmsMonitoringLocation implements Serializable {
      */
     private Long m_priority;
 
+    @XmlIDREF
+    @XmlAttribute(name="region")
+    @JsonBackReference
     private OnmsRegion m_region;
 
     private List<String> m_tags;
@@ -129,7 +127,7 @@ public class OnmsMonitoringLocation implements Serializable {
      * @param pollingPackageName
      */
     public OnmsMonitoringLocation(final String locationName, final String monitoringArea) {
-        this(locationName, monitoringArea, null, null, null, null, null, null);
+        this(locationName, monitoringArea, null, null, null, null, null, null, null);
     }
 
     /**
@@ -140,10 +138,10 @@ public class OnmsMonitoringLocation implements Serializable {
      * @param pollingPackageName
      */
     public OnmsMonitoringLocation(final String locationName, final String monitoringArea, final String pollingPackageName) {
-        this(locationName, monitoringArea, null, new String[] { pollingPackageName }, null, null, null, null);
+        this(locationName, monitoringArea, null, new String[] { pollingPackageName }, null, null, null, null, null);
     }
 
-    public OnmsMonitoringLocation(final String locationName, final String monitoringArea, final String[] pollingPackageNames, final String[] collectionPackageNames, final String geolocation, final Float latitude, final Float longitude, final Long priority, final String... tags) {
+    public OnmsMonitoringLocation(final String locationName, final String monitoringArea, final String[] pollingPackageNames, final String[] collectionPackageNames, final String geolocation, final Float latitude, final Float longitude, final Long priority, final OnmsRegion region, final String... tags) {
         m_locationName = locationName;
         m_monitoringArea = monitoringArea;
         m_pollingPackageNames = (pollingPackageNames == null ? Collections.emptyList() : Arrays.asList(pollingPackageNames));
@@ -152,6 +150,7 @@ public class OnmsMonitoringLocation implements Serializable {
         m_latitude = latitude;
         m_longitude = longitude;
         m_priority = priority;
+        m_region = region;
         // Because tags is a vararg, if you have no arguments for it, it comes in as String[0]
         m_tags = ((tags == null || tags.length == 0) ? Collections.emptyList() : Arrays.asList(tags));
     }
@@ -258,9 +257,8 @@ public class OnmsMonitoringLocation implements Serializable {
      *
      * @return a {@link org.opennms.netmgt.model.OnmsRegion} object.
      */
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "region")
-    @XmlElement(name="region")
     public OnmsRegion getRegion() {
         return m_region;
     }
@@ -309,6 +307,7 @@ public class OnmsMonitoringLocation implements Serializable {
         result = prime * result + ((m_collectionPackageNames == null || m_collectionPackageNames.size() == 0) ? 0 : m_collectionPackageNames.hashCode());
         result = prime * result + ((m_priority == null) ? 0 : m_priority.hashCode());
         result = prime * result + ((m_tags == null || m_tags.size() == 0) ? 0 : m_tags.hashCode());
+        result = prime * result + ((m_region == null) ? 0 : m_region.hashCode());
         return result;
     }
 
@@ -334,6 +333,7 @@ public class OnmsMonitoringLocation implements Serializable {
             .append(getCollectionPackageNames(), other.getCollectionPackageNames())
             .append(getPriority(), other.getPriority())
             .append(getTags(), other.getTags())
+            .append(getRegion(), other.getRegion())
             .isEquals();
     }
 
@@ -347,7 +347,8 @@ public class OnmsMonitoringLocation implements Serializable {
                 ", latitude=" + m_latitude +
                 ", longitude=" + m_longitude +
                 ", priority=" + m_priority +
-                ", tags=" + m_tags + "]";
+                ", tags=" + m_tags +
+                ", region=" + m_region + "]";
     }
 
 }

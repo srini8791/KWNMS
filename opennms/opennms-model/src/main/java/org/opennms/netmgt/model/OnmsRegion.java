@@ -28,24 +28,39 @@
 
 package org.opennms.netmgt.model;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "regions")
 @XmlRootElement(name = "region")
-public class OnmsRegion implements Comparable<OnmsRegion> {
+@XmlAccessorType(XmlAccessType.NONE)
+public class OnmsRegion implements Serializable, Comparable<OnmsRegion> {
 
+    private static final long serialVersionUID = -8906476327527789591L;
+
+    @Id
+    @Column(name="id")
+    @SequenceGenerator(name = "opennmsSequence", sequenceName = "opennmsNxtId")
+    @GeneratedValue(generator = "opennmsSequence")
+    @XmlAttribute(name = "id")
     private Integer m_id;
 
+    @XmlAttribute(name = "name")
+    @Column(name = "name", length = 32, nullable = false, unique = true)
     private String m_name;
 
+    @XmlElementWrapper(name = "monitoringLocations")
+    @XmlElement(name = "monitoringLocation")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
     private Set<OnmsMonitoringLocation> m_monitoringLocations = new LinkedHashSet<>();
 
     /**
@@ -53,11 +68,6 @@ public class OnmsRegion implements Comparable<OnmsRegion> {
      *
      * @return a {@link Integer} object.
      */
-    @Id
-    @Column(nullable = false)
-    @SequenceGenerator(name = "opennmsSequence", sequenceName = "opennmsNxtId")
-    @GeneratedValue(generator = "opennmsSequence")
-    @XmlAttribute
     public Integer getId() {
         return m_id;
     }
@@ -76,7 +86,6 @@ public class OnmsRegion implements Comparable<OnmsRegion> {
      *
      * @return a {@link String} object.
      */
-    @Column(name = "name", length = 32, nullable = false, unique = true)
     public String getName() {
         return m_name;
     }
@@ -96,11 +105,6 @@ public class OnmsRegion implements Comparable<OnmsRegion> {
      * @return a {@link Set} object.
      * @since 1.8.1
      */
-    @OneToMany(mappedBy = "region", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @XmlIDREF
-    @XmlElement(name = "monitoringLocation")
-    @XmlElementWrapper(name = "monitoringLocations")
-    @JsonBackReference
     public Set<OnmsMonitoringLocation> getMonitoringLocations() {
         return m_monitoringLocations;
     }
