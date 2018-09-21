@@ -122,7 +122,7 @@
       <not><columnExists tableName="assets" columnName="modulation" /></not>
     </preConditions>
 
-    <addColumn tableName="node">
+    <addColumn tableName="assets">
       <column name="firmware"         type="text" />
       <column name="ethernetspeed"    type="text" />
       <column name="iobandwidthlimit" type="text" />
