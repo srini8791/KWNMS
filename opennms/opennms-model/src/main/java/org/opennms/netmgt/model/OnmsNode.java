@@ -144,6 +144,25 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     /** boolean flag for a flow exporting node */
     private boolean m_hasFlows;
 
+    /** nullable persistent field */
+    private String m_ssid;
+
+    /** nullable persistent field */
+    private String m_macAddress;
+
+    /** nullable persistent field */
+    private Integer m_opMode;
+
+    /** nullable persistent field */
+    private Integer m_bandwidth;
+
+    /** nullable persistent field */
+    private Integer m_channel;
+
+    /** nullable persistent field */
+    private boolean m_active;
+
+
     @Transient
     @XmlTransient
     @JsonIgnore
@@ -552,6 +571,92 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         }
         m_label = nodelabel;
     }
+
+
+    @XmlElement(name="ssid")
+    @Column(name="ssid")
+    public String getSsid() {
+        return m_ssid;
+    }
+
+    /**
+     * <p>setSsid</p>
+     * @param ssid
+     */
+    public void setSsid(String ssid) {
+        this.m_ssid = ssid;
+    }
+
+    @XmlElement(name="macAddress")
+    @Column(name="macAddress")
+    public String getMacAddress() {
+        return m_macAddress;
+    }
+
+    /**
+     * <p>setMacAddress</p>
+     * @param macAddress
+     */
+    public void setMacAddress(String macAddress) {
+        this.m_macAddress = macAddress;
+    }
+
+    @XmlElement(name="opMode")
+    @Column(name="opMode")
+    public Integer getOpMode() {
+        return m_opMode;
+    }
+
+    /**
+     * <p>setOpMode</p>
+     * @param opMode
+     */
+    public void setOpMode(Integer opMode) {
+        this.m_opMode = opMode;
+    }
+
+    @XmlElement(name="bandwidth")
+    @Column(name="bandwidth")
+    public Integer getBandwidth() {
+        return m_bandwidth;
+    }
+
+    /**
+     * <p>setBandwidth</p>
+     * @param bandwidth
+     */
+    public void setBandwidth(Integer bandwidth) {
+        this.m_bandwidth = bandwidth;
+    }
+
+    @XmlElement(name="channel")
+    @Column(name="channel")
+    public Integer getChannel() {
+        return m_channel;
+    }
+
+    /**
+     * <p>setChannel</p>
+     * @param channel
+     */
+    public void setChannel(Integer channel) {
+        this.m_channel = channel;
+    }
+
+    @Column(name="active", nullable=false)
+    @XmlAttribute(name="active")
+    public boolean getActive() {
+        return m_active;
+    }
+
+    /**
+     * <p>setActive</p>
+     * @param active
+     */
+    public void setActive(boolean active) {
+        this.m_active = active;
+    }
+
 
     @XmlEnum
     public enum NodeLabelSource {
@@ -1130,7 +1235,12 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         retval.append("sysContact", m_sysContact);
         retval.append("type", m_type == null ? null : m_type.toString());
         retval.append("operatingSystem", m_operatingSystem);
-        retval.append("hasFlows", getHasFlows());
+        retval.append("ssid", getSsid());
+        retval.append("macAddress", getMacAddress());
+        retval.append("opMode", getOpMode());
+        retval.append("bandwidth", getBandwidth());
+        retval.append("channel", getChannel());
+        retval.append("active", getActive());
 
         return retval.toString();
     }
@@ -1455,6 +1565,26 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
         if (hasNewValue(scannedNode.getOperatingSystem(), getOperatingSystem())) {
             setOperatingSystem(scannedNode.getOperatingSystem());
+        }
+
+        if (hasNewValue(scannedNode.getSsid(), getSsid())) {
+            setSsid(scannedNode.getSsid());
+        }
+
+        if (hasNewValue(scannedNode.getMacAddress(), getMacAddress())) {
+            setMacAddress(scannedNode.getMacAddress());
+        }
+
+        if (hasNewValue(scannedNode.getOpMode(), getOpMode())) {
+            setOpMode(scannedNode.getOpMode());
+        }
+
+        if (hasNewValue(scannedNode.getBandwidth(), getBandwidth())) {
+            setBandwidth(scannedNode.getBandwidth());
+        }
+
+        if (hasNewValue(scannedNode.getChannel(), getChannel())) {
+            setChannel(scannedNode.getChannel());
         }
 
         mergeAgentAttributes(scannedNode);

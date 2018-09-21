@@ -369,6 +369,26 @@ public class OnmsAssetRecord implements Serializable {
     /**
      * persistent field
      */
+    private String m_firmware;
+
+    /**
+     * persistent field
+     */
+    private String m_ethernetSpeed;
+
+    /**
+     * persistent field
+     */
+    private String m_ioBandwidthLimit;
+
+    /**
+     * persistent field
+     */
+    private String m_modulation;
+
+    /**
+     * persistent field
+     */
     private OnmsNode m_node;
 
     private String m_managedObjectType;
@@ -1343,6 +1363,59 @@ public class OnmsAssetRecord implements Serializable {
         m_rackunitheight = rackunitheight;
     }
 
+
+    @Column(name = "firmware")
+    public String getFirmware() {
+        return m_firmware;
+    }
+
+    /**
+     * <p>setFirmware</p>
+     * @param firmware
+     */
+    public void setFirmware(String firmware) {
+        this.m_firmware = firmware;
+    }
+
+    @Column(name = "ethernetSpeed")
+    public String getEthernetSpeed() {
+        return m_ethernetSpeed;
+    }
+
+    /**
+     * <p>setEthernetSpeed</p>
+     * @param ethernetSpeed
+     */
+    public void setEthernetSpeed(String ethernetSpeed) {
+        this.m_ethernetSpeed = ethernetSpeed;
+    }
+
+    @Column(name = "ioBandwidthLimit")
+    public String getIoBandwidthLimit() {
+        return m_ioBandwidthLimit;
+    }
+
+    /**
+     * <p>setIoBandwidthLimit</p>
+     * @param ioBandwidthLimit
+     */
+    public void setIoBandwidthLimit(String ioBandwidthLimit) {
+        this.m_ioBandwidthLimit = ioBandwidthLimit;
+    }
+
+    @Column(name = "modulation")
+    public String getModulation() {
+        return m_modulation;
+    }
+
+    /**
+     * <p>setModulation</p>
+     * @param modulation
+     */
+    public void setModulation(String modulation) {
+        this.m_modulation = modulation;
+    }
+
     /**
      * <p>getAdmin</p>
      *
@@ -1865,7 +1938,11 @@ public class OnmsAssetRecord implements Serializable {
         .append("vmwareManagedEntityType", getVmwareManagedEntityType())
         .append("vmwareManagementServer", getVmwareManagementServer())
         .append("vmwareTopologyInfo", getVmwareTopologyInfo())
-        .append("vmwareState", getVmwareState()).toString();
+        .append("vmwareState", getVmwareState())
+        .append("firmware", getFirmware())
+        .append("ethernetSpeed", getEthernetSpeed())
+        .append("ioBandwidthLimit", getIoBandwidthLimit())
+        .append("modulation", getModulation()).toString();
     }
 
     /**

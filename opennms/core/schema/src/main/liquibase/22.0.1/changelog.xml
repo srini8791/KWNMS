@@ -93,11 +93,15 @@
 
     <addColumn tableName="node">
       <column name="ssid"       type="text" />
-      <column name="macaddress" type="text" />
+      <column name="macaddress" type="text">
+        <constraints unique="true" />
+      </column>
       <column name="opmode"     type="integer" />
       <column name="bandwidth"  type="integer" />
       <column name="channel"    type="integer" />
-      <column name="active"     type="boolean" />
+      <column name="active"     type="boolean" defaultValueBoolean="false">
+        <constraints nullable="false" />
+      </column>
     </addColumn>
 
     <rollback>
@@ -107,6 +111,29 @@
       <dropColumn tableName="node" columnName="bandwidth" />
       <dropColumn tableName="node" columnName="channel" />
       <dropColumn tableName="node" columnName="active" />
+    </rollback>
+
+  </changeSet>
+
+  <changeSet author="ndarbha" id="22.0.1-add-columns-to-assets">
+    <validCheckSum>ANY</validCheckSum>
+
+    <preConditions onFail="MARK_RAN">
+      <not><columnExists tableName="assets" columnName="modulation" /></not>
+    </preConditions>
+
+    <addColumn tableName="node">
+      <column name="firmware"         type="text" />
+      <column name="ethernetspeed"    type="text" />
+      <column name="iobandwidthlimit" type="text" />
+      <column name="modulation"       type="text" />
+    </addColumn>
+
+    <rollback>
+      <dropColumn tableName="assets" columnName="firmware" />
+      <dropColumn tableName="assets" columnName="ethernetspeed" />
+      <dropColumn tableName="assets" columnName="iobandwidthlimit" />
+      <dropColumn tableName="assets" columnName="modulation" />
     </rollback>
 
   </changeSet>
