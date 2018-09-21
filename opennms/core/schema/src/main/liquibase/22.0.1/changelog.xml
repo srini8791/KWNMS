@@ -147,7 +147,7 @@
         <constraints primaryKey="true" primaryKeyName="pk_regions_id" nullable="false"/>
       </column>
       <column name="name" type="varchar(32)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true" uniqueConstraintName="uk_regions_name" />
       </column>
     </createTable>
 
@@ -245,6 +245,49 @@
 
     <rollback>
       <dropTable tableName="wirelessstats" />
+    </rollback>
+
+  </changeSet>
+
+
+  <changeSet author="ndarbha" id="22.0.1-profiles">
+    <validCheckSum>ANY</validCheckSum>
+
+    <createTable tableName="profiles">
+      <column name="id" type="integer" defaultValueComputed="nextval('opennmsNxtId')">
+        <constraints primaryKey="true" primaryKeyName="pk_profiles_id" nullable="false" />
+      </column>
+      <column name="name" type="text">
+        <constraints nullable="false" unique="true" uniqueConstraintName="uk_profiles_name" />
+      </column>
+      <column name="ssid" type="text">
+        <constraints nullable="true" />
+      </column>
+      <column name="opmode" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="bandwidth" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="channel" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="ipaddress" type="text">
+        <constraints nullable="true" />
+      </column>
+      <column name="countrycode" type="integer">
+        <constraints nullable="true" />
+      </column>
+      <column name="filepath" type="text">
+        <constraints nullable="true" />
+      </column>
+      <column name="modifiedon" type="DATETIME" defaultValueDate="CURRENT_TIMESTAMP">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <rollback>
+      <dropTable tableName="profiles" />
     </rollback>
 
   </changeSet>

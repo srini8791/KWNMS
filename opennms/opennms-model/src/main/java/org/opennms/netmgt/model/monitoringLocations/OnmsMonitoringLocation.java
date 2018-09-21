@@ -29,8 +29,7 @@
 package org.opennms.netmgt.model.monitoringLocations;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.opennms.netmgt.model.OnmsRegion;
 
 import javax.persistence.*;
@@ -108,7 +107,6 @@ public class OnmsMonitoringLocation implements Serializable {
      */
     private Long m_priority;
 
-    @JsonBackReference
     private OnmsRegion m_region;
 
     private List<String> m_tags;
@@ -253,10 +251,10 @@ public class OnmsMonitoringLocation implements Serializable {
      *
      * @return a {@link org.opennms.netmgt.model.OnmsRegion} object.
      */
-    @XmlIDREF
     @XmlAttribute(name="region")
     @ManyToOne
     @JoinColumn(name = "region")
+    @JsonManagedReference
     public OnmsRegion getRegion() {
         return m_region;
     }

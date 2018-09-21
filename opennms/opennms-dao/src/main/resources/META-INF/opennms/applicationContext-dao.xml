@@ -229,6 +229,12 @@
 
   <onmsgi:service interface="org.opennms.netmgt.dao.api.KdpElementDao" ref="kdpElementDao" />
 
+  <bean id="profileDao" class="org.opennms.netmgt.dao.hibernate.ProfileDaoHibernate">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+  <onmsgi:service interface="org.opennms.netmgt.dao.api.ProfileDao" ref="profileDao" />
+
   <bean id="acknowledgmentDao" class="org.opennms.netmgt.dao.hibernate.AcknowledgmentDaoHibernate">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>
