@@ -34,13 +34,23 @@ public class KwpGetResponseDTO implements RpcResponse {
 
     private KwpPacket packet;
 
+    private String error = null;
+
+    public KwpGetResponseDTO(Throwable ex) {
+        error = ex.getMessage();
+    }
+
     public KwpGetResponseDTO(byte[] responseBytes) {
         this.packet = new KwpPacket(responseBytes);
 
     }
 
+    public KwpPacket getPacket() {
+        return this.packet;
+    }
+
     @Override
     public String getErrorMessage() {
-        return null;
+        return error;
     }
 }
