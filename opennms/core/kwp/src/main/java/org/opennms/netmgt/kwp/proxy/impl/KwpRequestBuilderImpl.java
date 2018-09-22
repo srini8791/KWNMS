@@ -28,14 +28,14 @@
 
 package org.opennms.netmgt.kwp.proxy.impl;
 
-import org.opennms.netmgt.kwp.*;
+import org.opennms.netmgt.kwp.KwpGetResponseDTO;
+import org.opennms.netmgt.kwp.KwpLTVPacket;
+import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.kwp.KwpPacketHeader;
 import org.opennms.netmgt.kwp.proxy.KwpRequestBuilder;
-import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class KwpRequestBuilderImpl<T> extends AbstractKwpRequestBuilder<T> {
 
@@ -63,15 +63,12 @@ public class KwpRequestBuilderImpl<T> extends AbstractKwpRequestBuilder<T> {
     }
 
     @Override
-    public CompletableFuture<T> execute() {
-        KwpGetRequestDTO requestDTO = new KwpGetRequestDTO();
-        requestDTO.setHost(this.host.getHostAddress());
-        requestDTO.buildGetRequest(this.header);
-        return m_client.execute(requestDTO).thenApply(this::processResponse);
-    }
-
-    @Override
     protected T processResponse(KwpGetResponseDTO response) {
+
+        if (response.getErrorMessage() != null) {
+            KwpPacket packet = response.getPacket();
+        }
+
         return null;
     }
 }
