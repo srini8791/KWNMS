@@ -112,6 +112,35 @@ public class KwpLTVPacket {
         return stream.toByteArray();
     }
 
+    public int getTotalLtvLength() {
+        return 2+1+value.length;
+    }
+
+    public short getShortValue() {
+        return KwpConversionUtil.bytesToShort(value);
+    }
+
+    public int getShortIntValue() {
+        return KwpConversionUtil.bytesToShort(value);
+    }
+
+    public int getUnsignedToInt() {
+        if (value != null && value.length == 1) {
+            return KwpConversionUtil.unsignedByteToInt(value[0]);
+        } else {
+            return getShortIntValue();
+        }
+
+    }
+
+
+    public String getStringUTF8Value() throws UnsupportedEncodingException {
+        if (value != null) {
+            return new String(value,"UTF-8");
+        }
+        return "";
+    }
+
     public int getTotalLength() {
         return Short.SIZE/Byte.SIZE /* length = short = 2 bytes */
                + Byte.SIZE /* type = byte = 1 byte */
