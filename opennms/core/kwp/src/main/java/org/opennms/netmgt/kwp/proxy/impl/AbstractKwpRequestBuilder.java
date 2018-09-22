@@ -28,6 +28,7 @@
 
 package org.opennms.netmgt.kwp.proxy.impl;
 
+import org.opennms.netmgt.kwp.KwpGetRequestDTO;
 import org.opennms.netmgt.kwp.KwpGetResponseDTO;
 import org.opennms.netmgt.kwp.KwpLTVPacket;
 import org.opennms.netmgt.kwp.KwpPacketHeader;
@@ -79,8 +80,12 @@ public abstract class AbstractKwpRequestBuilder<T> implements KwpRequestBuilder<
     }
 
     @Override
-    public CompletableFuture execute() {
-        return null;
+    public CompletableFuture<T> execute() {
+        KwpGetRequestDTO requestDTO = new KwpGetRequestDTO();
+        requestDTO.setHost(this.host.getHostAddress());
+        requestDTO.buildGetRequest(this.header);
+        return m_client.execute(requestDTO)
+                .thenApply(this::processResponse);
     }
 
     protected abstract T processResponse(KwpGetResponseDTO response);
