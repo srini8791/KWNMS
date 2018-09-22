@@ -33,8 +33,12 @@ import org.opennms.core.tasks.RunInBatch;
 import org.opennms.netmgt.kwp.KwpPacketHeader;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
+import org.opennms.netmgt.provision.service.kwp.KwpConfiguration;
+import org.opennms.netmgt.provision.service.kwp.KwpInventory;
+import org.opennms.netmgt.provision.service.kwp.KwpSysInfo;
 
 import java.net.InetAddress;
+import java.util.concurrent.ExecutionException;
 
 public class NodeKwpInfoScan implements RunInBatch {
 
@@ -66,16 +70,62 @@ public class NodeKwpInfoScan implements RunInBatch {
             public void run(BatchTask batch) {
                 discoveryKwpService();
             }
+        }, new RunInBatch() {
+            @Override
+            public void run(BatchTask batch) {
+                retreiveKwpDeviceSysInfo();
+            }
+        }, new RunInBatch() {
+            @Override
+            public void run(BatchTask batch) {
+                retreiveKwpDeviceInventory();
+            }
         });
 
     }
 
     private void discoveryKwpService() {
-        //m_provisionService.getLocationAwareSnmpClient().
-        m_provisionService.getLocationAwareKwpClient().get(m_agentAddress.getHostAddress(),
-                new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)1))
-                .buildRequest()
-                .execute();
+        KwpConfiguration configuration = new KwpConfiguration();
+        try {
+            m_provisionService.getLocationAwareKwpClient().get(m_agentAddress.getHostAddress(),
+                    new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)1),configuration)
+                    .buildRequest()
+                    .execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void retreiveKwpDeviceSysInfo() {
+
+        try {
+            KwpSysInfo sysInfo = new KwpSysInfo();
+            m_provisionService.getLocationAwareKwpClient().get(m_agentAddress.getHostAddress(),
+                    new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)2),sysInfo)
+                    .buildRequest()
+                    .execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void retreiveKwpDeviceInventory() {
+        //m_provisionService.getLocationAwareSnmpClient().
+
+        try {
+            KwpInventory inventory = new KwpInventory();
+            m_provisionService.getLocationAwareKwpClient().get(m_agentAddress.getHostAddress(),
+                    new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)3),inventory)
+                    .buildRequest()
+                    .execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }
