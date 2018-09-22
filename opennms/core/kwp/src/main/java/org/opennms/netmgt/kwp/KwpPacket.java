@@ -232,14 +232,32 @@ public class KwpPacket {
         return null;
     }
 
-/*
-	public String getMacAddressFromLTV() {
-		String macAddress = "";
-		byte[] arr = getValueFromLTVByType(ProximControllerUtil.OP_CODE_MAC_ADDR_TYPE);
-		macAddress = ControllerUtil.byteArray2MAC(arr);
-		return macAddress == null ? "" : macAddress.trim().toUpperCase();
-	}
-*/
+    public String getIPAddressBytesFromLTVByType(short type) {
+        KwpLTVPacket ltv = getLTVPacketByType(type);
+        if (ltv == null) {
+            return "0.0.0.0";
+        }
+        byte[] bytes = ltv.getValue();
+        StringBuffer buffer = new StringBuffer();
+        if (bytes != null) {
+            for (int i = 0; i < bytes.length; i++) {
+                if (i != 0) {
+                    buffer.append(".");
+                }
+                buffer.append(KwpConversionUtil.unsignedByteToInt(bytes[i]));
+            }
+        }
+        return buffer.toString();
+    }
+
+    public String getMacAddressFromLTV(short type) {
+        String macAddress = "";
+        byte[] arr = getValueFromLTVByType(type);
+        if (arr != null) {
+            macAddress = KwpConversionUtil.byteArray2MAC(arr);
+        }
+        return macAddress == null ? "" : macAddress.trim();
+    }
 
     public KwpLTVPacket getOpCodeLTVPacket() {
         return ltvPackets.get(0);
@@ -288,5 +306,7 @@ public class KwpPacket {
                 ", ltvPackets=" + ltvPackets +
                 "}";
     }
+
+
 
 }
