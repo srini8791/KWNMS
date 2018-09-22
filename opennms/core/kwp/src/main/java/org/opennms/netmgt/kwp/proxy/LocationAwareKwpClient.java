@@ -31,6 +31,7 @@ package org.opennms.netmgt.kwp.proxy;
 import org.opennms.netmgt.kwp.KwpLTVPacket;
 import org.opennms.netmgt.kwp.KwpPacket;
 import org.opennms.netmgt.kwp.KwpPacketHeader;
+import org.opennms.netmgt.kwp.KwpProxiableTracker;
 
 import java.net.InetAddress;
 import java.util.List;
@@ -44,5 +45,7 @@ public interface LocationAwareKwpClient {
     KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header, List<KwpLTVPacket> ltvs);
 
     KwpRequestBuilder<KwpPacket> get(InetAddress host, KwpPacketHeader header);
+
+    <T extends KwpProxiableTracker> KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header, T tracker);
 
 }
