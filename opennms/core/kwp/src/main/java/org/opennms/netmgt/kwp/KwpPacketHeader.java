@@ -51,7 +51,7 @@ public class KwpPacketHeader {
     /**
      * Standard size of each Keywest Packet Header
      */
-    public static final int HEADER_SIZE = 6;
+    public static final int HEADER_SIZE = 8;
 
     /**
      * Unique identifier with possible values 1 & 2.
@@ -82,6 +82,18 @@ public class KwpPacketHeader {
     private byte contentType;
 
     /**
+     * indicates if single object will be available in packet or multiple objects
+     * 1 - multiple objects
+     * 0 - single objects
+     */
+    private byte ptmp;
+
+    /**
+     * indicates whether this is the last packet
+     */
+    private byte more;
+
+    /**
      * Default constructor
      */
     public KwpPacketHeader() {
@@ -93,7 +105,7 @@ public class KwpPacketHeader {
      * @param headerData
      */
     public KwpPacketHeader(byte[] headerData) {
-        if (headerData == null || headerData.length != 6) {
+        if (headerData == null || headerData.length != HEADER_SIZE) {
             throw new IllegalArgumentException("Invalid header data.");
         }
         id = headerData[0];
@@ -101,6 +113,8 @@ public class KwpPacketHeader {
         length = Arrays.copyOfRange(headerData, 2, 4);
         requestType = headerData[4];
         contentType = headerData[5];
+        ptmp=headerData[6];
+        more = headerData[7];
     }
 
     /**
@@ -146,6 +160,17 @@ public class KwpPacketHeader {
     public byte getContentType() {
         return contentType;
     }
+
+    public void setPtmp(byte ptmp) { this.ptmp = ptmp;}
+
+    public byte getPtmp() {return this.ptmp;}
+
+    public void setMore(byte more) {this.more = more;}
+
+    public byte getMore() {return this.more;}
+
+    public byte hasMore() {return this.more;}
+
 
     public void setContentType(byte contentType) {
         this.contentType = contentType;
