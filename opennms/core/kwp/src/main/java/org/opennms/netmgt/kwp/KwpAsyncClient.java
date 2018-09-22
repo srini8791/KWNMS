@@ -72,17 +72,19 @@ public class KwpAsyncClient {
 
             try {
                 client.connect(serverAddress);
-                client.send(buffer, serverAddress);
-                buffer.clear();
-                client.socket().setSoTimeout(3000);
-                client.receive(buffer);
-                buffer.flip();
-                int limits = buffer.limit();
-                bytes = new byte[limits];
-                buffer.get(bytes, 0, limits);
-                KwpGetResponseDTO responseDTO = new KwpGetResponseDTO(bytes);
-                result.complete(responseDTO);
-                client.disconnect();
+                if (client.isConnected()) {
+                    client.send(buffer, serverAddress);
+                    buffer.clear();
+                    client.socket().setSoTimeout(3000);
+                    client.receive(buffer);
+                    buffer.flip();
+                    int limits = buffer.limit();
+                    bytes = new byte[limits];
+                    buffer.get(bytes, 0, limits);
+                    KwpGetResponseDTO responseDTO = new KwpGetResponseDTO(bytes);
+                    result.complete(responseDTO);
+                    client.disconnect();
+                }
             } catch (IOException e) {
                 result.completeExceptionally(e);
             }
