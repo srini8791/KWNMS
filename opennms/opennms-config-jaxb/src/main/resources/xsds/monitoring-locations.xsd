@@ -50,6 +50,7 @@
          <element ref="this:polling-package-names" minOccurs="0" maxOccurs="1" />
          <element ref="this:collection-package-names" minOccurs="0" maxOccurs="1" />
          <element ref="this:tags" minOccurs="0" maxOccurs="1" />
+         <element ref="this:region" minOccurs="0" maxOccurs="1" />
       </sequence>
       <attribute name="location-name" type="string" use="required" />
       <attribute name="monitoring-area" type="string" use="required" />
@@ -126,6 +127,16 @@
       <documentation>An arbitrary metadata "tag" that can be associated with other configs.</documentation>
     </annotation>
     <complexType>
+      <attribute name="name" type="string" />
+    </complexType>
+  </element>
+
+  <element name="region">
+    <annotation>
+      <documentation>A region with which the loctation is associated.</documentation>
+    </annotation>
+    <complexType>
+      <attribute name="id" type="integer" />
       <attribute name="name" type="string" />
     </complexType>
   </element>

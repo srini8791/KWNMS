@@ -107,6 +107,7 @@ public class OnmsMonitoringLocation implements Serializable {
      */
     private Long m_priority;
 
+    @JsonManagedReference
     private OnmsRegion m_region;
 
     private List<String> m_tags;
@@ -251,10 +252,9 @@ public class OnmsMonitoringLocation implements Serializable {
      *
      * @return a {@link org.opennms.netmgt.model.OnmsRegion} object.
      */
-    @XmlAttribute(name="region")
+    @XmlElement(name="region")
     @ManyToOne
     @JoinColumn(name = "region")
-    @JsonManagedReference
     public OnmsRegion getRegion() {
         return m_region;
     }
