@@ -93,6 +93,17 @@ public class LocationAwareKwpClientImpl implements LocationAwareKwpClient, Initi
         return new KwpRequestBuilderImpl(this,host,header).buildRequest();
     }
 
+    @Override
+    public <T extends KwpProxiableTracker> KwpRequestBuilder<KwpPacket> get(String host, KwpPacketHeader header, T tracker) {
+        InetAddress address = null;
+        try {
+            address = InetAddress.getByName(host);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return new KwpGetTrackerBuilder<KwpPacket>(this,address,header,tracker).buildRequest();
+    }
+
     public CompletableFuture<KwpGetResponseDTO> execute(KwpGetRequestDTO request) {
         return delegate.execute(request);
     }
