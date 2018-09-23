@@ -6,7 +6,7 @@
           "class": "col-md-6",
           "panels": [
             {
-              "title": "SNMP Info",
+              "title": "System Info",
               "fields": [
                 {
                   "label": "System ID",
@@ -37,6 +37,60 @@
                   "tooltip": "System Description, information from SNMP agent",
                   "model": "sysDescription",
                   "type": "static"
+                },
+                {
+                  "label": "MAC Address",
+                  "tooltip": "MAC Address",
+                  "model": "macAddress",
+                  "type": "static"
+                },
+                {
+                  "label": "Latitude",
+                  "tooltip": "Geo Latitude",
+                  "model": "latitude",
+                  "pattern": "^[0-9.-]*$",
+                  "type": "text"
+                },
+                {
+                  "label": "Longitude",
+                  "tooltip": "Geo Longitude",
+                  "model": "longitude",
+                  "pattern": "^[0-9.-]*$",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "col-md-6",
+          "panels": [
+            {
+              "title": "Wireless Info",
+              "fields": [
+                {
+                  "label": "SSID",
+                  "tooltip": "SSIID",
+                  "model": "ssid",
+                  "type": "static"
+                },
+                {
+                  "label": "Operation Mode",
+                  "tooltip": "Operation Mode",
+                  "model": "opMode",
+                  "type": "static"
+                },
+                {
+                  "label": "Bandwidth",
+                  "tooltip": "Bandwidth",
+                  "model": "bandwidth",
+                  "type": "static"
+                },
+                {
+                  "label": "Channel",
+                  "tooltip": "Channel",
+                  "model": "channel",
+                  "type": "static"
                 }
               ]
             }
@@ -52,6 +106,36 @@
             {
               "title": "Identification",
               "fields": [
+                {
+                  "label": "Serial Number",
+                  "tooltip": "Serial Number",
+                  "model": "serialNumber",
+                  "type": "text"
+                },
+                {
+                  "label": "Model Number",
+                  "tooltip": "Model number of the device (E.G. Cisco 3845, Oki B4400, Etc.)",
+                  "model": "modelNumber",
+                  "type": "text"
+                },
+                {
+                  "label": "Firmware",
+                  "tooltip": "Firmware version of the device.",
+                  "model": "firmware",
+                  "type": "text"
+                },
+                {
+                  "label": "Ethernet Speed",
+                  "tooltip": "Ethernet Speed of the device.",
+                  "model": "ethernetSpeed",
+                  "type": "text"
+                },
+                {
+                  "label": "I/O Bandwidth Limit",
+                  "tooltip": "I/O Bandwidth Limit of the device.",
+                  "model": "ioBandwidthLimit",
+                  "type": "text"
+                },
                 {
                   "label": "Description",
                   "tooltip": "Description of the device's purpose (E.G. Core P2P Router, Egress Internet Router, Etc.)",
@@ -69,18 +153,6 @@
                   "label": "Manufacturer",
                   "tooltip": "Manufacturer - Self explanatory",
                   "model": "manufacturer",
-                  "type": "text"
-                },
-                {
-                  "label": "Model Number",
-                  "tooltip": "Model number of the device (E.G. Cisco 3845, Oki B4400, Etc.)",
-                  "model": "modelNumber",
-                  "type": "text"
-                },
-                {
-                  "label": "Serial Number",
-                  "tooltip": "Serial Number",
-                  "model": "serialNumber",
                   "type": "text"
                 },
                 {
@@ -193,20 +265,6 @@
                   "label": "Country",
                   "tooltip": "Country",
                   "model": "country",
-                  "type": "text"
-                },
-                {
-                  "label": "Longitude",
-                  "tooltip": "Geo Longitude",
-                  "model": "longitude",
-                  "pattern": "^[0-9.-]*$",
-                  "type": "text"
-                },
-                {
-                  "label": "Latitude",
-                  "tooltip": "Geo Latitude",
-                  "model": "latitude",
-                  "pattern": "^[0-9.-]*$",
                   "type": "text"
                 },
                 {
