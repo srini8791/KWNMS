@@ -1,33 +1,40 @@
 package com.hsq.kw.server.handler;
 
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 import com.hsq.kw.packet.PacketHeader;
 import com.hsq.kw.packet.util.KeywestConstants;
 import com.hsq.kw.server.test.ResponseHandler;
 
 public class KWPacketAnalyzer {
-	
-	private KeywestPacket packet = null;
-	
-	public KWPacketAnalyzer(KeywestPacket packet) {
+
+	private KwpPacket packet = null;
+
+	public KWPacketAnalyzer(KwpPacket packet) {
 		this.packet = packet;
 	}
-	
-	
-	public KeywestPacket analyzeAndReturn() {
+
+	public KwpPacket analyzeAndReturn() {
 		PacketHeader header = packet.getHeader();
 		ResponseHandler rHandler = new ResponseHandler();
-		KeywestPacket returnPacket = null;
-		switch(header.getSubType()) {
+		KwpPacket returnPacket = null;
+		if (header.getType() == 1) {
+			switch (header.getSubType()) {
 			case KeywestConstants.CONFIG_GET_REQUEST:
-				returnPacket =  rHandler.sendConfigResponse();
+				returnPacket = rHandler.sendConfigResponse();
 				break;
-			case KeywestConstants.CONFIG_SET_REQUEST:
+			case KeywestConstants.SYSINFO_GET_REQUEST:
 				System.out.println("Received Packet");
 				System.out.println(packet);
-				returnPacket = rHandler.sendSetConfigResponse();
+				returnPacket = rHandler.sendSysinfoResponse();
+				break;
+			case KeywestConstants.INVENTORY_GET_REQUEST:
+				System.out.println("Received Packet");
+				System.out.println(packet);
+				returnPacket = rHandler.sendInventoryResponse();
+				break;
+			}
 		}
-		
+
 		return returnPacket;
 	}
 

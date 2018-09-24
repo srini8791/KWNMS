@@ -14,6 +14,18 @@ public class KeywestConstants {
 	public static final int CONFIG_GET_REQUEST = 1;
 	
 	/**
+	 * constant for sending get request
+	 * 
+	 */
+	public static final int SYSINFO_GET_REQUEST = 2;
+	
+	/**
+	 * constant for sending get request
+	 * 
+	 */
+	public static final int INVENTORY_GET_REQUEST = 3;
+	
+	/**
 	 * constant for receiving get response
 	 * 
 	 */
