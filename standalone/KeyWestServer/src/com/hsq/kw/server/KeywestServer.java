@@ -8,23 +8,17 @@ import com.hsq.kw.server.handler.KeywestClientHandler;
 
 public class KeywestServer {
 	
-	public static final int PORT = 9876;
+	public static final int PORT = 7861;
 
 	public KeywestServer() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static void main(String[] args) throws IOException {
-		/*ServerSocket socket = new ServerSocket(PORT);
-		System.out.println("Starting server on port " + PORT);
-		while (true) {
-			Socket client = socket.accept();
-			System.out.println("Received connection from " + client.getInetAddress());
-			KeywestClientHandler handler = new KeywestClientHandler(client.getInputStream(), client.getOutputStream());
-			handler.start();
-		}*/
-		
-		KeywestUDPServer server = new KeywestUDPServer();
+	public static void main(String[] args) throws Exception {
+		if (args.length == 0) {
+			throw new Exception("Invalid number of arguments. Usage KeywestServer <IPAddress to bind>");
+		}
+		KeywestUDPServer server = new KeywestUDPServer(args[0]);
 		try {
 			server.start();
 		} catch (Exception e) {

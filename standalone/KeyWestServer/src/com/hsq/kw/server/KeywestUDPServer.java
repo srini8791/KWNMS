@@ -7,20 +7,24 @@ import java.net.UnknownHostException;
 
 public class KeywestUDPServer {
 	
-	private int port = 9876;
+	private int port = 7861;
 	
-	private String host = "localhost";
+	private String host = "192.168.0.104";
 	
 	private DatagramSocket udpSocket = null;
 	
 	private boolean serverInitialized = false;
 	
 	public KeywestUDPServer() {
-		this("localhost",9876);
+		this("192.168.0.104",7861);
+	}
+	
+	public KeywestUDPServer(String host) {
+		this.host = host;
+		initialize();
 	}
 	
 	public KeywestUDPServer(String host, int port) {
-		
 		this.host = host;
 		this.port = port;
 		initialize();
@@ -28,7 +32,7 @@ public class KeywestUDPServer {
 	
 	protected void initialize() {
 		try {
-			System.out.println("UDP server is about to start on port " + port);
+			System.out.println("UDP server is about to start on " + host + ":"+ port);
 			this.udpSocket = new DatagramSocket(port, InetAddress.getByName(host));
 			serverInitialized = true;
 		} catch (SocketException | UnknownHostException e) {
