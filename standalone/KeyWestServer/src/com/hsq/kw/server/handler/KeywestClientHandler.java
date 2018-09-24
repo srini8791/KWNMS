@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 
 public class KeywestClientHandler implements Runnable {
 	
@@ -50,9 +50,9 @@ public class KeywestClientHandler implements Runnable {
 			stop();
 		}
 		
-		KeywestPacket packet = new KeywestPacket(buffer);
+		KwpPacket packet = new KwpPacket(buffer);
 		KWPacketAnalyzer analyzer = new KWPacketAnalyzer(packet);
-		KeywestPacket returnPacket = analyzer.analyzeAndReturn();
+		KwpPacket returnPacket = analyzer.analyzeAndReturn();
 		try {
 			dos.write(returnPacket.toByteArray());
 		} catch (IOException e) {

@@ -1,6 +1,6 @@
 package com.kw.demo;
 
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 import com.hsq.kw.packet.vo.Configuration;
 
 import javax.swing.*;
@@ -70,7 +70,7 @@ public class ConfigurationPanel extends JPanel {
         byte[] buffer = new byte[1307];
 
         DatagramSocket socket = new DatagramSocket();
-        KeywestPacket packet = new ResponseHandler().sendConfigRequest();
+        KwpPacket packet = new ResponseHandler().sendConfigRequest();
         byte[] requestArr = packet.toByteArray();
         System.out.println("Sending packet from " + socket.getLocalPort());
         DatagramPacket dPacket = new DatagramPacket(requestArr, requestArr.length, InetAddress.getByName("localhost"), 9876);
@@ -78,7 +78,7 @@ public class ConfigurationPanel extends JPanel {
         System.out.println("packet sent");
         DatagramPacket rPacket = new DatagramPacket(buffer, buffer.length);
         socket.receive(rPacket);
-        KeywestPacket rKwPacket = new KeywestPacket(rPacket.getData());
+        KwpPacket rKwPacket = new KwpPacket(rPacket.getData());
         System.out.println(rKwPacket);
         Configuration config = new Configuration(rKwPacket);
         socket.close();

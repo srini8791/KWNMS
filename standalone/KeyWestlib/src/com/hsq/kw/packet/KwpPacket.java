@@ -15,7 +15,7 @@ import com.hsq.kw.packet.util.ConversionUtil;
  * @author Spittala
  *
  */
-public class KeywestPacket {
+public class KwpPacket {
 	
 	private final int SIZE_OF_LENGTH = 2;
 	
@@ -41,14 +41,14 @@ public class KeywestPacket {
 
 	private int length = 0;
 	
-	public KeywestPacket() {
+	public KwpPacket() {
 	}
 	
 	/**
 	 * kewest packet built from the Datagram packet
 	 * @param packet
 	 */
-	public KeywestPacket(DatagramPacket packet) {
+	public KwpPacket(DatagramPacket packet) {
 		this.packet = packet;
 		try {
 			// retreive the header
@@ -70,7 +70,7 @@ public class KeywestPacket {
 		}
 	}
 	
-		public KeywestPacket(byte[] packet) {
+		public KwpPacket(byte[] packet) {
 		try {
 		
 			System.out.println("packetLength" + packet.length);
@@ -101,7 +101,7 @@ public class KeywestPacket {
 	 * @param type
 	 * @param subType
 	 */
-	public KeywestPacket(byte id,byte type, byte subType) {
+	public KwpPacket(byte id, byte type, byte subType) {
 		this.header = new PacketHeader(id,(byte)1,type,subType);
 		this.header.setLength((short) payload.length);
 		this.length = payload.length;
@@ -156,6 +156,10 @@ public class KeywestPacket {
 		KeywestLTVPacket ltv = new KeywestLTVPacket();
 		
 		short length = getShortValueFromPacket(this.payload, 0, 2);
+		if (length ==  0) {
+			return null;
+		}
+
 		ltv.setLength(length);
 		// retreve the ltv type
 		byte type = this.payload[2];

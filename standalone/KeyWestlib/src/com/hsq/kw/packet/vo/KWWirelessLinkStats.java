@@ -1,7 +1,7 @@
 package com.hsq.kw.packet.vo;
 
 import com.hsq.kw.packet.KeywestLTVPacket;
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 
 public class KWWirelessLinkStats {
 	
@@ -40,13 +40,13 @@ public class KWWirelessLinkStats {
 	private int remoteRate;
 	
 	
-	private KeywestPacket packet;
+	private KwpPacket packet;
 	
 	public KWWirelessLinkStats() {
 	}
 	
 	
-	public KWWirelessLinkStats(KeywestPacket packet) {
+	public KWWirelessLinkStats(KwpPacket packet) {
 		this.packet = packet;
 		if (packet.getLTVPacket() != null && packet.getLTVPacket().size() > 1) {
 			KeywestLTVPacket ltv = this.packet.getLTVPacketByType((byte)NO_OF_LINKS_TYPE);
@@ -233,11 +233,11 @@ public class KWWirelessLinkStats {
 		this.remoteRate = remoteRate;
 	}
 
-	public KeywestPacket getPacket() {
+	public KwpPacket getPacket() {
 		return packet;
 	}
 
-	public void setPacket(KeywestPacket packet) {
+	public void setPacket(KwpPacket packet) {
 		this.packet = packet;
 	}
 	

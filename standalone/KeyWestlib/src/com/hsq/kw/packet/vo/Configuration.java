@@ -1,14 +1,12 @@
 package com.hsq.kw.packet.vo;
 
-import java.util.List;
-
 import com.hsq.kw.packet.KeywestLTVPacket;
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 import com.hsq.kw.packet.util.ConversionUtil;
 
 public class Configuration {
 	
-	private KeywestPacket packet;
+	private KwpPacket packet;
 	
 	
 	public static final byte ADDRESS_TYPE = 2;
@@ -59,7 +57,7 @@ public class Configuration {
 	 * Generates a new Configuration from UI
 	 */
 	public Configuration() {
-		this.packet = new KeywestPacket((byte)1,(byte)1,(byte)1);
+		this.packet = new KwpPacket((byte)1,(byte)1,(byte)1);
 	}
 	
 	
@@ -67,7 +65,7 @@ public class Configuration {
 	 * Generates/ Updates the configuration in UI received from the packet.
 	 * @param packet
 	 */
-	public Configuration(KeywestPacket packet) {
+	public Configuration(KwpPacket packet) {
 		this.packet = packet;
 		this.ipAddress = packet.getIPAddressBytesFromLTVByType(IPADDRESS_TYPE);
 		KeywestLTVPacket ltv = packet.getLTVPacketByType(ADDRESS_TYPE);
@@ -236,8 +234,8 @@ public class Configuration {
 	}
 
 
-	public KeywestPacket buildPacketFromUI() {
-		KeywestPacket setPacket = new KeywestPacket((byte)1,(byte)3,(byte)1);
+	public KwpPacket buildPacketFromUI() {
+		KwpPacket setPacket = new KwpPacket((byte)1,(byte)3,(byte)1);
 		setPacket.addLTVToPacket(new KeywestLTVPacket(SSID_TYPE, this.ssid));
 		setPacket.addLTVToPacket(new KeywestLTVPacket(MODE_TYPE, ConversionUtil.intToSingleByte(this.operationalMode)));
 		setPacket.addLTVToPacket(new KeywestLTVPacket(BANDWIDTH_TYPE, ConversionUtil.intToSingleByte(this.channelBW)));
@@ -253,7 +251,7 @@ public class Configuration {
 		return setPacket;
 	}
 	
-	public KeywestPacket getPacket() {
+	public KwpPacket getPacket() {
 		return this.packet;
 	}
 	

@@ -1,6 +1,6 @@
 package com.hsq.kw.packet.vo;
 
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 
 public class KeywestWirelessStats {
 	
@@ -18,9 +18,9 @@ public class KeywestWirelessStats {
 	private String rxMgmtDataPkts;
 	private String mpduErrors;
 	private String phyErrors;
-	private KeywestPacket packet;
+	private KwpPacket packet;
 	
-	public KeywestWirelessStats(KeywestPacket packet) {
+	public KeywestWirelessStats(KwpPacket packet) {
 		this.packet = packet;
 		this.txDataPkts = packet.getStringValueFromLTVByType(TX_DATA_TYPE);
 		this.rxDataPkts = packet.getStringValueFromLTVByType(RX_DATA_TYPE);
@@ -31,7 +31,7 @@ public class KeywestWirelessStats {
 	}
 	
 	public KeywestWirelessStats() {
-		this.packet = new KeywestPacket((byte) 1,(byte) 1, (byte) 2);
+		this.packet = new KwpPacket((byte) 1,(byte) 1, (byte) 2);
 	}
 	
 	public String getTxDataPkts() {

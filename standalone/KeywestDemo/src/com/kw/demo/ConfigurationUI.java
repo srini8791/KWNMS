@@ -1,9 +1,9 @@
 package com.kw.demo;
 
-import com.hsq.kw.packet.KeywestPacket;
+import com.hsq.kw.packet.KwpPacket;
 
 public class ConfigurationUI {
-	private KeywestPacket packet = null;
+	private KwpPacket packet = null;
 	
 	private String ssid = null;
 	private String mod = null;
@@ -16,7 +16,7 @@ public class ConfigurationUI {
 	}
 	
 	
-	public ConfigurationUI(KeywestPacket packet) {
+	public ConfigurationUI(KwpPacket packet) {
 		this.packet = packet;
 		ssid = this.packet.getStringValueFromLTVByType(2);
 		mod = this.packet.getStringValueFromLTVByType(3);
@@ -27,7 +27,7 @@ public class ConfigurationUI {
 	}
 	
 	public ConfigurationUI() {
-		this.packet = new KeywestPacket();
+		this.packet = new KwpPacket();
 	}
 	
 	public String getSSID() {

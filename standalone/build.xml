@@ -26,6 +26,16 @@
         <copy todir="dist" file="KeywestDemo/dist/KeywestDemo.jar" />
     </target>
  
+    <target name="runServer">
+        <java dir="dist" classname="com.hsq.kw.server.KeywestServer" fork="true">
+            <arg value="${ip}" />
+            <classpath>
+                <pathelement location="dist/KeyWestlib.jar"/>
+                <pathelement location="dist/KeyWestServer.jar"/>
+            </classpath>
+        </java>
+    </target>
+
     <target name="runApp">
         <java dir="dist" classname="com.kw.demo.KeywestMainFrame" fork="true">
             <classpath>

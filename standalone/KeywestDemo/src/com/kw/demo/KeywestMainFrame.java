@@ -5,17 +5,6 @@
  */
 package com.kw.demo;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-
-import com.hsq.kw.packet.KeywestPacket;
-import com.hsq.kw.packet.vo.Configuration;
-
 /**
  *
  * @author Spittala
