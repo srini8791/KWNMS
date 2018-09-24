@@ -96,6 +96,7 @@
       <column name="macaddress" type="text">
         <constraints unique="true" />
       </column>
+      <column name="radiomode"  type="integer" />
       <column name="opmode"     type="integer" />
       <column name="bandwidth"  type="integer" />
       <column name="channel"    type="integer" />
@@ -107,6 +108,7 @@
     <rollback>
       <dropColumn tableName="node" columnName="ssid" />
       <dropColumn tableName="node" columnName="macaddress" />
+      <dropColumn tableName="node" columnName="radiomode" />
       <dropColumn tableName="node" columnName="opmode" />
       <dropColumn tableName="node" columnName="bandwidth" />
       <dropColumn tableName="node" columnName="channel" />

@@ -151,7 +151,10 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private String m_macAddress;
 
     /** nullable persistent field */
-    private Integer m_opMode;
+    private RadioMode m_radioMode;
+
+    /** nullable persistent field */
+    private OpMode m_opMode;
 
     /** nullable persistent field */
     private Integer m_bandwidth;
@@ -601,9 +604,25 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         this.m_macAddress = macAddress;
     }
 
+    @XmlElement(name="radioMode")
+    @Column(name="radioMode")
+    @Type(type="org.opennms.netmgt.model.RadioModeUserType")
+    public RadioMode getRadioMode() {
+        return m_radioMode;
+    }
+
+    /**
+     * <p>setRadioMode</p>
+     * @param radioMode
+     */
+    public void setRadioMode(RadioMode radioMode) {
+        this.m_radioMode = radioMode;
+    }
+
     @XmlElement(name="opMode")
     @Column(name="opMode")
-    public Integer getOpMode() {
+    @Type(type="org.opennms.netmgt.model.OpModeUserType")
+    public OpMode getOpMode() {
         return m_opMode;
     }
 
@@ -611,7 +630,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setOpMode</p>
      * @param opMode
      */
-    public void setOpMode(Integer opMode) {
+    public void setOpMode(OpMode opMode) {
         this.m_opMode = opMode;
     }
 
@@ -1237,6 +1256,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         retval.append("operatingSystem", m_operatingSystem);
         retval.append("ssid", getSsid());
         retval.append("macAddress", getMacAddress());
+        retval.append("radioMode", getRadioMode());
         retval.append("opMode", getOpMode());
         retval.append("bandwidth", getBandwidth());
         retval.append("channel", getChannel());
@@ -1573,6 +1593,10 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
         if (hasNewValue(scannedNode.getMacAddress(), getMacAddress())) {
             setMacAddress(scannedNode.getMacAddress());
+        }
+
+        if (hasNewValue(scannedNode.getRadioMode(), getRadioMode())) {
+            setRadioMode(scannedNode.getRadioMode());
         }
 
         if (hasNewValue(scannedNode.getOpMode(), getOpMode())) {
