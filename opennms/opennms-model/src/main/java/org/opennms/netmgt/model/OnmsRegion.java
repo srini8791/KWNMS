@@ -54,7 +54,7 @@ public class OnmsRegion implements Serializable {
     private Integer m_id;
 
     @XmlAttribute(name = "name")
-    @Column(name = "name", length = 32, nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String m_name;
 
     @XmlIDREF

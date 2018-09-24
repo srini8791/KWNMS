@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,37 +26,35 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.rest.support;
+package org.opennms.netmgt.dao.api;
 
+import org.opennms.netmgt.model.*;
+import org.springframework.stereotype.Repository;
+
+import java.net.InetAddress;
+import java.util.*;
+
+@Repository
 /**
- * This enum contains well-known aliases for search terms that should be
- * reused by different RESTv2 services for consistency.
- * 
- * @author Seth
+ * <p>RegionDao interface.</p>
  */
-public enum Aliases {
-    alarm,
-    assetRecord,
-    category,
-    distPoller,
-    event,
-    eventParameter,
-    ipInterface,
-    location,
-    memo,
-    monitoredService,
-    node,
-    notification,
-    outage,
-    reductionKeyMemo,
-    region,
-    serviceType,
-    snmpInterface;
+public interface RegionDao extends OnmsDao<OnmsRegion, Integer> {
 
-    public String prop(String propertyName) {
-        return new StringBuilder(this.toString())
-            .append(".")
-            .append(propertyName)
-            .toString(); 
-    }
+    /**
+     * Get a region based on it's region ID
+     *
+     * @param regionId region identifier
+     * @return the node
+     */
+    @Override
+    OnmsRegion get(Integer regionId);
+
+    /**
+     * Returns a list of regions ordered by name.
+     *
+     * @return a {@link List} of {@link OnmsRegion} objects.
+     */
+    @Override
+    List<OnmsRegion> findAll();
+
 }

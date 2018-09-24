@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,37 +26,45 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.rest.support;
+package org.opennms.netmgt.dao.hibernate;
+
+import org.opennms.netmgt.dao.api.RegionDao;
+import org.opennms.netmgt.model.OnmsRegion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
- * This enum contains well-known aliases for search terms that should be
- * reused by different RESTv2 services for consistency.
- * 
- * @author Seth
+ * <p>RegionDaoHibernate class.</p>
+ *
+ * @author ndarbha
  */
-public enum Aliases {
-    alarm,
-    assetRecord,
-    category,
-    distPoller,
-    event,
-    eventParameter,
-    ipInterface,
-    location,
-    memo,
-    monitoredService,
-    node,
-    notification,
-    outage,
-    reductionKeyMemo,
-    region,
-    serviceType,
-    snmpInterface;
+public class RegionDaoHibernate extends AbstractDaoHibernate<OnmsRegion, Integer> implements RegionDao {
+    private static final Logger LOG = LoggerFactory.getLogger(RegionDaoHibernate.class);
 
-    public String prop(String propertyName) {
-        return new StringBuilder(this.toString())
-            .append(".")
-            .append(propertyName)
-            .toString(); 
+    /**
+     * <p>Constructor for RegionDaoHibernate.</p>
+     */
+    public RegionDaoHibernate() {
+        super(OnmsRegion.class);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public OnmsRegion get(Integer regionId) {
+        return findUnique("from OnmsRegion r where r.id  = ?", regionId);
+    }
+
+
+    /**
+     * <p>findAll</p>
+     *
+     * @return a {@link List} of {@link OnmsRegion} objects.
+     */
+    @Override
+    public List<OnmsRegion> findAll() {
+        return find("from OnmsRegion order by name");
+    }
+
 }
