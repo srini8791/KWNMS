@@ -31,6 +31,7 @@ package org.opennms.netmgt.provision.service.kwp;
 import org.opennms.netmgt.kwp.AbstractKwpProxiableTracker;
 import org.opennms.netmgt.kwp.KwpLTVPacket;
 import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.model.OnmsNode;
 
 public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
@@ -116,6 +117,14 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
             this.linkId = ltv.getUnsignedToInt();
         }
 
+    }
+
+
+    public void updateKwpDataforNode(OnmsNode node) {
+        if (this.packet != null) {
+            node.setSsid(ssid);
+            //node.setOpMode();
+        }
     }
 
     public void setDeviceMac(String deviceMac) {

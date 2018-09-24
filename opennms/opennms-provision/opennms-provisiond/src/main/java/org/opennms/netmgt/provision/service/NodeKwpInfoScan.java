@@ -62,6 +62,10 @@ public class NodeKwpInfoScan implements RunInBatch {
         m_nodeId = nodeId;
     }
 
+    public OnmsNode getNode() {
+        return m_node;
+    }
+
     @Override
     public void run(BatchTask phase) {
 
@@ -80,6 +84,11 @@ public class NodeKwpInfoScan implements RunInBatch {
             public void run(BatchTask batch) {
                 retreiveKwpDeviceInventory();
             }
+        }, new RunInBatch() {
+            @Override
+            public void run(BatchTask batch) {
+                doPersistNodeInfo();
+            }
         });
 
     }
@@ -91,6 +100,7 @@ public class NodeKwpInfoScan implements RunInBatch {
                     new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)1),configuration)
                     .buildRequest()
                     .execute().get();
+            configuration.updateKwpDataforNode(getNode());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -106,6 +116,7 @@ public class NodeKwpInfoScan implements RunInBatch {
                     new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)2),sysInfo)
                     .buildRequest()
                     .execute().get();
+            sysInfo.updateKwpDataforNode(getNode());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -122,10 +133,19 @@ public class NodeKwpInfoScan implements RunInBatch {
                     new KwpPacketHeader((byte)1,(byte)1,(byte)1,(byte)3),inventory)
                     .buildRequest()
                     .execute().get();
+            inventory.updateKwpDataforNode(getNode());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    public ProvisionService getProvisionService() {
+        return m_provisionService;
+    }
+
+    private void doPersistNodeInfo() {
+        getProvisionService().updateNodeAttributes(getNode());
     }
 }

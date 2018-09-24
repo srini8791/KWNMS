@@ -30,6 +30,7 @@ package org.opennms.netmgt.provision.service.kwp;
 
 import org.opennms.netmgt.kwp.AbstractKwpProxiableTracker;
 import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.model.OnmsNode;
 
 public class KwpSysInfo extends AbstractKwpProxiableTracker {
 
@@ -66,5 +67,17 @@ public class KwpSysInfo extends AbstractKwpProxiableTracker {
         this.sysDescription = packet.getStringValueFromLTVByType(SYSDESCRIPTION_TYPE);
         this.geoLatitude = packet.getStringValueFromLTVByType(GEOLATITUDE_TYPE);
         this.geLongitude = packet.getStringValueFromLTVByType(GEOLONGITUDE_MODE);
+    }
+
+
+    public void updateKwpDataforNode(OnmsNode node) {
+        if (this.packet != null) {
+            node.setSysObjectId(sysId);
+            node.setSysName(sysName);
+            node.setSysContact(sysContact);
+            node.setSysDescription(sysDescription);
+            node.getAssetRecord().getGeolocation().setLatitude(0.0D);
+            node.getAssetRecord().getGeolocation().setLongitude(0.0D);
+        }
     }
 }

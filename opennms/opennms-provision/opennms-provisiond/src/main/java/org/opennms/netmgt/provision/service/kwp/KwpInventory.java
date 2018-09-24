@@ -30,6 +30,7 @@ package org.opennms.netmgt.provision.service.kwp;
 
 import org.opennms.netmgt.kwp.AbstractKwpProxiableTracker;
 import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.model.OnmsNode;
 
 public class KwpInventory extends AbstractKwpProxiableTracker {
 
@@ -59,5 +60,16 @@ public class KwpInventory extends AbstractKwpProxiableTracker {
         this.ethSpeed = packet.getStringValueFromLTVByType(ETH_SPEED_TYPE);
         this.bandwidthLimit = packet.getStringValueFromLTVByType(BANDWIDTH_LIMIT_TYPE);
 
+    }
+
+
+    public void updateKwpDataforNode(OnmsNode node) {
+        if (this.packet != null) {
+            node.getAssetRecord().setSerialNumber(serialNumber);
+            node.getAssetRecord().setModelNumber(modelNumber);
+            node.getAssetRecord().setFirmware(firmwareVersion);
+            node.getAssetRecord().setEthernetSpeed(ethSpeed);
+            node.getAssetRecord().setIoBandwidthLimit(bandwidthLimit);
+        }
     }
 }
