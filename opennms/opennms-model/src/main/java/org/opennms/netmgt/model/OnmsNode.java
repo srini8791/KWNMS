@@ -157,7 +157,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private OpMode m_opMode;
 
     /** nullable persistent field */
-    private Integer m_bandwidth;
+    private Bandwidth m_bandwidth;
 
     /** nullable persistent field */
     private Integer m_channel;
@@ -636,7 +636,8 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     @XmlElement(name="bandwidth")
     @Column(name="bandwidth")
-    public Integer getBandwidth() {
+    @Type(type="org.opennms.netmgt.model.BandwidthUserType")
+    public Bandwidth getBandwidth() {
         return m_bandwidth;
     }
 
@@ -644,7 +645,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setBandwidth</p>
      * @param bandwidth
      */
-    public void setBandwidth(Integer bandwidth) {
+    public void setBandwidth(Bandwidth bandwidth) {
         this.m_bandwidth = bandwidth;
     }
 

@@ -31,7 +31,10 @@ package org.opennms.netmgt.provision.service.kwp;
 import org.opennms.netmgt.kwp.AbstractKwpProxiableTracker;
 import org.opennms.netmgt.kwp.KwpLTVPacket;
 import org.opennms.netmgt.kwp.KwpPacket;
+import org.opennms.netmgt.model.Bandwidth;
 import org.opennms.netmgt.model.OnmsNode;
+import org.opennms.netmgt.model.OpMode;
+import org.opennms.netmgt.model.RadioMode;
 
 public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
@@ -54,9 +57,9 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
     private String ssid = null;
 
-    private int channelBW = 0;
+    private Bandwidth channelBW = Bandwidth.BANDWIDTH_UNKNOWN;
 
-    private int operationalMode = 0;
+    private OpMode operationalMode;
 
     private int channel = 0;
 
@@ -64,7 +67,7 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
     private String ipAddress = null;
 
-    private int deviceMode = 0;
+    private RadioMode deviceMode;
 
     private String deviceMac = "";
 
@@ -90,11 +93,15 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
         this.ssid = packet.getStringValueFromLTVByType(SSID_TYPE);
         ltv = packet.getLTVPacketByType(BANDWIDTH_TYPE);
         if (ltv != null) {
-            this.channelBW = ltv.getUnsignedToInt();
+            try {
+                this.channelBW = Bandwidth.get(ltv.getUnsignedToInt());
+            } catch (IllegalArgumentException ex) {
+            }
+
         }
         ltv = packet.getLTVPacketByType(MODE_TYPE);
         if (ltv != null) {
-            this.operationalMode = ltv.getUnsignedToInt();
+            this.operationalMode = OpMode.get(ltv.getUnsignedToInt());
         }
         ltv = packet.getLTVPacketByType(CHANNEL_TYPE);
         if (ltv != null) {
@@ -102,7 +109,7 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
         }
         ltv = packet.getLTVPacketByType(DEVICE_MODE);
         if (ltv != null) {
-            this.deviceMode = ltv.getUnsignedToInt();
+            this.deviceMode = RadioMode.get(ltv.getUnsignedToInt());
         }
         this.setDeviceMac(packet.getMacAddressFromLTV(DEVICE_MAC));
         ltv = packet.getLTVPacketByType(COUNTRY_CODE);
@@ -123,7 +130,19 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
     public void updateKwpDataforNode(OnmsNode node) {
         if (this.packet != null) {
             node.setSsid(ssid);
-            //node.setOpMode();
+            node.setChannel(this.channel);
+            node.setBandwidth(this.channelBW);
+            node.setOpMode(this.operationalMode);
+            node.setBandwidth(this.channelBW);
+            node.setRadioMode(this.deviceMode);
+            node.setMacAddress(this.deviceMac);
+            //TODO
+            // Add bsu/su node detected event
+            /*EventBuilder builder = new EventBuilder(EventConstants.NODE_ADDED_EVENT_UEI, Provisioner.NAME);
+            builder.setNodeid(node.getId());
+            builder.getEvent().setDescr(this.deviceMode.toString()  + " discovered");
+            builder.s*/
+            node.setActive(true);
         }
     }
 
