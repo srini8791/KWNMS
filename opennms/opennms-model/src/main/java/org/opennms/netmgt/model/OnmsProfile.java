@@ -28,11 +28,11 @@
 
 package org.opennms.netmgt.model;
 
-import org.hibernate.annotations.Type;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -45,7 +45,7 @@ public class OnmsProfile implements Serializable {
     private static final long serialVersionUID = -5772069175604961577L;
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @SequenceGenerator(name = "opennmsSequence", sequenceName = "opennmsNxtId")
     @GeneratedValue(generator = "opennmsSequence")
     @XmlAttribute(name = "id")
@@ -59,36 +59,40 @@ public class OnmsProfile implements Serializable {
     @Column(name = "ssid")
     private String m_ssid;
 
-    @XmlAttribute(name = "op-mode")
+    @XmlElement(name = "opMode")
     @Column(name = "opMode")
+    @XmlJavaTypeAdapter(OpModeAdapter.class)
     private OpMode m_opMode;
 
     @XmlAttribute(name = "bandwidth")
     @Column(name = "bandwidth")
-    private Integer m_bandwidth;
+    @XmlJavaTypeAdapter(BandwidthAdapter.class)
+    private Bandwidth m_bandwidth;
 
     @XmlAttribute(name = "channel")
     @Column(name = "channel")
     private Integer m_channel;
 
-    @XmlAttribute(name = "ip-address")
+    @XmlAttribute(name = "ipAddress")
     @Column(name = "ipAddress")
     private String m_ipAddress;
 
-    @XmlAttribute(name = "country-code")
+    @XmlAttribute(name = "countryCode")
     @Column(name = "countryCode")
     private Integer m_countryCode;
 
-    @XmlAttribute(name = "file-path")
+    @XmlAttribute(name = "filePath")
     @Column(name = "filePath")
     private String m_filePath;
 
-    @XmlAttribute(name = "modified-on")
-    @Column(name = "modifiedOn")
+    @XmlAttribute(name = "modifiedOn")
+    @Column(name = "modifiedOn", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date m_modifiedOn;
 
 
-    public OnmsProfile() {}
+    public OnmsProfile() {
+    }
 
     public OnmsProfile(Integer id, String name) {
         this.m_id = id;
@@ -149,14 +153,19 @@ public class OnmsProfile implements Serializable {
         this.m_ssid = ssid;
     }
 
-    @Type(type="org.opennms.netmgt.model.OpModeUserType")
+    /**
+     * <p>getOpMode</p>
+     *
+     * @return a {@link OpMode} object.
+     */
     public OpMode getOpMode() {
         return m_opMode;
     }
 
     /**
      * <p>setOpMode</p>
-     * @param opMode
+     *
+     * @param opMode a {@link OpMode} object.
      */
     public void setOpMode(OpMode opMode) {
         this.m_opMode = opMode;
@@ -165,18 +174,18 @@ public class OnmsProfile implements Serializable {
     /**
      * <p>getBandwidth</p>
      *
-     * @return a {@link Integer} object.
+     * @return a {@link Bandwidth} object.
      */
-    public Integer getBandwidth() {
+    public Bandwidth getBandwidth() {
         return m_bandwidth;
     }
 
     /**
      * <p>setBandwidth</p>
      *
-     * @param bandwidth a {@link Integer} object.
+     * @param bandwidth a {@link Bandwidth} object.
      */
-    public void setBandwidth(Integer bandwidth) {
+    public void setBandwidth(Bandwidth bandwidth) {
         this.m_bandwidth = bandwidth;
     }
 

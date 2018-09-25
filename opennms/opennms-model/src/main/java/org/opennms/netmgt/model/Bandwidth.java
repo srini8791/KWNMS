@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * OpenNMS Radio Mode.
+ * OpenNMS Bandwidth.
  */
 public enum Bandwidth {
 
@@ -81,6 +81,10 @@ public enum Bandwidth {
             }
         }
         return null;
+    }
+
+    public Integer getValue() {
+        return m_id;
     }
 
     @Override

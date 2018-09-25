@@ -75,10 +75,11 @@
                 <label for="input_opMode" class="col-sm-4 control-label">Operation Mode</label>
                 <div class="col-sm-8">
                   <select id="input_opMode" name="opMode" ng-model="profile.opMode" class="form-control">
-                    <option value="1">Outdoor Base</option>
-                    <option value="2">Outdoor Subscriber</option>
-                    <option value="3">Access Point</option>
-                    <option value="4">Client</option>
+                    <option value="1">11g</option>
+                    <option value="2">11ng</option>
+                    <option value="3">11a</option>
+                    <option value="4">11na</option>
+                    <option value="5">11ac</option>
                   </select>
                 </div>
               </div>
@@ -87,7 +88,12 @@
               <div class="row">
                 <label for="input_bandwidth" class="col-sm-4 control-label">Bandwidth</label>
                 <div class="col-sm-8">
-                  <input id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth" class="form-control" />
+                  <select id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth" class="form-control">
+                    <option value="1">20MHz</option>
+                    <option value="2">40MHz</option>
+                    <option value="3">80MHz</option>
+                    <option value="4">Unknown</option>
+                  </select>
                 </div>
               </div>
             </div>

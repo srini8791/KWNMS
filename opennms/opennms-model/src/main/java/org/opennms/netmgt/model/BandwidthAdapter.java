@@ -1,7 +1,7 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2007-2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2014 The OpenNMS Group, Inc.
  * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
@@ -28,59 +28,24 @@
 
 package org.opennms.netmgt.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-/**
- * OpenNMS Operation Mode.
- */
-public enum OpMode {
+public class BandwidthAdapter extends XmlAdapter<Integer, Bandwidth> {
 
-    WIRELESS_11G(1, "11g"),
-    WIRELESS_11NG(2, "11ng"),
-    WIRELESS_11A(3, "11a"),
-    WIRELESS_11NA(4, "11na"),
-    WIRELESS_11AC(5, "11ac");
-
-    private static final Map<Integer, OpMode> m_idMap;
-
-    private int m_id;
-    private String m_label;
-
-    static {
-        m_idMap = new HashMap<>(values().length);
-        for (final OpMode opMode : values()) {
-            m_idMap.put(opMode.getValue(), opMode);
-        }
-    }
-
-    OpMode(int id, String label) {
-        m_id = id;
-        m_label = label;
-    }
-
-    public int getId() {
-        return m_id;
-    }
-
-    public String getLabel() {
-        return m_label;
-    }
-
-    public static OpMode get(final int id) {
-        if (m_idMap.containsKey(id)) {
-            return m_idMap.get(id);
-        } else {
-            throw new IllegalArgumentException("Cannot create OpMode from unknown ID " + id);
-        }
-    }
-
-    public Integer getValue() {
-        return m_id;
+    @Override
+    public Integer marshal(final Bandwidth v) throws Exception {
+        return v == null? null : v.getId();
     }
 
     @Override
-    public String toString() {
-        return m_label;
+    public Bandwidth unmarshal(final Integer v) throws Exception {
+        if (v == null) return null;
+        for (Bandwidth opMode : Bandwidth.values()) {
+            if (opMode.getValue().equals(v)) {
+                return opMode;
+            }
+        }
+        return null;
     }
+
 }
