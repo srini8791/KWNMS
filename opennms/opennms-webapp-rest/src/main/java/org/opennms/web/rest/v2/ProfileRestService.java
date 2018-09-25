@@ -80,10 +80,6 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     @Override
     protected CriteriaBuilder getCriteriaBuilder(UriInfo uriInfo) {
         final CriteriaBuilder builder = new CriteriaBuilder(OnmsProfile.class, Aliases.profile.toString());
-
-        // Order by name by default
-        builder.orderBy("profile.name").asc();
-
         return builder;
     }
 

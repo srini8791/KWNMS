@@ -80,10 +80,6 @@ public class RegionRestService extends AbstractDaoRestService<OnmsRegion, Search
     @Override
     protected CriteriaBuilder getCriteriaBuilder(UriInfo uriInfo) {
         final CriteriaBuilder builder = new CriteriaBuilder(OnmsRegion.class, Aliases.region.toString());
-
-        // Order by name by default
-        builder.orderBy("region.name").asc();
-
         return builder;
     }
 
