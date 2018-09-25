@@ -75,10 +75,18 @@
                   "type": "static"
                 },
                 {
+                  "label": "Radio Mode",
+                  "tooltip": "Radio Mode",
+                  "model": "radioMode",
+                  "type": "select",
+                  "options": [ "1", "2", "3", "4" ]
+                },
+                {
                   "label": "Operation Mode",
                   "tooltip": "Operation Mode",
                   "model": "opMode",
-                  "type": "static"
+                  "type": "select",
+                  "options": [ "1", "2", "3", "4", "5" ]
                 },
                 {
                   "label": "Bandwidth",

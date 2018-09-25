@@ -58,7 +58,7 @@ public class OpModeUserType extends EnumType {
             return null;
         }
         for (OpMode type : OpMode.values()) {
-            if (type.getValue() == c.intValue()) {
+            if (type.getId() == c.intValue()) {
                 return type;
             }
         }
@@ -70,7 +70,7 @@ public class OpModeUserType extends EnumType {
         if (value == null) {
             IntegerType.INSTANCE.nullSafeSet(st, null, index);
         } else if (value instanceof OpMode){
-            IntegerType.INSTANCE.nullSafeSet(st, ((OpMode)value).getValue(), index);
+            IntegerType.INSTANCE.nullSafeSet(st, ((OpMode)value).getId(), index);
         }
     }
 

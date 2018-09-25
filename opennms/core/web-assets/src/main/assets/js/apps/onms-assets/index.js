@@ -35,7 +35,7 @@ angular.module('onms-assets', [
 .controller('NodeAssetsCtrl', ['$scope', '$http', '$q', 'growl', 'uibDateParser', function($scope, $http, $q, growl, uibDateParser) {
 
   $scope.blackList = [ 'id', 'lastModifiedDate', 'lastModifiedBy', 'lastCapsdPoll', 'createTime' ];
-  $scope.infoKeys = [ 'sysObjectId', 'sysName', 'sysLocation', 'sysContact', 'sysDescription', 'macAddress', 'ssid', 'opMode', 'bandwidth', 'channel' ];
+  $scope.infoKeys = [ 'sysObjectId', 'sysName', 'sysLocation', 'sysContact', 'sysDescription', 'macAddress', 'ssid', 'radioMode', 'opMode', 'bandwidth', 'channel' ];
   $scope.dateKeys = [ 'dateInstalled', 'leaseExpires', 'maintContractExpiration' ];
 
   $scope.dateFormat = 'yyyy-MM-dd';
@@ -145,5 +145,25 @@ angular.module('onms-assets', [
         growl.error('Cannot obtain node data from requisition ' + $scope.foreignSource);
       });
   };
+
+}])
+
+.controller('ProfileCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
+
+  $scope.profile = {};
+
+  $scope.save = function() {
+    $http({
+      method: 'POST',
+      url: 'api/v2/profiles',
+      headers: {'Content-Type': 'application/json'},
+      data: $scope.profile
+    }).success(function() {
+      growl.success('The profile has been successfully created.');
+    }).error(function(msg) {
+      growl.error('Cannot create the profile: ' + msg);
+    });
+  };
+
 
 }]);

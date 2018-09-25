@@ -28,6 +28,7 @@
 
 package org.opennms.netmgt.model;
 
+import org.hibernate.annotations.Type;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
@@ -60,7 +61,7 @@ public class OnmsProfile implements Serializable {
 
     @XmlAttribute(name = "op-mode")
     @Column(name = "opMode")
-    private Integer m_opMode;
+    private OpMode m_opMode;
 
     @XmlAttribute(name = "bandwidth")
     @Column(name = "bandwidth")
@@ -148,21 +149,16 @@ public class OnmsProfile implements Serializable {
         this.m_ssid = ssid;
     }
 
-    /**
-     * <p>getOpMode</p>
-     *
-     * @return a {@link Integer} object.
-     */
-    public Integer getOpMode() {
+    @Type(type="org.opennms.netmgt.model.OpModeUserType")
+    public OpMode getOpMode() {
         return m_opMode;
     }
 
     /**
      * <p>setOpMode</p>
-     *
-     * @param opMode a {@link Integer} object.
+     * @param opMode
      */
-    public void setOpMode(Integer opMode) {
+    public void setOpMode(OpMode opMode) {
         this.m_opMode = opMode;
     }
 

@@ -28,25 +28,64 @@
 
 package org.opennms.netmgt.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * OpenNMS Operation Mode.
  */
 public enum OpMode {
 
-    WIRELESS_11G(1),
-    WIRELESS_11NG(2),
-    WIRELESS_11A(3),
-    WIRELESS_11NA(4),
-    WIRELESS_11AC(5);
+    WIRELESS_11G(1, "11g"),
+    WIRELESS_11NG(2, "11ng"),
+    WIRELESS_11A(3, "11a"),
+    WIRELESS_11NA(4, "11na"),
+    WIRELESS_11AC(5, "11ac");
 
-    private final int m_value;
+    private static final Map<Integer, OpMode> m_idMap;
 
-    OpMode(int value) {
-        m_value = value;
+    private int m_id;
+    private String m_label;
+
+    static {
+        m_idMap = new HashMap<>(values().length);
+        for (final OpMode radioMode : values()) {
+            m_idMap.put(radioMode.getId(), radioMode);
+        }
     }
 
-    public int getValue() {
-        return this.m_value;
+    OpMode(int id, String label) {
+        m_id = id;
+        m_label = label;
     }
 
+    public int getId() {
+        return m_id;
+    }
+
+    public String getLabel() {
+        return m_label;
+    }
+
+    public static OpMode get(final int id) {
+        if (m_idMap.containsKey(id)) {
+            return m_idMap.get(id);
+        } else {
+            throw new IllegalArgumentException("Cannot create OpMode from unknown ID " + id);
+        }
+    }
+
+    public static OpMode get(final String label) {
+        for (final Integer key : m_idMap.keySet()) {
+            if (m_idMap.get(key).getLabel().equalsIgnoreCase(label)) {
+                return m_idMap.get(key);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return m_label;
+    }
 }

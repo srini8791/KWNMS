@@ -31,9 +31,9 @@ package org.opennms.web.rest.v2;
 import org.apache.cxf.jaxrs.ext.search.SearchBean;
 import org.opennms.core.config.api.JaxbListWrapper;
 import org.opennms.core.criteria.CriteriaBuilder;
-import org.opennms.netmgt.dao.api.RegionDao;
-import org.opennms.netmgt.model.OnmsRegion;
-import org.opennms.netmgt.model.OnmsRegionList;
+import org.opennms.netmgt.dao.api.ProfileDao;
+import org.opennms.netmgt.model.OnmsProfile;
+import org.opennms.netmgt.model.OnmsProfileList;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.RedirectHelper;
 import org.slf4j.Logger;
@@ -50,26 +50,26 @@ import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
 
 /**
- * Basic Web Service using REST for {@link OnmsRegion} entity
+ * Basic Web Service using REST for {@link OnmsProfile} entity
  */
 @Component
-@Path("regions")
+@Path("profiles")
 @Transactional
-public class RegionRestService extends AbstractDaoRestService<OnmsRegion, SearchBean, Integer, String> {
+public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, SearchBean, Integer, String> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RegionRestService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProfileRestService.class);
 
     @Autowired
-    private RegionDao m_dao;
+    private ProfileDao m_dao;
 
     @Override
-    protected RegionDao getDao() {
+    protected ProfileDao getDao() {
         return m_dao;
     }
 
     @Override
-    protected Class<OnmsRegion> getDaoClass() {
-        return OnmsRegion.class;
+    protected Class<OnmsProfile> getDaoClass() {
+        return OnmsProfile.class;
     }
 
     @Override
@@ -79,44 +79,44 @@ public class RegionRestService extends AbstractDaoRestService<OnmsRegion, Search
 
     @Override
     protected CriteriaBuilder getCriteriaBuilder(UriInfo uriInfo) {
-        final CriteriaBuilder builder = new CriteriaBuilder(OnmsRegion.class, Aliases.region.toString());
+        final CriteriaBuilder builder = new CriteriaBuilder(OnmsProfile.class, Aliases.profile.toString());
 
         // Order by name by default
-        builder.orderBy("region.name").asc();
+        builder.orderBy("profile.name").asc();
 
         return builder;
     }
 
     @Override
-    protected JaxbListWrapper<OnmsRegion> createListWrapper(Collection<OnmsRegion> list) {
-        return new OnmsRegionList(list);
+    protected JaxbListWrapper<OnmsProfile> createListWrapper(Collection<OnmsProfile> list) {
+        return new OnmsProfileList(list);
     }
 
     @Override
-    public Response doCreate(final SecurityContext securityContext, final UriInfo uriInfo, final OnmsRegion region) {
-        if (region == null) {
-            throw getException(Status.BAD_REQUEST, "Region object cannot be null");
+    public Response doCreate(final SecurityContext securityContext, final UriInfo uriInfo, final OnmsProfile profile) {
+        if (profile == null) {
+            throw getException(Status.BAD_REQUEST, "Profile object cannot be null");
         }
-        final Integer id = getDao().save(region);
+        final Integer id = getDao().save(profile);
         return Response.created(RedirectHelper.getRedirectUri(uriInfo, id)).build();
     }
 
     @Override
-    protected Response doUpdate(SecurityContext securityContext, UriInfo uriInfo, Integer key, OnmsRegion region) {
-        if (region == null) {
-            throw getException(Status.BAD_REQUEST, "Region object cannot be null");
+    protected Response doUpdate(SecurityContext securityContext, UriInfo uriInfo, Integer key, OnmsProfile profile) {
+        if (profile == null) {
+            throw getException(Status.BAD_REQUEST, "Profile object cannot be null");
         }
-        getDao().saveOrUpdate(region);
+        getDao().saveOrUpdate(profile);
         return Response.noContent().build();
     }
 
     @Override
-    protected void doDelete(SecurityContext securityContext, UriInfo uriInfo, OnmsRegion region) {
-        getDao().delete(region);
+    protected void doDelete(SecurityContext securityContext, UriInfo uriInfo, OnmsProfile profile) {
+        getDao().delete(profile);
     }
 
     @Override
-    protected OnmsRegion doGet(UriInfo uriInfo, String id) {
+    protected OnmsProfile doGet(UriInfo uriInfo, String id) {
         return getDao().get(Integer.parseInt(id));
     }
 

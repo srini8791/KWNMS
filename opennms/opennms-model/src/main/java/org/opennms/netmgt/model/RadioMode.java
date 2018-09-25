@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * OpenNMS Operation Mode.
+ * OpenNMS Radio Mode.
  */
 public enum RadioMode {
 
@@ -47,7 +47,7 @@ public enum RadioMode {
     private String m_label;
 
     static {
-        m_idMap = new HashMap<Integer, RadioMode>(values().length);
+        m_idMap = new HashMap<>(values().length);
         for (final RadioMode radioMode : values()) {
             m_idMap.put(radioMode.getId(), radioMode);
         }
@@ -83,4 +83,8 @@ public enum RadioMode {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return m_label;
+    }
 }
