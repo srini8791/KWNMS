@@ -22,6 +22,7 @@
         <mkdir dir="dist" />
         <copy todir="dist" file="KeyWestlib/dist/KeyWestlib.jar" />
         <copy todir="dist" file="KeyWestServer/dist/KeyWestServer.jar" />
+        <copy todir="dist" file="KeyWestServer/dist/node.props" />
         <copy todir="dist" file="KeyWestClient/dist/KeyWestClient.jar" />
         <copy todir="dist" file="KeywestDemo/dist/KeywestDemo.jar" />
     </target>

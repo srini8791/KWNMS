@@ -19,6 +19,7 @@
     <target name="dist" depends="compile" description="generate the distribution">
         <mkdir dir="dist" />
         <jar destfile="dist/KeyWestServer.jar" basedir="bin" />
+        <copy file="node.props" todir="dist" />
     </target>
  
 </project>

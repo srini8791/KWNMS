@@ -1,0 +1,29 @@
+### CONFIG ###
+
+config.ip=192.168.0.126
+config.ssid=126SSID
+config.mode=1
+config.bandwidth=1
+config.devicemode=1
+config.channel=1
+config.macaddress=CC:2F:71:D6:03:1C
+
+### SYSINFO ###
+
+#do not modify sysid
+sysinfo.sysid=1.2.1.4.22.1
+
+sysinfo.sysname=ranjan
+sysinfo.syscontact=darbha
+sysinfo.sysdesc=darbha-lt
+sysinfo.geolat=87.0
+sysinfo.geolong=12.0
+
+
+### INVENTORY ###
+
+inventory.bandwidthlimit=40
+inventory.ethspeed=100
+inventory.firmware=1.1
+inventory.modelnumber=DELL125
+inventory.serialnumber=12312
