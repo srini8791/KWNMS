@@ -155,7 +155,7 @@ angular.module('onms-assets', [
 
   $scope.init = function() {
     $scope.loadProfiles();
-  }
+  };
 
   $scope.loadProfiles = function() {
     $http.get('api/v2/profiles')
@@ -165,7 +165,7 @@ angular.module('onms-assets', [
       .error(function(msg) {
         growl.error(msg);
       });
-  }
+  };
 
   $scope.save = function() {
     $http({
