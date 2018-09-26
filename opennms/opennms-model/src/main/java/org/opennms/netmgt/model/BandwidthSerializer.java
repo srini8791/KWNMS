@@ -1,7 +1,7 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2007-2014 The OpenNMS Group, Inc.
  * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
@@ -28,24 +28,20 @@
 
 package org.opennms.netmgt.model;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.SerializerProvider;
 
-public class BandwidthAdapter extends XmlAdapter<Integer, Bandwidth> {
+import java.io.IOException;
+
+public final class BandwidthSerializer extends JsonSerializer<Bandwidth> {
 
     @Override
-    public Integer marshal(final Bandwidth v) throws Exception {
-        return v == null ? null : v.getId();
+    public void serialize(Bandwidth bandwidth, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeNumberField("id", bandwidth.getId());
+        jsonGenerator.writeStringField("label", bandwidth.getLabel());
+        jsonGenerator.writeEndObject();
     }
-
-    @Override
-    public Bandwidth unmarshal(final Integer v) throws Exception {
-        if (v == null) return null;
-        for (Bandwidth opMode : Bandwidth.values()) {
-            if (opMode.getValue().equals(v)) {
-                return opMode;
-            }
-        }
-        return Bandwidth.BANDWIDTH_UNKNOWN;
-    }
-
 }

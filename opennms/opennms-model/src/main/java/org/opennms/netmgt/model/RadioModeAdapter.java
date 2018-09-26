@@ -30,22 +30,22 @@ package org.opennms.netmgt.model;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class BandwidthAdapter extends XmlAdapter<Integer, Bandwidth> {
+public class RadioModeAdapter extends XmlAdapter<Integer, RadioMode> {
 
     @Override
-    public Integer marshal(final Bandwidth v) throws Exception {
-        return v == null ? null : v.getId();
+    public Integer marshal(final RadioMode v) throws Exception {
+        return v == null? null : v.getId();
     }
 
     @Override
-    public Bandwidth unmarshal(final Integer v) throws Exception {
+    public RadioMode unmarshal(final Integer v) throws Exception {
         if (v == null) return null;
-        for (Bandwidth opMode : Bandwidth.values()) {
-            if (opMode.getValue().equals(v)) {
-                return opMode;
+        for (RadioMode radioMode : RadioMode.values()) {
+            if (radioMode.getValue().equals(v)) {
+                return radioMode;
             }
         }
-        return Bandwidth.BANDWIDTH_UNKNOWN;
+        return RadioMode.MODE_UNKNOWN;
     }
 
 }

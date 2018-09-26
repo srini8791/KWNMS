@@ -150,7 +150,22 @@ angular.module('onms-assets', [
 
 .controller('ProfileCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
 
+  $scope.profiles = [];
   $scope.profile = {};
+
+  $scope.init = function() {
+    $scope.loadProfiles();
+  }
+
+  $scope.loadProfiles = function() {
+    $http.get('api/v2/profiles')
+      .success(function(result) {
+        $scope.profiles = result.profile;
+      })
+      .error(function(msg) {
+        growl.error(msg);
+      });
+  }
 
   $scope.save = function() {
     $http({
@@ -160,6 +175,7 @@ angular.module('onms-assets', [
       data: $scope.profile
     }).success(function() {
       growl.success('The profile has been successfully created.');
+      $scope.loadProfiles();
     }).error(function(msg) {
       growl.error('Cannot create the profile: ' + msg);
     });

@@ -28,18 +28,25 @@
 
 package org.opennms.netmgt.model;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * OpenNMS Radio Mode.
  */
+@JsonDeserialize(using = RadioModeDeserializer.class)
+@JsonSerialize(using = RadioModeSerializer.class)
 public enum RadioMode {
 
-    OUTDOOR_BASE(1, "Outdoor Base"),
-    OUTDOOR_SUBSCRIBER(2, "Outdoor Subscriber"),
-    ACCESS_POINT(3, "Access Point"),
-    CLIENT(4, "Client");
+    MODE_UNKNOWN(0, "Unknown"),
+    MODE_OUTDOOR_BASE(1, "Outdoor Base"),
+    MODE_OUTDOOR_SUBSCRIBER(2, "Outdoor Subscriber"),
+    MODE_ACCESS_POINT(3, "Access Point"),
+    MODE_CLIENT(4, "Client");
 
     private static final Map<Integer, RadioMode> m_idMap;
 
@@ -66,11 +73,12 @@ public enum RadioMode {
         return m_label;
     }
 
+    @JsonCreator
     public static RadioMode get(final int id) {
         if (m_idMap.containsKey(id)) {
             return m_idMap.get(id);
         } else {
-            throw new IllegalArgumentException("Cannot create RadioMode from unknown ID " + id);
+            return MODE_UNKNOWN;
         }
     }
 
@@ -81,6 +89,10 @@ public enum RadioMode {
             }
         }
         return null;
+    }
+
+    public Integer getValue() {
+        return m_id;
     }
 
     @Override

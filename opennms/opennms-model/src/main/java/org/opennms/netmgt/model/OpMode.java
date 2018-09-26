@@ -28,23 +28,31 @@
 
 package org.opennms.netmgt.model;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * OpenNMS Operation Mode.
  */
+@JsonDeserialize(using = OpModeDeserializer.class)
+@JsonSerialize(using = OpModeSerializer.class)
 public enum OpMode {
 
-    WIRELESS_11G(1, "11g"),
-    WIRELESS_11NG(2, "11ng"),
-    WIRELESS_11A(3, "11a"),
-    WIRELESS_11NA(4, "11na"),
-    WIRELESS_11AC(5, "11ac");
+    MODE_UNKNOWN(0, "Unknown"),
+    MODE_11G(1, "11g"),
+    MODE_11NG(2, "11ng"),
+    MODE_11A(3, "11a"),
+    MODE_11NA(4, "11na"),
+    MODE_11AC(5, "11ac");
 
     private static final Map<Integer, OpMode> m_idMap;
 
-    private int m_id;
+    private Integer m_id;
+
     private String m_label;
 
     static {
@@ -59,7 +67,7 @@ public enum OpMode {
         m_label = label;
     }
 
-    public int getId() {
+    public Integer getId() {
         return m_id;
     }
 
@@ -67,11 +75,12 @@ public enum OpMode {
         return m_label;
     }
 
+    @JsonCreator
     public static OpMode get(final int id) {
         if (m_idMap.containsKey(id)) {
             return m_idMap.get(id);
         } else {
-            throw new IllegalArgumentException("Cannot create OpMode from unknown ID " + id);
+            return MODE_UNKNOWN;
         }
     }
 

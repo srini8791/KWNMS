@@ -1,48 +1,49 @@
 <%--
 /*******************************************************************************
- * This file is part of OpenNMS(R).
- *
- * Copyright (C) 2018-2018 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
- *
- * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
- *
- * OpenNMS(R) is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
- *
- * OpenNMS(R) is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with OpenNMS(R).  If not, see:
- *      http://www.gnu.org/licenses/
- *
- * For more information contact:
- *     OpenNMS(R) Licensing <license@opennms.org>
- *     http://www.opennms.org/
- *     http://www.opennms.com/
- *******************************************************************************/
+* This file is part of OpenNMS(R).
+*
+* Copyright (C) 2018-2018 The OpenNMS Group, Inc.
+* OpenNMS(R) is Copyright (C) 1999-2018 The OpenNMS Group, Inc.
+*
+* OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
+*
+* OpenNMS(R) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published
+* by the Free Software Foundation, either version 3 of the License,
+* or (at your option) any later version.
+*
+* OpenNMS(R) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with OpenNMS(R).  If not, see:
+*      http://www.gnu.org/licenses/
+*
+* For more information contact:
+*     OpenNMS(R) Licensing
+<license@opennms.org>
+*     http://www.opennms.org/
+*     http://www.opennms.com/
+*******************************************************************************/
 
 --%>
 <jsp:include page="/includes/bootstrap.jsp" flush="false">
-    <jsp:param name="norequirejs" value="true" />
+  <jsp:param name="norequirejs" value="true"/>
 
-    <jsp:param name="title" value="Profile Management" />
-    <jsp:param name="headTitle" value="Profile Management" />
-    <jsp:param name="breadcrumb" value="<a href='admin/index.jsp'>Admin</a>" />
-    <jsp:param name="breadcrumb" value="Profile Management" />
+  <jsp:param name="title" value="Profile Management"/>
+  <jsp:param name="headTitle" value="Profile Management"/>
+  <jsp:param name="breadcrumb" value="<a href='admin/index.jsp'>Admin</a>"/>
+  <jsp:param name="breadcrumb" value="Profile Management"/>
 </jsp:include>
 
 <jsp:include page="/assets/load-assets.jsp" flush="false">
-  <jsp:param name="asset" value="onms-assets" />
+  <jsp:param name="asset" value="onms-assets"/>
 </jsp:include>
 
 
-<div class="container-fluid" ng-app="onms-assets" ng-controller="ProfileCtrl">
+<div class="container-fluid" ng-app="onms-assets" ng-controller="ProfileCtrl" ng-init="init()">
 
   <div growl></div>
 
@@ -58,7 +59,7 @@
               <div class="row">
                 <label for="input_profileName" class="col-sm-4 control-label">Profile Name</label>
                 <div class="col-sm-8">
-                  <input id="input_profileName" name="profileName" ng-model="profile.name" class="form-control" />
+                  <input id="input_profileName" name="profileName" ng-model="profile.name" class="form-control"/>
                 </div>
               </div>
             </div>
@@ -66,7 +67,7 @@
               <div class="row">
                 <label for="input_ssid" class="col-sm-4 control-label">SSID</label>
                 <div class="col-sm-8">
-                  <input id="input_ssid" name="ssid" ng-model="profile.ssid" class="form-control" />
+                  <input id="input_ssid" name="ssid" ng-model="profile.ssid" class="form-control"/>
                 </div>
               </div>
             </div>
@@ -74,7 +75,8 @@
               <div class="row">
                 <label for="input_opMode" class="col-sm-4 control-label">Operation Mode</label>
                 <div class="col-sm-8">
-                  <select id="input_opMode" name="opMode" ng-model="profile.opMode" class="form-control">
+                  <select id="input_opMode" name="opMode" ng-model="profile.opMode.id" class="form-control">
+                    <option value="0">Select Operation Mode</option>
                     <option value="1">11g</option>
                     <option value="2">11ng</option>
                     <option value="3">11a</option>
@@ -89,10 +91,10 @@
                 <label for="input_bandwidth" class="col-sm-4 control-label">Bandwidth</label>
                 <div class="col-sm-8">
                   <select id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth" class="form-control">
+                    <option value="0">Select Bandwidth</option>
                     <option value="1">20MHz</option>
                     <option value="2">40MHz</option>
                     <option value="3">80MHz</option>
-                    <option value="4">Unknown</option>
                   </select>
                 </div>
               </div>
@@ -101,7 +103,7 @@
               <div class="row">
                 <label for="input_channel" class="col-sm-4 control-label">Channel</label>
                 <div class="col-sm-8">
-                  <input id="input_channel" name="channel" ng-model="profile.channel" class="form-control" />
+                  <input id="input_channel" name="channel" ng-model="profile.channel" class="form-control"/>
                 </div>
               </div>
             </div>
@@ -109,20 +111,19 @@
               <div class="row">
                 <label for="input_ipAddress" class="col-sm-4 control-label">IP Address</label>
                 <div class="col-sm-8">
-                  <input id="input_ipAddress" name="ipAddress" ng-model="profile.ipAddress" class="form-control" />
+                  <input id="input_ipAddress" name="ipAddress" ng-model="profile.ipAddress" class="form-control"/>
                 </div>
               </div>
             </div>
           </form>
         </div> <!-- panel-body -->
         <div class="panel-footer">
-          <button type="button" class="btn btn-default" ng-click="save()" id="save-profile" ng-disabled="profileForm.$invalid">
-            Create Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
+          <button type="button" class="btn btn-default" ng-click="save()" id="save-profile"
+                  ng-disabled="profileForm.$invalid">
+            Create Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"><span>
           </button>
         </div> <!-- panel-footer -->
       </div> <!-- panel -->
-    </div> <!-- column -->
-    <div class="col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Retrieve Profile from Device</h3>
@@ -143,7 +144,9 @@
           </form>
         </div> <!-- panel-body -->
         <div class="panel-footer">
-          <a href="javascript:retrieveProfile()">Retrieve Profile >>></a>
+          <button type="button" class="btn btn-default" ng-click="download()" id="download-profile">
+            Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
+          </button>
         </div> <!-- panel-footer -->
       </div> <!-- panel -->
       <div class="panel panel-default">
@@ -177,9 +180,37 @@
           </form>
         </div> <!-- panel-body -->
         <div class="panel-footer">
-          <a href="javascript:applyProfile()">Apply Profile >>></a>
+          <button type="button" class="btn btn-default" ng-click="apply()" id="apply-profile">
+            Apply Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-paste"><span>
+          </button>
         </div> <!-- panel-footer -->
       </div> <!-- panel -->
+    </div> <!-- column -->
+    <div class="col-md-6">
+      <table class="profiles-table table table-condensed table-bordered">
+        <thead>
+          <tr>
+            <th width="4%">&nbsp;</th>
+            <th width="20%">Name</th>
+            <th width="20%">SSID</th>
+            <th width="12%">Operation<br/>Mode</th>
+            <th width="12%">Bandwidth</th>
+            <th width="12%">Channel</th>
+            <th width="20%">IP Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="profile in profiles">
+            <td><input type="checkbox" value="{{profile.id}}"/></td>
+            <td>{{profile.name}}</td>
+            <td>{{profile.ssid}}</td>
+            <td>{{profile.opMode.label}}</td>
+            <td>{{profile.bandwidth}}</td>
+            <td>{{profile.channel}}</td>
+            <td>{{profile.ipAddress}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div> <!-- column -->
   </div>
 

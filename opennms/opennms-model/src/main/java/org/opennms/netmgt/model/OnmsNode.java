@@ -606,7 +606,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     @XmlElement(name="radioMode")
     @Column(name="radioMode")
-    @Type(type="org.opennms.netmgt.model.RadioModeUserType")
+    //@Type(type="org.opennms.netmgt.model.RadioModeUserType")
     public RadioMode getRadioMode() {
         return m_radioMode;
     }
@@ -621,7 +621,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     @XmlElement(name="opMode")
     @Column(name="opMode")
-    @Type(type="org.opennms.netmgt.model.OpModeUserType")
+    //@Type(type="org.opennms.netmgt.model.OpModeUserType")
     public OpMode getOpMode() {
         return m_opMode;
     }
@@ -636,7 +636,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     @XmlElement(name="bandwidth")
     @Column(name="bandwidth")
-    @Type(type="org.opennms.netmgt.model.BandwidthUserType")
+    //@Type(type="org.opennms.netmgt.model.BandwidthUserType")
     public Bandwidth getBandwidth() {
         return m_bandwidth;
     }

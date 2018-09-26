@@ -1,7 +1,7 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2007-2014 The OpenNMS Group, Inc.
  * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
@@ -28,24 +28,26 @@
 
 package org.opennms.netmgt.model;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonDeserializer;
 
-public class BandwidthAdapter extends XmlAdapter<Integer, Bandwidth> {
+import java.io.IOException;
+
+public final class BandwidthDeserializer extends JsonDeserializer<Bandwidth> {
 
     @Override
-    public Integer marshal(final Bandwidth v) throws Exception {
-        return v == null ? null : v.getId();
-    }
+    public Bandwidth deserialize(JsonParser parser, DeserializationContext context)
+            throws IOException, JsonProcessingException {
 
-    @Override
-    public Bandwidth unmarshal(final Integer v) throws Exception {
-        if (v == null) return null;
-        for (Bandwidth opMode : Bandwidth.values()) {
-            if (opMode.getValue().equals(v)) {
-                return opMode;
-            }
+        final JsonNode object = parser.getCodec().readTree(parser);
+        JsonNode idNode = object.get("id");
+        if (idNode != null) {
+            return Bandwidth.get(idNode.asInt());
         }
-        return Bandwidth.BANDWIDTH_UNKNOWN;
-    }
 
+        return null;
+    }
 }

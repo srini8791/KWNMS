@@ -28,6 +28,9 @@
 
 package org.opennms.netmgt.model;
 
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
@@ -60,13 +63,13 @@ public class OnmsProfile implements Serializable {
     private String m_ssid;
 
     @XmlElement(name = "opMode")
+    //@XmlJavaTypeAdapter(OpModeAdapter.class)
     @Column(name = "opMode")
-    @XmlJavaTypeAdapter(OpModeAdapter.class)
     private OpMode m_opMode;
 
-    @XmlAttribute(name = "bandwidth")
+    @XmlElement(name = "bandwidth")
     @Column(name = "bandwidth")
-    @XmlJavaTypeAdapter(BandwidthAdapter.class)
+    //@XmlJavaTypeAdapter(BandwidthAdapter.class)
     private Bandwidth m_bandwidth;
 
     @XmlAttribute(name = "channel")
