@@ -46,6 +46,15 @@
         </logmsg>
       <severity>Normal</severity>
    </event>
+    <event>
+        <uei>uei.opennms.org/nodes/nodeModeUpdated</uei>
+        <event-label>OpenNMS-defined node event: nodeModeUpdated</event-label>
+        <descr>&lt;p>KWP Node with id (%parm[nodeid]%) has been discovered in (%parm[radioMode]%) mode.&lt;/p></descr>
+        <logmsg dest="logndisplay">
+            KWP Node with id (%parm[nodeid]%) has been discovered in (%parm[radioMode]%) mode.
+        </logmsg>
+        <severity>Normal</severity>
+    </event>
    <event>
       <uei>uei.opennms.org/internal/importer/importStarted</uei>
       <event-label>OpenNMS-defined internal event: importer process has started</event-label>

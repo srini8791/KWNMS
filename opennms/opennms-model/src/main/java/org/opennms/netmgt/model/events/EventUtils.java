@@ -30,20 +30,7 @@ package org.opennms.netmgt.model.events;
 
 import static org.opennms.core.utils.InetAddressUtils.addr;
 import static org.opennms.core.utils.InetAddressUtils.str;
-import static org.opennms.netmgt.events.api.EventConstants.INTERFACE_DELETED_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.NODE_ADDED_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.NODE_CATEGORY_MEMBERSHIP_CHANGED_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.NODE_DELETED_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.NODE_GAINED_INTERFACE_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.NODE_GAINED_SERVICE_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.NODE_UPDATED_EVENT_UEI;
-import static org.opennms.netmgt.events.api.EventConstants.PARM_IP_HOSTNAME;
-import static org.opennms.netmgt.events.api.EventConstants.PARM_NODE_LABEL;
-import static org.opennms.netmgt.events.api.EventConstants.PARM_NODE_LABEL_SOURCE;
-import static org.opennms.netmgt.events.api.EventConstants.PARM_NODE_SYSDESCRIPTION;
-import static org.opennms.netmgt.events.api.EventConstants.PARM_NODE_SYSNAME;
-import static org.opennms.netmgt.events.api.EventConstants.PARM_RESCAN_EXISTING;
-import static org.opennms.netmgt.events.api.EventConstants.SERVICE_DELETED_EVENT_UEI;
+import static org.opennms.netmgt.events.api.EventConstants.*;
 
 import java.net.InetAddress;
 import java.util.Collection;
@@ -362,6 +349,30 @@ public abstract class EventUtils {
         if (rescanExisting != null) {
             bldr.addParam(PARM_RESCAN_EXISTING, rescanExisting);
         }
+        return bldr.getEvent();
+    }
+
+
+    /**
+     * <p>createNodeUpdatedEvent</p>
+     *
+     * @param source a {@link java.lang.String} object.
+     * @param nodeId a {@link java.lang.Integer} object.
+     * @param nodeLabel a {@link java.lang.String} object.
+     * @param labelSource a {@link java.lang.String} object.
+     * @param rescanExisting a {@link java.lang.String} object.
+     * @return a {@link org.opennms.netmgt.xml.event.Event} object.
+     */
+    public static Event createNodeModeUpdatedEvent(String source, Integer nodeId, String foreignSource, String foreignId,String radioMode) {
+        debug("CreateNodeUpdatedEvent: nodedId: %d", nodeId);
+        EventBuilder bldr = new EventBuilder(NODE_MODE_UPDATED_EVENT_UEI, source);
+        bldr.setNodeid(nodeId);
+        bldr.addParam(EventConstants.PARM_FOREIGN_SOURCE, foreignSource);
+        bldr.addParam(EventConstants.PARM_FOREIGN_ID, foreignId);
+        bldr.addParam(EventConstants.PARAM_RADIO_MODE,radioMode);
+        /*if (rescanExisting != null) {
+            bldr.addParam(PARM_RESCAN_EXISTING, rescanExisting);
+        }*/
         return bldr.getEvent();
     }
 

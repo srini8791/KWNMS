@@ -1019,9 +1019,24 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
 
                 final boolean changed = handleCategoryChanges(dbNode);
 
+                final boolean deviceModeUpdated = handleDeviceModeChanges(dbNode);
+
                 dbNode.mergeNodeAttributes(node, accumulator);
                 updateNodeHostname(dbNode);
                 final OnmsNode ret = saveOrUpdate(dbNode);
+
+                if (deviceModeUpdated) {
+                     EventBuilder builder = new EventBuilder(EventConstants.NODE_MODE_UPDATED_EVENT_UEI, Provisioner.NAME);
+                     builder.setNodeid(node.getId());
+                     builder.addParam(EventConstants.PARM_FOREIGN_SOURCE, node.getForeignSource());
+                     builder.addParam(EventConstants.PARM_FOREIGN_ID, node.getForeignId());
+                     builder.addParam(EventConstants.PARAM_RADIO_MODE,node.getRadioMode().toString());
+                     m_eventForwarder.sendNow(builder.getEvent());
+                     //m_eventForwarder.sendNow(EventUtils.createNodeModeUpdatedEvent("Provisiond",node.getId(),node.getForeignId(),node.getForeignSource(),node.getRadioMode().toString()));
+                     //accumulator.sendNow(builder.getEvent());
+                     //node.visit(new UpdateEventVisitor(m_eventForwarder,"false"));
+                    LOG.debug("KWP Node with id {} has been discovered in {} mode",dbNode.getId(), dbNode.getRadioMode());
+                }
 
                 if (changed) {
                     accumulator.sendNow(EventUtils.createNodeCategoryMembershipChangedEvent("Provisiond", ret.getId(), ret.getLabel(), m_categoriesAdded.toArray(new String[0]), m_categoriesDeleted.toArray(new String[0])));
@@ -1032,6 +1047,13 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
 
                 accumulator.flush();
                 return ret;
+            }
+
+            private boolean handleDeviceModeChanges(OnmsNode dbNode) {
+                if (dbNode.getRadioMode() != null && dbNode.getRadioMode() != node.getRadioMode()) {
+                    return true;
+                }
+                return false;
             }
 
             @Override

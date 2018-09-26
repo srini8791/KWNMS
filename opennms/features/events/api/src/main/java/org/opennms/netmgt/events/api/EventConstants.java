@@ -28,6 +28,11 @@
 
 package org.opennms.netmgt.events.api;
 
+import org.opennms.core.utils.Base64;
+import org.opennms.netmgt.snmp.SnmpObjId;
+import org.opennms.netmgt.snmp.SnmpValue;
+import org.opennms.netmgt.xml.event.Value;
+
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,11 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import org.opennms.core.utils.Base64;
-import org.opennms.netmgt.snmp.SnmpObjId;
-import org.opennms.netmgt.snmp.SnmpValue;
-import org.opennms.netmgt.xml.event.Value;
 
 /**
  * This class holds all OpenNMS events related constants - the UEIs, parm
@@ -105,7 +105,13 @@ public abstract class EventConstants {
      * The node added event UEI.
      */
     public static final String NODE_ADDED_EVENT_UEI = "uei.opennms.org/nodes/nodeAdded";
-    
+
+    /**
+     * The node added event UEI.
+     */
+    public static final String NODE_MODE_UPDATED_EVENT_UEI = "uei.opennms.org/nodes/nodeModeUpdated";
+
+
     /**
      * The node updated event UEI (added for the ProvisioningAdapter integration).
      */
@@ -853,6 +859,8 @@ public abstract class EventConstants {
     public static final String PARM_FOREIGN_ID = "foreignId";
     /** Constant <code>PARM_RESCAN_EXISTING="rescanExisting"</code> */
     public static final String PARM_RESCAN_EXISTING = "rescanExisting";
+    /** Constant <code>PARAM_RADIO_MODE="radioMode"</code> */
+    public static final String PARAM_RADIO_MODE = "radioMode";
     
     /**
      * Parms used for configureSnmp events
