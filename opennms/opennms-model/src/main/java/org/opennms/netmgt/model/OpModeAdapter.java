@@ -45,7 +45,7 @@ public class OpModeAdapter extends XmlAdapter<Integer, OpMode> {
                 return opMode;
             }
         }
-        return null;
+        return OpMode.MODE_UNKNOWN;
     }
 
 }

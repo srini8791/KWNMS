@@ -28,18 +28,24 @@
 
 package org.opennms.netmgt.model;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * OpenNMS Bandwidth.
  */
+@JsonDeserialize(using = BandwidthDeserializer.class)
+@JsonSerialize(using = BandwidthSerializer.class)
 public enum Bandwidth {
 
+    BANDWIDTH_UNKNOWN(0,"Unknown"),
     BANDWIDTH_20MHZ(1, "Bw20MHz"),
     BANDWIDTH_40MHZ(2, "Bw40MHz"),
-    BANDWIDTH_80MHZ(3, "Bw80MHz"),
-    BANDWIDTH_UNKNOWN(4,"Unknown");
+    BANDWIDTH_80MHZ(3, "Bw80MHz");
 
     private static final Map<Integer, Bandwidth> m_idMap;
 
@@ -66,6 +72,7 @@ public enum Bandwidth {
         return m_label;
     }
 
+    @JsonCreator
     public static Bandwidth get(final int id) throws IllegalArgumentException {
         if (m_idMap.containsKey(id)) {
             return m_idMap.get(id);
