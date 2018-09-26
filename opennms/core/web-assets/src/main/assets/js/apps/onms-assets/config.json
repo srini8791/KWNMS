@@ -77,20 +77,20 @@
                 {
                   "label": "Radio Mode",
                   "tooltip": "Radio Mode",
-                  "model": "radioMode.label",
-                  "type": "static"
+                  "model": "radioMode",
+                  "type": "enum"
                 },
                 {
                   "label": "Operation Mode",
                   "tooltip": "Operation Mode",
-                  "model": "opMode.label",
-                  "type": "static"
+                  "model": "opMode",
+                  "type": "enum"
                 },
                 {
                   "label": "Bandwidth",
                   "tooltip": "Bandwidth",
-                  "model": "bandwidth.label",
-                  "type": "static"
+                  "model": "bandwidth",
+                  "type": "enum"
                 },
                 {
                   "label": "Channel",

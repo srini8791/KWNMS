@@ -89,6 +89,8 @@
                     <div class="form-group" ng-class="{ 'has-error': assetForm[field.model].$invalid && !assetForm[field.model].$pristine, 'has-warning': assetForm[field.model].$dirty }">
                       <label class="control-label col-md-3" for="{{ field.model }}" uib-tooltip="{{ field.tooltip  }}">{{ field.label }}</label>
                       <div class="col-md-9">
+                        <%-- Dynamic/ReadOnly fields --%>
+                        <p class="form-control-static" ng-if="field.type=='enum'">{{ asset[field.model].label }}</p>
                         <%-- Static/ReadOnly fields --%>
                         <p class="form-control-static" ng-if="field.type=='static'">{{ asset[field.model] }}</p>
                         <%-- Standard fields with typeahead suggestions --%>
