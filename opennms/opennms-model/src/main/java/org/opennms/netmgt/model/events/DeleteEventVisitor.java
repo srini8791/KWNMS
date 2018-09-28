@@ -55,6 +55,7 @@ public class DeleteEventVisitor extends AbstractEntityVisitor {
 
     @Override
     public void visitNodeComplete(final OnmsNode node) {
+        m_eventForwarder.sendNow(EventUtils.createNodeDeletedEvent(m_eventSource,node.getId(),node.getLabel(),node.getLabel(),node.getRadioMode().toString()));
         m_eventForwarder.sendNow(EventUtils.createNodeDeletedEvent(m_eventSource, node.getId(), node.getLabel(), node.getLabel()));
     }
 }

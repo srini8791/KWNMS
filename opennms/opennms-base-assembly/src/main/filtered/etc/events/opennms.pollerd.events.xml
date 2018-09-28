@@ -263,6 +263,15 @@
         </logmsg>
         <severity>Normal</severity>
     </event>
+    <event>
+        <uei>uei.opennms.org/nodes/nodeModeDeleted</uei>
+        <event-label>OpenNMS-defined node event: nodeModeDeleted</event-label>
+        <descr>&lt;p>KWP Node with %parm[radioMode]% mode has been deleted.&lt;/p></descr>
+        <logmsg dest="logndisplay">
+            KWP Node with %parm[radioMode]% mode has been deleted..
+        </logmsg>
+        <severity>Normal</severity>
+    </event>
    <event>
       <uei>uei.opennms.org/nodes/nodeCategoryMembershipChanged</uei>
       <event-label>OpenNMS-defined node event: nodeCategoryMembershipChanged</event-label>

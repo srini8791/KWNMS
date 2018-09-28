@@ -107,9 +107,15 @@ public abstract class EventConstants {
     public static final String NODE_ADDED_EVENT_UEI = "uei.opennms.org/nodes/nodeAdded";
 
     /**
-     * The node added event UEI.
+     * The node mode added event UEI.
      */
     public static final String NODE_MODE_UPDATED_EVENT_UEI = "uei.opennms.org/nodes/nodeModeUpdated";
+
+
+    /**
+     * The node mode added event UEI.
+     */
+    public static final String NODE_MODE_DELETED_EVENT_UEI = "uei.opennms.org/nodes/nodeModeDeleted";
 
 
     /**

@@ -179,6 +179,38 @@ public abstract class EventUtils {
     }
 
     /**
+     * This method is responsible for generating a nodeDeleted event and sending
+     * it to eventd..
+     *
+     * @param source
+     *            A string representing the source of the event
+     * @param nodeId
+     *            Nodeid of the node got deleted.
+     * @param hostName
+     *            the Host server name.
+     * @param nodeLabel
+     *            the node label of the deleted node.
+     * @return a {@link org.opennms.netmgt.xml.event.Event} object.
+     */
+    public static Event createNodeDeletedEvent(String source, int nodeId, String hostName, String nodeLabel,String mode) {
+
+        debug("createNodeDeletedEvent for nodeid:  %d with mode %s", nodeId,mode);
+
+        EventBuilder bldr = new EventBuilder(NODE_MODE_DELETED_EVENT_UEI, source);
+        bldr.setNodeid(nodeId);
+        bldr.setHost(hostName);
+
+        if (nodeLabel != null) {
+            bldr.addParam(PARM_NODE_LABEL, nodeLabel);
+        }
+        if (mode != null) {
+            bldr.addParam(PARAM_RADIO_MODE,mode);
+        }
+
+        return bldr.getEvent();
+    }
+
+    /**
      * Construct an interfaceDeleted event for an interface.
      *
      * @param source
