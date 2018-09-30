@@ -153,8 +153,13 @@ angular.module('onms-assets', [
   $scope.profiles = [];
   $scope.profile = {};
 
+  $scope.nodes = [];
+  $scope.profileToApply = '';
+  $scope.nodesToApply = [];
+
   $scope.init = function() {
     $scope.loadProfiles();
+    $scope.loadNodes();
   };
 
   $scope.loadProfiles = function() {
@@ -175,11 +180,43 @@ angular.module('onms-assets', [
       data: $scope.profile
     }).success(function() {
       growl.success('The profile has been successfully created.');
+      $scope.profile = {};
       $scope.loadProfiles();
     }).error(function(msg) {
       growl.error('Cannot create the profile: ' + msg);
     });
   };
+
+  $scope.loadNodes = function() {
+    $http.get('api/v2/nodes')
+      .success(function(result) {
+        $scope.nodes = result.node;
+      })
+      .error(function(msg) {
+        growl.error(msg);
+      });
+  };
+
+  $scope.apply = function() {
+    if ($scope.profileToApply == '' || $scope.nodesToApply.length == 0) {
+      growl.error('Select a profile and nodes to apply');
+      return;
+    }
+
+    $http({
+      method: 'POST',
+      url: 'api/v2/profiles/' + $scope.profileToApply + '/applyToNodes',
+      headers: {'Content-Type': 'application/json'},
+      data: $scope.nodesToApply
+    }).success(function() {
+      growl.success('The profile has been initiated to apply for the selected nodes.');
+      $scope.profileToApply = '';
+      $scope.nodesToApply = [];
+    }).error(function(msg) {
+      growl.error('Cannot apply the profile: ' + msg);
+    });
+  };
+
 
 
 }]);

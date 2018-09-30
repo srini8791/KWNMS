@@ -41,13 +41,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Basic Web Service using REST for {@link OnmsProfile} entity
@@ -87,6 +90,32 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     protected JaxbListWrapper<OnmsProfile> createListWrapper(Collection<OnmsProfile> list) {
         return new OnmsProfileList(list);
     }
+
+    @POST
+    @Path("/{profileId}/applyToNodes")
+    public Response applyProfiles(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                                  @PathParam("profileId") Integer id,
+                                  @RequestBody List<String> nodesToApply) {
+        writeLock();
+        try {
+            System.out.println("id = " + id);
+            System.out.println("nodesToApply = " + nodesToApply);
+            for (String node : nodesToApply) {
+                System.out.println(" ==> node = " + node);
+            }
+            System.out.println(" ** uriinfo = " + uriInfo);
+            final MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+            System.out.println("queryParameters = " + queryParameters);
+            for (MultivaluedMap.Entry<String, List<String>> param : queryParameters.entrySet()) {
+                System.out.println("param.key = " + param.getKey());
+                System.out.println("param.value = " + param.getValue());
+            }
+            return Response.accepted().build();
+        } finally {
+            writeUnlock();
+        }
+    }
+
 
     @Override
     public Response doCreate(final SecurityContext securityContext, final UriInfo uriInfo, final OnmsProfile profile) {

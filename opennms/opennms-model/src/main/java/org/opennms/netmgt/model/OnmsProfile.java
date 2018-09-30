@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "profiles")
@@ -93,6 +94,11 @@ public class OnmsProfile implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date m_modifiedOn;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="profile_nodes",
+            joinColumns={@JoinColumn(name="profileid", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="nodeid", referencedColumnName="nodeid")})
+    private Set<OnmsNode> m_nodes;
 
     public OnmsProfile() {
     }
@@ -280,6 +286,25 @@ public class OnmsProfile implements Serializable {
      */
     public void setModifiedOn(Date modifiedOn) {
         this.m_modifiedOn = modifiedOn;
+    }
+
+
+    /**
+     * <p>getNodes</p>
+     *
+     * @return set of {@link OnmsNode} objects.
+     */
+    public Set<OnmsNode> getNodes() {
+        return m_nodes;
+    }
+
+    /**
+     * <p>setNodes</p>
+     *
+     * @param nodes set of {@link OnmsNode} objects.
+     */
+    public void setNodes(Set<OnmsNode> nodes) {
+        this.m_nodes = nodes;
     }
 
     /**

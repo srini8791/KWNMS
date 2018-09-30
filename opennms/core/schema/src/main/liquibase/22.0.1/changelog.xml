@@ -294,4 +294,33 @@
 
   </changeSet>
 
+  <changeSet author="ndarbha" id="22.0.1-profile-nodes">
+    <validCheckSum>ANY</validCheckSum>
+
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="profiles" />
+    </preConditions>
+
+    <createTable tableName="profile_nodes">
+      <column name="nodeid" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="profileid" type="integer">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        constraintName="fk_profilenodes_nodeid" onDelete="CASCADE" onUpdate="CASCADE"
+        baseTableName="profile_nodes" baseColumnNames="nodeid" referencedTableName="node" referencedColumnNames="nodeid" />
+    <addForeignKeyConstraint
+        constraintName="fk_profilenodes_profileid" onDelete="CASCADE" onUpdate="CASCADE"
+        baseTableName="profile_nodes" baseColumnNames="profileid" referencedTableName="profiles" referencedColumnNames="id" />
+
+    <rollback>
+      <dropTable tableName="profile_nodes" />
+    </rollback>
+
+  </changeSet>
+
 </databaseChangeLog>
