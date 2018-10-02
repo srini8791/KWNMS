@@ -1,0 +1,1730 @@
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+--
+-- Copyright (C) 2018 by KeyWest Networks. All rights reserved
+-- Enterprise MIB definition to manage MAP100 product.
+--
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+
+KEYWEST-MIB DEFINITIONS ::= BEGIN
+
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-IDENTITY,
+    NOTIFICATION-TYPE, OBJECT-TYPE,
+    Integer32, enterprises,
+    IpAddress
+        FROM SNMPv2-SMI
+
+    DisplayString, DateAndTime,
+    RowStatus
+        FROM SNMPv2-TC;
+
+
+keywest MODULE-IDENTITY
+        LAST-UPDATED "201809030000Z"
+        ORGANIZATION "KeyWest Networks."
+        CONTACT-INFO "www.keywestnetworks.com"
+        DESCRIPTION  "KeyWest Networks private enterprise MIB definition"
+        REVISION     "201809030000Z"
+        DESCRIPTION  "First Release"
+::= { enterprises 52619 }
+
+
+objects OBJECT-IDENTITY
+    STATUS      current
+    DESCRIPTION "Root Node for KeyWest Networks MAP100 product."
+::= { keywest 1 }
+
+configuration OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "Configuration"
+::= { objects 1 }
+
+management OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "Management"
+::= { objects 2 }
+
+monitor OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "Monitor"
+::= { objects 3 }
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+wireless OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "Wireless configuration"
+::= { configuration 1 }
+
+
+wirelessTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF WirelessEntry
+        MAX-ACCESS         not-accessible
+        STATUS             current
+        DESCRIPTION        "This table is used to specify Wireless
+                            Configuration."
+::= { wireless 1 }
+
+
+wirelessEntry OBJECT-TYPE
+        SYNTAX      WirelessEntry
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents an entry in the 
+                     Wireless Configuration table."
+        INDEX       { wirelessIndex }
+::= { wirelessTable 1 }
+
+
+WirelessEntry ::=
+        SEQUENCE {
+                wirelessIndex
+                    Integer32,
+                wirelessRadioMode
+                    INTEGER,
+                wirelessSSID
+                    DisplayString,
+                wirelessCountry
+                    INTEGER,
+                wirelessOpmode
+                    INTEGER,
+                wirelessSupportedBandwidths
+                    DisplayString,
+                wirelessBandwidth
+                    INTEGER,
+                wirelessSupportedChannels
+                    DisplayString,
+                wirelessChannel
+                    Integer32,
+                wirelessSupportedRates
+                    DisplayString,
+                wirelessRate
+                    Integer32,
+                wirelessTxPower
+                    Integer32,
+                wirelessAMSDU
+                    INTEGER,
+                wirelessUplinkLimit
+                    Integer32,
+                wirelessDownlinkLimit
+                    Integer32,
+                wirelessHideESSID
+                    INTEGER,
+                wirelessCustomerName
+                    DisplayString,
+                wirelessLinkId
+                    Integer32,
+                wirelessSecurityEncryption
+                    INTEGER,
+                wirelessSecurityKey
+                    DisplayString,
+                wirelessMACFilter
+                    INTEGER,
+                wirelessMACList
+                    DisplayString,
+                wirelessDistance
+                    Integer32,
+                wirelessShortGI
+                    INTEGER,
+                wirelessTxChainmask
+                    Integer32,
+                wirelessRxChainmask
+                    Integer32
+        }
+
+
+wirelessIndex OBJECT-TYPE
+        SYNTAX      Integer32 (1..2)
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents the Radio Index 
+                     for Wireless Configuration table
+                     For 2.4 GHz radio - '1'
+                     For   5 GHz radio - '2'."
+::= { wirelessEntry 1 }
+
+wirelessRadioMode OBJECT-TYPE
+        SYNTAX      INTEGER {
+            outdoorbase       (1),
+            outdoorsubscriber (2),
+            accesspoint       (3),
+            client            (4)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents Wireless Radio Mode.
+                     It can be configured as
+                     For 2.4 GHz radio - '3' - Access Point
+                                         '4' - Client
+                     For   5 GHz radio - '1' - Outdoor Base
+                                         '2' - Outdoor Subscriber."
+::= { wirelessEntry 2 }
+
+wirelessSSID OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure SSID."
+::= { wirelessEntry 3 }
+
+wirelessCountry OBJECT-TYPE
+        SYNTAX      INTEGER {
+            russia   (1),
+            indiaul  (2),
+            indial   (3),
+            russia24 (4)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Country.
+                     It can be configured as
+                     For 2.4 GHz radio - '4' - RUSSIA_24
+                     For   5 GHz radio - '1' - RUSSIA
+                                         '2' - INDIA_UL
+                                         '3' - INDIA_L."
+::= { wirelessEntry 4 }
+
+wirelessOpmode OBJECT-TYPE
+        SYNTAX      INTEGER {
+            dot11g  (1),
+            dot11ng (2),
+            dot11a  (3),
+            dot11na (4),
+            dot11ac (5)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Operational Mode.
+                     It can be configured as
+                     For 2.4 GHz radio - '1' - Legacy (11G)
+                                         '2' - 11NG
+                     For   5 GHz radio - '3' - Legacy (11A)
+                                         '4' - 11NA
+                                         '5' - 11AC."
+::= { wirelessEntry 5 }
+
+wirelessSupportedBandwidths OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the supported 
+                     Bandwidths."
+::= { wirelessEntry 6 }
+
+wirelessBandwidth OBJECT-TYPE
+        SYNTAX      INTEGER {
+            bw5       (1),
+            bw10      (2),
+            bw20      (3),
+            bw40PLUS  (4),
+            bw40MINUS (5),
+            bw80      (6)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the bandwidth.
+                     It can be configured as
+                     For 2.4 GHz - '3' - 20  MHz
+                                   '4' - 40  MHz
+                                   '5' - 40- MHz
+                     For   5 GHz - '3' - 20  MHz
+                                   '4' - 40+ MHz
+                                   '5' - 40- MHz
+                                   '6' - 80  MHz."
+::= { wirelessEntry 7 }
+
+wirelessSupportedChannels OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the supported 
+                     channel list."
+::= { wirelessEntry 8 }
+
+wirelessChannel OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the channel.
+                     It can be configured as auto (-1) or any other
+                     channel from the supported channel list based on
+                     country selected."
+::= { wirelessEntry 9 }
+
+wirelessSupportedRates OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the supported 
+                     Modulation Rates."
+::= { wirelessEntry 10 }
+
+wirelessRate OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Modulation Rates.
+                     It can be  configured as
+                     For 2.4 GHz radio - NA
+                     For   5 GHz radio - MCS 0 - MCS  7 for Legacy (11A)
+                                         MCS 0 - MCS 15 for 11NA
+                                         MCS 0 - MCS 19 for 11AC."
+::= { wirelessEntry 11 }
+
+wirelessTxPower OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Transmission
+                     power. It can be configured as 
+                     For 2.4 GHz radio - ( 1 - 26 ) dBm
+                     For   5 GHz radio - ( 1 - 26 ) dBm."
+::= { wirelessEntry 12 }
+
+wirelessAMSDU OBJECT-TYPE
+        SYNTAX      INTEGER {
+            enable  (1),
+            disable (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the AMSDU.
+                     It can be configured as
+                     For 2.4 GHz - NA
+                     For   5 GHz - '1' - Enable
+                                   '2' - Disable."
+::= { wirelessEntry 13 }
+
+wirelessUplinkLimit OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Uplink Limit.
+                     It can be configured as
+                     For 2.4 GHz - NA
+                     For   5 GHz - ( 1024 - 887000 ) Kbps."
+::= { wirelessEntry 14 }
+
+wirelessDownlinkLimit OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Downlink Limit.
+                     It can be configured as
+                     For 2.4 GHz - NA
+                     For   5 GHz - ( 1024 - 887000 ) Kbps."
+::= { wirelessEntry 15 }
+
+wirelessHideESSID OBJECT-TYPE
+        SYNTAX      INTEGER {
+            disable (0),
+            enable  (1)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the HideESSID.
+                     It can be configured as
+                     For 2.4 / 5 GHz - 0 - uncheck (disable)
+                                       1 - check   (enable)."
+::= { wirelessEntry 16 }
+
+wirelessCustomerName OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents CustomerName.
+                     It is configured only for 5 GHz radio."
+::= { wirelessEntry 17 }
+
+wirelessLinkId OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents LinkId.
+                     It can be configured only for 5 GHz radio
+                     in Outdoor Subscriber mode."
+::= { wirelessEntry 18 }
+
+wirelessSecurityEncryption OBJECT-TYPE
+        SYNTAX      INTEGER {
+            none     (1),
+            wpa2-psk (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Encryption
+                     type. It can be cofigured as
+                     For 2.4 / 5 GHz - '1' - None
+                                       '2' - WPA2/PSK."
+::= { wirelessEntry 19 }
+
+wirelessSecurityKey OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the
+                     Security Key."
+::= { wirelessEntry 20 }
+
+wirelessMACFilter OBJECT-TYPE
+        SYNTAX      INTEGER {
+            disable (1),
+            allow   (2),
+            deny    (3)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the MAC Filter.
+                     It can be configured as
+                     For 2.4 / 5 GHz - '1' - Disable
+                                       '2' - Allow
+                                       '3' - Deny."
+::= { wirelessEntry 21 }
+
+wirelessMACList OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the MAC List.
+                     It can be configured as
+                     For 2.4 / 5 GHz - mac '<mac address>'."
+::= { wirelessEntry 22 }
+
+wirelessDistance OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the
+                     Distance."
+::= { wirelessEntry 23 }
+
+wirelessShortGI OBJECT-TYPE
+        SYNTAX      INTEGER {
+            disable (0),
+            enable  (1)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the short Guard
+                     Interval.It is configured only for 5 GHz 
+                     radio as '0' - Disable
+                              '1' - Enable."
+::= { wirelessEntry 24 }
+
+wirelessTxChainmask OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the 
+                     Tx Chainmask."
+::= { wirelessEntry 25 }
+
+wirelessRxChainmask OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the 
+                     Rx Chainmask."
+::= { wirelessEntry 26 }
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+network OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "Network Parameters"
+::= { configuration 2 }
+
+
+networkAddressType OBJECT-TYPE
+        SYNTAX      INTEGER {
+            static  (1),
+            dynamic (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Address Type.
+                     It can be configured as 
+                     '1' - Static
+                     '2' - Dynamic."
+        DEFVAL      { static }
+::= { network 1 }
+
+networkIPAddress OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the
+                     IP Address. Default value 192.168.1.1."
+::= { network 2 }
+
+networkNetMask OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the 
+                     Subnet Mask. Default value 255.255.255.0"
+::= { network 3 }
+
+networkGateway OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the
+                     Gateway IP Addres. Default value 192.168.1.1."
+::= { network 4 }
+
+networkDNSIP OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the 
+                     DNS Server IP Address."
+::= { network 5 }
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+radius OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "RADIUS Parameters."
+::= { configuration 3 }
+
+radiusStatus OBJECT-TYPE
+        SYNTAX      INTEGER {
+            disable (0),
+            enable  (1)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Radius Server
+                     Status. It can be configured as
+                     '0' - Disable
+                     '1' - Enable"
+        DEFVAL      { disable }
+::= { radius 1 }
+
+radiusPrimaryServer OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Primary Server IP Address. Default value is 
+                     192.168.1.100."
+::= { radius 2 }
+
+radiusPrimaryPort OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Primary Port. Default value is 1812."
+::= { radius 3 }
+
+radiusPrimarySecret OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Primary Secret."
+        DEFVAL      { "public" }
+::= { radius 4 }
+
+radiusSecondaryServer OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Secondary Server IP Address. Default value is
+                     192.168.1.100."
+::= { radius 5 }
+
+radiusSecondaryPort OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Secondary Port. Default value is 1812."
+::= { radius 6 }
+
+radiusSecondarySecret OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Secondary Secret."
+        DEFVAL      { "public" }
+::= { radius 7 }
+
+radiusAuthenticationTime OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     ReAuthentication Time in seconds. Default value
+                     is 21600."
+::= { radius 8 }
+
+radiusRetryTime OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Retry Time in seconds. Default value is 300."
+::= { radius 9 }
+
+radiusRetryCount OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Retry Count. Default value is 3."
+::= { radius 10 }
+
+radiusRetryCountPeriod OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the Radius
+                     Retry Count Period in seconds. Default value is 
+                     3."
+::= { radius 11 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+vlan OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "VLAN Parameters"
+::= { configuration 4 }
+
+vlanStatus OBJECT-TYPE
+        SYNTAX      INTEGER {
+            enable  (1),
+            disable (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents VLAN status.
+                     It can be configured as 
+                     '1' - Enable
+                     '2' - Disable."
+        DEFVAL      { disable }
+::= { vlan 1 }
+
+vlanMode OBJECT-TYPE
+        SYNTAX      INTEGER {
+            transparent (0),
+            access      (1),
+            trunk       (2),
+            q-in-q      (3),
+            mac-in-mac  (4)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents VLAN mode.
+                     It can be configured as 
+                           Outdoor Base - '0' - Transparent
+                     Outdoor Subscriber - '0' - Transparent
+                                          '1' - Access
+                                          '2' - Trunk
+                                          '3' - Q-in-Q
+                                          '4' - MAC-in-MAC."
+        DEFVAL      { transparent }
+::= { vlan 2 }
+
+vlanMgmtId OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure
+                     the Managment VLAN ID. Default value
+                     is 1."
+::= { vlan 3 }
+
+vlanAccessId OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure
+                     the Access VLAN ID. Default value
+                     is -1."
+::= { vlan 4 }
+
+vlanTrunkOption OBJECT-TYPE
+        SYNTAX      INTEGER {
+            list (1),
+            all  (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the VLAN 
+                     Trunk option. It can be configured as
+                     '1' - List
+                     '2' - All."
+        DEFVAL      { all }
+::= { vlan 5 }
+
+vlanTrunkId OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure 
+                     the Trunk VLAN ID."
+::= { vlan 6 }
+
+vlanSvlanId OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure 
+                     the SVLAN ID. Default value is -1."
+::= { vlan 7 }
+
+vlanSVlanEtherType OBJECT-TYPE
+        SYNTAX      INTEGER {
+            x8100 (1),
+            x88a8 (2),
+            x9100 (3),
+            x9200 (4)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the 
+                     SVLAN Ether Type. It can be configured as
+                     '1' - 0x8100
+                     '2' - 0x88a8
+                     '3' - 0x9100
+                     '4' - 0x9200.
+                     Default value is 0x8100."
+::= { vlan 8 }
+
+vlanBackboneDestinationMAC OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the
+                     Backbone Destination MAC Address. 
+                     Default value is 00:00:00:00:00:00."
+::= { vlan 9 }
+
+vlanBackboneSourceMAC OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure the
+                     Backbone Source MAC Address.
+                     Default value is 00:00:00:00:00:00."
+::= { vlan 10 }
+
+vlanBackboneVLANID OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure 
+                     the Backbone VLANID. Defult value 
+                     is -1."
+::= { vlan 11 }
+
+vlanBackboneServiceInstanceVLANID OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure 
+                     the Backbone Service Instance VLANID.
+                     Default value is -1."
+::= { vlan 12 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+ethernet OBJECT-IDENTITY
+        STATUS      current
+        DESCRIPTION "Ethernet Parameters."
+::= { configuration 5 }
+
+ethernetMode OBJECT-TYPE
+        SYNTAX      INTEGER {
+            autoNegotation (0),
+            half10Mbps     (1),
+            full10Mbps     (2),
+            half100Mbps    (3),
+            full100Mbps    (4),
+            full1000Mbps   (5)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Ethernet 
+                     Mode and Speed. It can be configured as
+                     '0' - Auto Negotiation,
+                     '1' - 10Mbps-Half,
+                     '2' - 10Mbps-Full,
+                     '3' - 100Mbps-Half,
+                     '4' - 100Mbps-Full,
+                     '5' - 1000Mbps-Full."
+        DEFVAL      { autoNegotation }
+::= { ethernet 1 }
+
+ethernetInactivity OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to Configuration 
+                     the Ethernet Inactivity in minutes. 
+                     Default value is 0"
+::= { ethernet 2 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+dhcp OBJECT-IDENTITY
+        STATUS current
+        DESCRIPTION "DHCP Parameters"
+::= { configuration 6 }
+
+dhcpServer OBJECT-TYPE
+        SYNTAX      INTEGER {
+            disable (0),
+            enable  (1)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the DHCP Server
+                     Status. It can be configured as 
+                     '0' - Disable
+                     '1' - Enable."
+        DEFVAL      { disable }
+::= { dhcp 1 }
+
+dhcpStart OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure DHCP
+                     Server Start Range. Defualt value is 100."
+::= { dhcp 2 }
+
+dhcpLimit OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure DHCP
+                     Server End Limit Range. Default value is 
+                     150."
+::= { dhcp 3 }
+
+dhcpLeaseTime OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure DHCP 
+                     Server Lease Time. Default value is 12h."
+::= { dhcp 4 }
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+sysMgmt OBJECT-IDENTITY
+        STATUS current
+        DESCRIPTION "Management Parameters"
+::= { management 1 }
+
+sysMgmtApply OBJECT-TYPE
+        SYNTAX      INTEGER {
+            yes (1),
+            no  (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to Apply 
+                     changed configuration."
+::= { sysMgmt 1 }
+
+sysMgmtReset OBJECT-TYPE
+        SYNTAX      INTEGER {
+            yes (1),
+            no  (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to restore
+                     default configuration."
+::= { sysMgmt 2 }
+
+sysMgmtReboot OBJECT-TYPE
+        SYNTAX      INTEGER {
+            yes (1),
+            no  (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to Reboot
+                     the device."
+::= { sysMgmt 3 }
+
+sysMgmtDynamicUpdate OBJECT-TYPE
+        SYNTAX      INTEGER {
+            yes (1),
+            no  (2)
+        }
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to apply
+                     Dynamic Configuration."
+::= { sysMgmt 4 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+sysInfo OBJECT-IDENTITY
+        STATUS current
+        DESCRIPTION "Management Parameters"
+::= { management 2 }
+
+sysInfoName OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure
+                     the system name."
+::= { sysInfo 1 }
+
+sysInfoLocation OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure
+                     the system Location."
+::= { sysInfo 2 }
+
+sysInfoContact OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter is used to configure
+                     the system Contact."
+::= { sysInfo 3 }
+
+sysInfoDescription OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the 
+                     system Description."
+::= { sysInfo 4 }
+
+sysInfoGeolat OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the 
+                     Latitude Coordinates."
+::= { sysInfo 5 }
+
+sysInfoGeolong OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the 
+                     Longitude Coordinates."
+::= { sysInfo 6 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+sysInventory OBJECT-IDENTITY
+        STATUS current
+        DESCRIPTION "Management Parameters"
+::= { management 3 }
+
+sysInventorySerialNo OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter is represents the 
+                     Serial Number."
+::= { sysInventory 1 }
+
+sysInventoryModel OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter is represents the 
+                     Model."
+::= { sysInventory 2 }
+
+sysInventoryversion OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter is represents the 
+                     firmware version number."
+::= { sysInventory 3 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+wirelessStatsTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF WirelessStatsEntry
+        MAX-ACCESS         not-accessible
+        STATUS             current
+        DESCRIPTION        "This table is used to specify 
+                            Wireless Statistics."
+::= { monitor 1 }
+
+wirelessStatsEntry OBJECT-TYPE
+        SYNTAX      WirelessStatsEntry
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents an entry in the 
+                     Wireless Statistics Table."
+        INDEX       { wirelessStatsRadioIndex }
+::= { wirelessStatsTable 1 }
+
+
+WirelessStatsEntry ::=
+        SEQUENCE {
+                wirelessStatsRadioIndex
+                    Integer32,
+                wirelessStatsMACAddress
+                    DisplayString,
+                wirelessStatsRemotePartners
+                    Integer32,
+                wirelessStatsDataTxTotalPackets
+                    Integer32,
+                wirelessStatsDataRxTotalPackets
+                    Integer32,
+                wirelessStatsDataTxMulticastPackets
+                    Integer32,
+                wirelessStatsDataRxMulticastPackets
+                    Integer32,
+                wirelessStatsDataTxUnicastPackets
+                    Integer32,
+                wirelessStatsDataRxUnicastPackets
+                    Integer32,
+                wirelessStatsMgmtTxPackets
+                    Integer32,
+                wirelessStatsMgmtRxPackets
+                    Integer32,
+                wirelessStatsMgmtTxBeacons
+                    Integer32,
+                wirelessStatsMgmtRxBeacons
+                    Integer32,
+                wirelessStatsMgmtAuthReqSent
+                    Integer32,
+                wirelessStatsMgmtAuthReqRecv
+                    Integer32,
+                wirelessStatsMgmtAuthConfirm
+                    Integer32,
+                wirelessStatsMgmtAuthReject
+                    Integer32,
+                wirelessStatsMgmtDeAuthReqSent
+                    Integer32,
+                wirelessStatsMgmtDeAuthReqRecv
+                    Integer32,
+                wirelessStatsMgmtAuthResultLast
+                    DisplayString,
+                wirelessStatsMgmtAssocReqSent
+                    Integer32,
+                wirelessStatsMgmtAssocReqRecv
+                    Integer32,
+                wirelessStatsMgmtAssocConfirm
+                    Integer32,
+                wirelessStatsMgmtAssocReject
+                    Integer32,
+                wirelessStatsMgmtDeAssocReqSent
+                    Integer32,
+                wirelessStatsMgmtDeAssocReqRecv
+                    Integer32,
+                wirelessStatsMgmtAssocResultLast
+                    DisplayString,
+                wirelessStatsMPDUErrors
+                    Integer32,
+                wirelessStatsPhyErrors
+                    Integer32
+        }
+
+wirelessStatsRadioIndex OBJECT-TYPE
+        SYNTAX      Integer32 (1..2)
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the index for the 
+                     wireless Statistics table."
+::= { wirelessStatsEntry 1 }
+
+wirelessStatsMACAddress OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the MAC address of 
+                     in a wireless Statistics."
+::= { wirelessStatsEntry 2 }
+
+wirelessStatsRemotePartners OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote Partners
+                     in Wireless Statistics."
+::= { wirelessStatsEntry 3 }
+
+wirelessStatsDataTxTotalPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx total packets
+                     in Wireless Statistics of type data."
+::= { wirelessStatsEntry 4 }
+
+wirelessStatsDataRxTotalPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx total packets
+                     in Wireless Statistics of type data."
+::= { wirelessStatsEntry 5 }
+
+wirelessStatsDataTxMulticastPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Multicast
+                     packets in Wireless Statistics of type data."
+::= { wirelessStatsEntry 6 }
+
+wirelessStatsDataRxMulticastPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Multicast
+                     packets in Wireless Statistics of type data."
+::= { wirelessStatsEntry 7 }
+
+wirelessStatsDataTxUnicastPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Multicast
+                     packets in Wireless Statistics of type data."
+::= { wirelessStatsEntry 8 }
+
+wirelessStatsDataRxUnicastPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Multicast
+                     packets in Wireless Statistics of type data."
+::= { wirelessStatsEntry 9 }
+
+wirelessStatsMgmtTxPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx packets
+                     in Wireless Statistics of type Managment."
+::= { wirelessStatsEntry 10 }
+
+wirelessStatsMgmtRxPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx packets
+                     in Wireless Statistics of type Managment."
+::= { wirelessStatsEntry 11 }
+
+wirelessStatsMgmtTxBeacons OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Beacons
+                     in Wireless Statistics of type Managment."
+::= { wirelessStatsEntry 12 }
+
+wirelessStatsMgmtRxBeacons OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Beacons
+                     in Wireless Statistics of type Managment."
+::= { wirelessStatsEntry 13 }
+
+wirelessStatsMgmtAuthReqSent OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Authentication
+                     request sent in Wireless Statistics of type 
+                     Managment."
+::= { wirelessStatsEntry 14 }
+
+wirelessStatsMgmtAuthReqRecv OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Authentication
+                     request received in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 15 }
+
+wirelessStatsMgmtAuthConfirm OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Authentication
+                     confirm in Wireless Statistics of type 
+                     Managment."
+::= { wirelessStatsEntry 16 }
+
+wirelessStatsMgmtAuthReject OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Authentication
+                     reject in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 17 }
+
+wirelessStatsMgmtDeAuthReqSent OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the DeAuthentication
+                     request sent in Wireless Statistics of type 
+                     Managment."
+::= { wirelessStatsEntry 18 }
+
+wirelessStatsMgmtDeAuthReqRecv OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the DeAuthentication
+                     request received in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 19 }
+
+wirelessStatsMgmtAuthResultLast OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Authentication
+                     result last in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 20 }
+
+wirelessStatsMgmtAssocReqSent OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Association
+                     request sent in Wireless Statistics of type 
+                     Managment."
+::= { wirelessStatsEntry 21 }
+
+wirelessStatsMgmtAssocReqRecv OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Association
+                     request received in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 22 }
+
+wirelessStatsMgmtAssocConfirm OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Association
+                     confirm in Wireless Statistics of type 
+                     Managment."
+::= { wirelessStatsEntry 23 }
+
+wirelessStatsMgmtAssocReject OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Association
+                     reject in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 24 }
+
+wirelessStatsMgmtDeAssocReqSent OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the DeAssociation
+                     request sent in Wireless Statistics of type 
+                     Managment."
+::= { wirelessStatsEntry 25 }
+
+wirelessStatsMgmtDeAssocReqRecv OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the DeAssociation
+                     request received in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 26 }
+
+wirelessStatsMgmtAssocResultLast OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Association
+                     result last in Wireless Statistics of 
+                     type Managment."
+::= { wirelessStatsEntry 27 }
+
+wirelessStatsMPDUErrors OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the MPDU Errors
+                     in Wireless Statistcs."
+::= { wirelessStatsEntry 28 }
+
+wirelessStatsPhyErrors OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Phy Errors
+                     in Wireless Statistcs."
+::= { wirelessStatsEntry 29 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+ethernetStatsTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF EthernetStatsEntry
+        MAX-ACCESS         not-accessible
+        STATUS             current
+        DESCRIPTION        "This table is used to specify 
+                            Ethernet Statistics."
+::= { monitor 2 }
+
+ethernetStatsEntry OBJECT-TYPE
+        SYNTAX      EthernetStatsEntry
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents an entry in the 
+                     Ethernet Statistics Table."
+        INDEX       { ethernetStatsIndex }
+::= { ethernetStatsTable 1 }
+
+
+EthernetStatsEntry ::=
+        SEQUENCE {
+                ethernetStatsIndex
+                    Integer32,
+                ethernetStatus
+                    DisplayString,
+                ethernetMACAddress
+                    DisplayString,
+                ethernetSpeed
+                    DisplayString,
+                ethernetDuplex
+                    DisplayString,
+                ethernetTxTotalPackets
+                    Integer32,
+                ethernetRxTotalPackets
+                    Integer32,
+                ethernetTxTotalBytes
+                    Integer32,
+                ethernetRxTotalBytes
+                    Integer32,
+                ethernetTxErrors
+                    Integer32,
+                ethernetRxErrors
+                    Integer32
+        }
+
+ethernetStatsIndex OBJECT-TYPE
+        SYNTAX      Integer32 (1..2)
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the index for the 
+                     ethernet Statistics table."
+::= { ethernetStatsEntry 1 }
+
+ethernetStatus OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Ethernet Status
+                     in ethernet Statistics table."
+::= { ethernetStatsEntry 2  }
+
+ethernetMACAddress OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the MAC address of 
+                     in ethernet Statistics table."
+::= { ethernetStatsEntry 3 }
+
+ethernetSpeed OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Ethernet Speed
+                     in ethernet Statistics table ."
+::= { ethernetStatsEntry 4  }
+
+ethernetDuplex OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Ethernet Duplex
+                     in ethernet Statistics table."
+::= { ethernetStatsEntry 5  }
+
+ethernetTxTotalPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Total packets
+                     in ethernet statistics table."
+::= { ethernetStatsEntry 6  }
+
+ethernetRxTotalPackets OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Total packets
+                     in ethernet statistics table."
+::= { ethernetStatsEntry 7  }
+
+ethernetTxTotalBytes OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Total Bytes
+                     in ethernet statistics table."
+::= { ethernetStatsEntry 8 }
+
+ethernetRxTotalBytes OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Total Bytes
+                     in ethernet statistics table."
+::= { ethernetStatsEntry 9 }
+
+ethernetTxErrors OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Errors
+                     in ethernet statistics table."
+::= { ethernetStatsEntry 10 }
+
+ethernetRxErrors OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Errors
+                     in ethernet statistics table."
+::= { ethernetStatsEntry 11 }
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+
+assocTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF AssocEntry
+        MAX-ACCESS         not-accessible
+        STATUS             current
+        DESCRIPTION        "This table is used to specify
+                            Wireless Association Station"
+::= { monitor 3 }
+
+
+assocEntry OBJECT-TYPE
+        SYNTAX      AssocEntry
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents an entry in the
+                     Associated station Table"
+        INDEX   { assocRadioIndex, assocSecIndex }
+::= { assocTable 1 }
+
+
+AssocEntry ::=
+        SEQUENCE {
+                assocRadioIndex
+                    Integer32,
+                assocSecIndex
+                    Integer32,
+                assocMAC
+                    DisplayString,
+                assocIP
+                    IpAddress,
+                assocRemoteLat
+                    DisplayString,
+                assocRemoteLong
+                    DisplayString,
+                assocLocalLat
+                    DisplayString,
+                assocLocalLong
+                    DisplayString,
+                assocRxRate
+                    Integer32,
+                assocTxRate
+                    Integer32,
+                assocRxTput
+                    Integer32,
+                assocTxTput
+                    Integer32,
+                assocLocalSNRA1
+                    Integer32,
+                assocLocalSNRA2
+                    Integer32,
+                assocRemoteSNRA1
+                    Integer32,
+                assocRemoteSNRA2
+                    Integer32,
+                assocLocalPhyErr
+                    Integer32,
+                assocRemotePhyErr
+                    Integer32,
+                assocLocalMPDUErr
+                    Integer32,
+                assocRemoteMPDUErr
+                    Integer32,
+                assocLocalRetries
+                    Integer32,
+                assocRemoteRetries
+                    Integer32,
+                assocLinkTestDuration
+                    Integer32,
+                assocLinkTestDirection
+                    Integer32,
+                assocLinkTestStartStop
+                    Integer32,
+                assocLocalNoiseFloor
+                    Integer32,
+                assocRemoteNoiseFloor
+                    Integer32
+        }
+
+assocRadioIndex OBJECT-TYPE
+        SYNTAX      Integer32 (1..2)
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents the index for the 
+                     wireless Assoc Table."
+::= { assocEntry 1 }
+
+assocSecIndex OBJECT-TYPE
+        SYNTAX      Integer32 (1..2)
+        MAX-ACCESS  not-accessible
+        STATUS      current
+        DESCRIPTION "This parameter represents the Secondary index 
+                     for the wireless Assoc Table."
+::= { assocEntry 2 }
+
+
+assocMAC OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the MAC address of 
+                     associated station for a wireless interface."
+::= { assocEntry 3 }
+
+
+assocIP OBJECT-TYPE
+        SYNTAX      IpAddress
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the IP address of 
+                     associated station for a wireless interface."
+::= { assocEntry 4 }
+
+assocRemoteLat OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote Latitude 
+                     of associated station for a wireless interface."
+::= { assocEntry 5 }
+
+assocRemoteLong OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote Longitude 
+                     of associated station for a wireless interface."
+::= { assocEntry 6 }
+
+assocLocalLat OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local Latitude 
+                     of associated station for a wireless interface."
+::= { assocEntry 7 }
+
+assocLocalLong OBJECT-TYPE
+        SYNTAX      DisplayString
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local Longitude 
+                     of associated station for a wireless interface."
+::= { assocEntry 8 }
+
+assocRxRate OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Rate 
+                     of associated station for a wireless interface."
+::= { assocEntry 9 }
+
+assocTxRate OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Rate 
+                     of associated station for a wireless interface."
+::= { assocEntry 10 }
+
+assocRxTput OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Rx Throughput 
+                     of associated station for a wireless interface."
+::= { assocEntry 11 }
+
+assocTxTput OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Tx Throughput 
+                     of associated station for a wireless interface."
+::= { assocEntry 12 }
+
+assocLocalSNRA1 OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local SNR A1 
+                     of associated station for a wireless interface."
+::= { assocEntry 13 }
+
+assocLocalSNRA2 OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local SNR A2 
+                     of associated station for a wireless interface."
+::= { assocEntry 14 }
+
+assocRemoteSNRA1 OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote SNR A1 
+                     of associated station for a wireless interface."
+::= { assocEntry 15 }
+
+assocRemoteSNRA2 OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote SNR A2 
+                     of associated station for a wireless interface."
+::= { assocEntry 16 }
+
+assocLocalPhyErr OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local Phy Errors 
+                     of associated station for a wireless interface."
+::= { assocEntry 17 }
+
+assocRemotePhyErr OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote Phy Errors 
+                     of associated station for a wireless interface."
+::= { assocEntry 18 }
+
+assocLocalMPDUErr OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local MPDU Errors 
+                     of associated station for a wireless interface."
+::= { assocEntry 19 }
+
+assocRemoteMPDUErr OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote MPDU Errors 
+                     of associated station for a wireless interface."
+::= { assocEntry 20 }
+
+assocLocalRetries OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local Retries
+                     of associated station for a wireless interface."
+::= { assocEntry 21 }
+
+assocRemoteRetries OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote Retries
+                     of associated station for a wireless interface."
+::= { assocEntry 22 }
+
+assocLinkTestDuration OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Link test Duration."
+::= { assocEntry 23 }
+
+assocLinkTestDirection OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Link test Direction."
+::= { assocEntry 24 }
+
+assocLinkTestStartStop OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-write
+        STATUS      current
+        DESCRIPTION "This parameter represents the Link test status as
+                     Start or Stop."
+::= { assocEntry 25 }
+
+assocLocalNoiseFloor OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Local Noise Floor
+                     of associated station for a wireless interface."
+::= { assocEntry 26 }
+
+assocRemoteNoiseFloor OBJECT-TYPE
+        SYNTAX      Integer32
+        MAX-ACCESS  read-only
+        STATUS      current
+        DESCRIPTION "This parameter represents the Remote Noise Floor
+                     of associated station for a wireless interface."
+::= { assocEntry 27 }
+
+
+END
