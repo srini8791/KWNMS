@@ -33,6 +33,7 @@ package org.opennms.netmgt.provision.service;
 
 import java.net.InetAddress;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.opennms.core.tasks.BatchTask;
@@ -41,8 +42,11 @@ import org.opennms.netmgt.config.api.SnmpAgentConfigFactory;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.provision.NodePolicy;
+import org.opennms.netmgt.provision.service.snmp.KWPSystemGroup;
+import org.opennms.netmgt.provision.service.snmp.KwpConfigurationGroup;
 import org.opennms.netmgt.provision.service.snmp.SystemGroup;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
+import org.opennms.netmgt.snmp.SnmpValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -80,6 +84,12 @@ final class NodeInfoScan implements RunInBatch {
                     @Override
                     public void run(BatchTask batch) {
                         collectNodeInfo();
+                    }
+                },new RunInBatch() {
+
+                    @Override
+                    public void run(BatchTask batch) {
+                        collectNodeConfigInfo();
                     }
                 },
                 new RunInBatch() {
@@ -135,6 +145,35 @@ final class NodeInfoScan implements RunInBatch {
         m_node = node;
     }
 
+
+    private void collectNodeConfigInfo() {
+        InetAddress primaryAddress = getAgentAddress();
+        SnmpAgentConfig agentConfig = getAgentConfig(primaryAddress);
+        KwpConfigurationGroup configGroup = new KwpConfigurationGroup(primaryAddress);
+        try {
+            KwpConfigurationGroup configGroup1 = new KwpConfigurationGroup(primaryAddress);
+            final CompletableFuture<List<SnmpValue>> future = m_provisionService.getLocationAwareSnmpClient().get(agentConfig,configGroup1.getGetList())
+                    .withDescription("configGroup")
+                    .withLocation(getLocationName())
+                    .execute();
+            //.get();
+            List<SnmpValue> values = null;
+            try {
+                values = future.get();
+            } catch(ExecutionException ex) {
+
+            }
+
+            if (values != null && configGroup1.getGetList().size() == values.size()) {
+                configGroup1.updateSnmpDataForNode(getNode(),values);
+            }
+            //configGroup.updateSnmpDataForNode(getNode());,
+        } catch (final InterruptedException e) {
+            abort("Aborting node scan : Scan thread interrupted!");
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private void collectNodeInfo() {
         Assert.notNull(getAgentConfigFactory(), "agentConfigFactory was not injected");
         InetAddress primaryAddress = getAgentAddress();
@@ -153,6 +192,18 @@ final class NodeInfoScan implements RunInBatch {
             } catch (ExecutionException e) {
                 abort("Aborting node scan : Agent failed while scanning the system table: " + e.getMessage());
             }
+
+            KWPSystemGroup kwpSystemGroup = new KWPSystemGroup(primaryAddress);
+                try {
+                    m_provisionService.getLocationAwareSnmpClient().walk(agentConfig, kwpSystemGroup)
+                            .withDescription("systemGroup")
+                            .withLocation(getLocationName())
+                            .execute()
+                            .get();
+                    kwpSystemGroup.updateSnmpDataForNode(getNode());
+                } catch (ExecutionException e) {
+                    abort("Aborting node scan : Agent failed while scanning the system table: " + e.getMessage());
+                }
 
             List<NodePolicy> nodePolicies = getProvisionService().getNodePoliciesForForeignSource(getEffectiveForeignSource());
 
