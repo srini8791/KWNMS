@@ -231,6 +231,8 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
     private PathElement m_pathElement;
 
+    private OnmsProfile m_profile;
+
     /**
      * <p>
      * Constructor for OnmsNode. This constructor should only be used
@@ -1062,6 +1064,27 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         m_pathElement = pathElement;
     }
 
+    /**
+     * <p>getProfile</p>
+     *
+     * @return a {@link OnmsProfile} object.
+     */
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinTable(name="profile_nodes",
+            joinColumns={@JoinColumn(name="nodeid", referencedColumnName="nodeid")},
+            inverseJoinColumns={@JoinColumn(name="profileid", referencedColumnName="id")})
+    public OnmsProfile getProfile() {
+        return m_profile;
+    }
+
+    /**
+     * <p>setProfile</p>
+     *
+     * @param profile a {@link OnmsProfile} object.
+     */
+    public void setProfile(OnmsProfile profile) {
+        this.m_profile = profile;
+    }
 
     /**
      * The interfaces on this node

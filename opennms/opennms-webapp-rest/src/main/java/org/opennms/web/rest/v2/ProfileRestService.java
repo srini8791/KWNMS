@@ -31,7 +31,9 @@ package org.opennms.web.rest.v2;
 import org.apache.cxf.jaxrs.ext.search.SearchBean;
 import org.opennms.core.config.api.JaxbListWrapper;
 import org.opennms.core.criteria.CriteriaBuilder;
+import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
+import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsProfile;
 import org.opennms.netmgt.model.OnmsProfileList;
 import org.opennms.web.rest.support.Aliases;
@@ -46,9 +48,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,6 +68,9 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
     @Autowired
     private ProfileDao m_dao;
+
+    @Autowired
+    private NodeDao nodeDao;
 
     @Override
     protected ProfileDao getDao() {
@@ -93,23 +100,23 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
     @POST
     @Path("/{profileId}/applyToNodes")
+    @Transactional
     public Response applyProfiles(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
                                   @PathParam("profileId") Integer id,
-                                  @RequestBody List<String> nodesToApply) {
+                                  @RequestBody List<Integer> nodesToApply) {
         writeLock();
         try {
             System.out.println("id = " + id);
+            OnmsProfile profile = getDao().findProfileById(id);
             System.out.println("nodesToApply = " + nodesToApply);
-            for (String node : nodesToApply) {
-                System.out.println(" ==> node = " + node);
+            for (Integer nodeId : nodesToApply) {
+                System.out.println(" ==> node = " + nodeId);
+                OnmsNode node = nodeDao.load(nodeId);
+                node.setProfile(profile);
+                nodeDao.update(node);
+                System.out.println(" node to profile updated ");
             }
-            System.out.println(" ** uriinfo = " + uriInfo);
-            final MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-            System.out.println("queryParameters = " + queryParameters);
-            for (MultivaluedMap.Entry<String, List<String>> param : queryParameters.entrySet()) {
-                System.out.println("param.key = " + param.getKey());
-                System.out.println("param.value = " + param.getValue());
-            }
+
             return Response.accepted().build();
         } finally {
             writeUnlock();

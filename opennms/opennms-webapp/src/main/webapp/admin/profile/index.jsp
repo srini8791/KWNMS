@@ -74,12 +74,6 @@
     }
   }
 
-  function selectAllSelectedNodes() {
-    for (i=0; i < m2.length; i++) {
-      m2.options[i].selected = true;
-    }
-  }
-
 
 </script>
 
@@ -191,7 +185,7 @@
       </div> <!-- panel -->
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Apply Profile to Device</h3>
+          <h3 class="panel-title">Apply Profile to Devices</h3>
         </div>
         <div class="panel-body">
           <form method="post" name="applyProfile">
@@ -207,16 +201,16 @@
             </div>
             <div class="form-group">
               <div class="row">
-                <label class="col-sm-4 control-label">Select Nodes:</label>
+                <label class="col-sm-4 control-label">Select Devices:</label>
                 <div class="col-sm-4">
-                  <label class="control-label">Available Nodes</label>
+                  <label class="control-label">Available Devices</label>
                   <select class="form-control" multiple="multiple" name="availableNodes" size="10">
                     <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
                   </select>
                   <button type="button" class="btn btn-default" id="nodes.doAdd" onClick="javascript:addNodes()">&nbsp;&#155;&#155;&nbsp; Add</button>
                 </div>
                 <div class="col-sm-4">
-                  <label class="control-label">Selected Nodes</label>
+                  <label class="control-label">Selected Devices</label>
                   <select class="form-control" multiple="multiple" name="selectedNodes" ng-model="nodesToApply" size="10">
                   </select>
                   <button type="button" class="btn btn-default" id="nodes.doRemove" onClick="javascript:removeNodes()">&nbsp;&#139;&#139;&nbsp; Remove</button>
@@ -226,7 +220,7 @@
           </form>
         </div> <!-- panel-body -->
         <div class="panel-footer">
-          <button type="button" class="btn btn-default" onClick="javascript:selectAllSelectedNodes()" ng-click="apply()" id="apply-profile">
+          <button type="button" class="btn btn-default" ng-click="apply()" id="apply-profile">
             Apply Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-paste"><span>
           </button>
         </div> <!-- panel-footer -->
