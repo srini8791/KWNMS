@@ -28,11 +28,11 @@
 
 package org.opennms.netmgt.provision.service.operations;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsNode.NodeLabelSource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>ScanResource class.</p>
@@ -99,6 +99,18 @@ public class ScanResource {
                 m_node.setSysLocation(value);
             } else if (key.equals("sysObjectId")) {
                 m_node.setSysObjectId(value);
+            } else if (key.equals("longitude")) {
+                try {
+                    m_node.getAssetRecord().getGeolocation().setLongitude(Double.parseDouble(value));
+                } catch (NumberFormatException ne) {
+
+                }
+            } else if (key.equals("latitude")) {
+                try {
+                    m_node.getAssetRecord().getGeolocation().setLatitude(Double.parseDouble(value));
+                } catch (NumberFormatException ne) {
+
+                }
             } else if (key.equals("sysName")) {
                 m_node.setSysName(value);
 
