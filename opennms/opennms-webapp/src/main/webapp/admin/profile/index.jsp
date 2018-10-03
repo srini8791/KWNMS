@@ -45,39 +45,37 @@
 <script type="text/javascript" >
 
   function addNodes() {
-    m1len = m1.length;
-    for (i = 0; i < m1len; i++) {
-      if (m1.options[i].selected == true) {
-        m2len = m2.length;
-        m2.options[m2len] = new Option(m1.options[i].text, m1.options[i].value);
-      }
-    }
-    for (i = (m1len - 1); i >= 0; i--) {
-      if (m1.options[i].selected == true) {
-        m1.options[i] = null;
-      }
-    }
+    $("#availableNodes option:selected").each(function(idx, obj) {
+      $("#nodesToApply").append("<option value='" + obj.value + "'>" + obj.text + "</option>");
+      $(this).remove();
+    });
+    selectAllOptions();
   }
 
   function removeNodes() {
-    m2len = m2.length;
-    for (i = 0; i < m2len; i++) {
-      if (m2.options[i].selected == true) {
-        m1len = m1.length;
-        m1.options[m1len] = new Option(m2.options[i].text, m2.options[i].value);
-      }
-    }
-    for (i = (m2len - 1); i >= 0; i--) {
-      if (m2.options[i].selected == true) {
-        m2.options[i] = null;
-      }
-    }
+    $("#nodesToApply option:selected").each(function(idx, obj) {
+      $("#availableNodes").append("<option value='" + obj.value + "'>" + obj.text + "</option>");
+      $(this).remove();
+    });
+    selectAllOptions();
   }
 
+  function selectAllOptions() {
+    $("#nodesToApply option").each(function() {
+      $(this).prop("selected", true).trigger('change');
+    });
+  }
+
+  function applyProfile() {
+    angular.element($("#profCtrl")).scope().apply();
+    removeNodes();
+  }
 
 </script>
 
-<div class="container-fluid" ng-app="onms-assets" ng-controller="ProfileCtrl" ng-init="init()">
+<div ng-app="onms-assets">
+
+  <div id="profCtrl" class="container-fluid" ng-controller="ProfileCtrl" ng-init="init()">
 
   <div growl></div>
 
@@ -124,11 +122,13 @@
               <div class="row">
                 <label for="input_bandwidth" class="col-sm-4 control-label">Bandwidth</label>
                 <div class="col-sm-8">
-                  <select id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth" class="form-control">
+                  <select id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth.id" class="form-control">
                     <option value="0">Select Bandwidth</option>
-                    <option value="1">20MHz</option>
-                    <option value="2">40MHz</option>
-                    <option value="3">80MHz</option>
+                    <option value="1">5MHz</option>
+                    <option value="2">10MHz</option>
+                    <option value="3">20MHz</option>
+                    <option value="4">40MHz</option>
+                    <option value="5">80MHz</option>
                   </select>
                 </div>
               </div>
@@ -188,7 +188,7 @@
           <h3 class="panel-title">Apply Profile to Devices</h3>
         </div>
         <div class="panel-body">
-          <form method="post" name="applyProfile">
+          <form method="post" name="applyProfileForm">
             <div class="form-group">
               <div class="row">
                 <label for="input_profileName" class="col-sm-4 control-label">Select Profile</label>
@@ -204,14 +204,14 @@
                 <label class="col-sm-4 control-label">Select Devices:</label>
                 <div class="col-sm-4">
                   <label class="control-label">Available Devices</label>
-                  <select class="form-control" multiple="multiple" name="availableNodes" size="10">
+                  <select class="form-control" id="availableNodes" multiple="multiple" size="10">
                     <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
                   </select>
                   <button type="button" class="btn btn-default" id="nodes.doAdd" onClick="javascript:addNodes()">&nbsp;&#155;&#155;&nbsp; Add</button>
                 </div>
                 <div class="col-sm-4">
                   <label class="control-label">Selected Devices</label>
-                  <select class="form-control" multiple="multiple" name="selectedNodes" ng-model="nodesToApply" size="10">
+                  <select class="form-control" id="nodesToApply" multiple="multiple" ng-model="nodesToApply" size="10">
                   </select>
                   <button type="button" class="btn btn-default" id="nodes.doRemove" onClick="javascript:removeNodes()">&nbsp;&#139;&#139;&nbsp; Remove</button>
                 </div>
@@ -220,7 +220,7 @@
           </form>
         </div> <!-- panel-body -->
         <div class="panel-footer">
-          <button type="button" class="btn btn-default" ng-click="apply()" id="apply-profile">
+          <button type="button" class="btn btn-default" onClick="javascript:applyProfile()" id="apply-profile">
             Apply Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-paste"><span>
           </button>
         </div> <!-- panel-footer -->
@@ -245,7 +245,7 @@
           <td>{{profile.name}}</td>
           <td>{{profile.ssid}}</td>
           <td>{{profile.opMode.label}}</td>
-          <td>{{profile.bandwidth}}</td>
+          <td>{{profile.bandwidth.label}}</td>
           <td>{{profile.channel}}</td>
           <td>{{profile.ipAddress}}</td>
         </tr>
@@ -254,11 +254,13 @@
     </div> <!-- column -->
   </div>
 
-</div>
+  </div> <!-- controller ends -->
+
+</div> <!-- app ends -->
 
 <script type="text/javascript" >
-    var m1 = document.applyProfile.availableNodes;
-    var m2 = document.applyProfile.selectedNodes;
+    var m1 = document.applyProfileForm.availableNodes;
+    var m2 = document.applyProfileForm.selectedNodes;
 </script>
 
 <jsp:include page="/includes/bootstrap-footer.jsp" flush="false"/>
