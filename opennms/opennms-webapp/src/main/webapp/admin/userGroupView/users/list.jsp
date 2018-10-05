@@ -36,6 +36,11 @@
 <%@page import="java.util.*" %>
 <%@page import="org.opennms.netmgt.config.*" %>
 <%@page import="org.opennms.netmgt.config.users.*" %>
+<%@page import="org.opennms.netmgt.model.OnmsRegion"%>
+<%@page import="org.opennms.netmgt.dao.api.RegionDao"%>
+<%@page import="org.springframework.web.context.WebApplicationContext"%>
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
+
 <%
 	UserManager userFactory;
   	Map<String,User> users = null;
@@ -133,6 +138,7 @@
           <th width="5%">Rename</th>
           <th width="5%">User ID</th>
           <th width="15%">Full Name</th>
+          <th width="15%">Region</th>
           <th width="15%">Email</th>
           <th width="15%">Pager Email</th>
           <th width="15%">XMPP Address</th>
@@ -143,6 +149,16 @@
            int row = 0;
            for (User curUser : users.values()) {
 	      String userid = curUser.getUserId();
+	      Integer regionId = curUser.getRegionId().orElse(null);
+	      String regionName = "";
+	      if (regionId != null) {
+            WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+            RegionDao regionDao = context.getBean(RegionDao.class);
+            OnmsRegion userRegion = regionDao.get(regionId);
+            if (userRegion != null) {
+                regionName = userRegion.getName();
+            }
+	      }
 	      String email = userFactory.getEmail(userid);
 	      String pagerEmail = userFactory.getPagerEmail(userid);
 	      String xmppAddress = userFactory.getXMPPAddress(userid);
@@ -180,6 +196,11 @@
 	      </div>
           </td>
           <td>
+            <div id="<%= "users("+curUser.getUserId()+").regionId" %>">
+              <%= regionName %>
+            </div>
+          </td>
+          <td>
             <div id="<%= "users("+curUser.getUserId()+").email" %>">
             <%= ((email == null || email.equals("")) ? "&nbsp;" : email) %>
             </div>
@@ -196,7 +217,7 @@
           </td>
           </tr>
           <tr>
-            <td colspan="5">
+            <td colspan="6">
              <div id="<%= "users("+curUser.getUserId()+").userComments" %>">
              <%= (curUser.getUserComments().orElse("No Comments")) %>
 	        </div>

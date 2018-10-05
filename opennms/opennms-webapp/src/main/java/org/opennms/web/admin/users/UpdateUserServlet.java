@@ -76,6 +76,12 @@ public class UpdateUserServlet extends HttpServlet {
             
             // get the rest of the user information from the form
             newUser.setFullName(request.getParameter("fullName"));
+
+            String regionIdStr = request.getParameter("regionId");
+            if (regionIdStr != null && !regionIdStr.trim().equals("")) {
+                newUser.setRegionId(Integer.parseInt(regionIdStr));
+            }
+
             newUser.setUserComments(request.getParameter("userComments"));
 
             String password = request.getParameter("password");

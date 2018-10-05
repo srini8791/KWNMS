@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -47,6 +48,10 @@ public class OnmsUser {
 
     @XmlElement(name="full-name", required=false)
     private String m_fullName;
+
+    @XmlElement(name="region-id", required=false)
+    @XmlJavaTypeAdapter(RegionAdapter.class)
+    private OnmsRegion m_region;
 
     @XmlElement(name="user-comments", required=false)
     private String m_comments;
@@ -102,6 +107,14 @@ public class OnmsUser {
 
     public void setFullName(String fullName) {
         m_fullName = fullName;
+    }
+
+    public OnmsRegion getRegion() {
+        return m_region;
+    }
+
+    public void setRegion(OnmsRegion region) {
+        this.m_region = region;
     }
 
     public String getUsername() {

@@ -39,6 +39,11 @@
 <%@page import="org.opennms.netmgt.config.users.*"%>
 <%@page import="org.opennms.web.api.Util"%>
 <%@page import="org.opennms.web.api.Authentication"%>
+<%@page import="org.opennms.netmgt.model.OnmsRegion"%>
+<%@page import="org.opennms.netmgt.dao.api.RegionDao"%>
+<%@page import="org.springframework.web.context.WebApplicationContext"%>
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%!
@@ -51,9 +56,29 @@
 
         return buffer.toString();
     }
+
+    private String createRegionSelectList(String name, List<OnmsRegion> regions, Integer regionId) {
+        StringBuffer buffer = new StringBuffer("<select class=\"form-control\" name=\""+name+"\">");
+        buffer.append("<option value=''>Select Region</option>");
+        for(OnmsRegion region : regions){
+            buffer.append("<option value='" + region.getId() + "'");
+            if (region.getId().equals(regionId)) {
+                buffer.append(" selected='selected' ");
+            }
+            buffer.append(">" + region.getName() + "</option>");
+        }
+        buffer.append("</select>");
+
+        return buffer.toString();
+    }
 %>
 
 <%
+        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+
+        RegionDao regionDao = context.getBean(RegionDao.class);
+        List<OnmsRegion> allRegions = regionDao.findAll();
+
         final HttpSession userSession = request.getSession(false);
         User user = null;
         String userid = "";
@@ -282,6 +307,7 @@
         String homePhone = null;
         String microblog = null;
         String fullName = null;
+        Integer regionId = null;
         String comments = null;
         String tuiPin = null;
         List<String> availableRoles = new ArrayList<String>(Authentication.getAvailableRoles());
@@ -325,6 +351,7 @@
                     }
             }
             fullName = user.getFullName().orElse(null);
+            regionId = user.getRegionId().orElse(null);
             comments = user.getUserComments().orElse(null);
             tuiPin = user.getTuiPin().orElse(null);
 
@@ -341,6 +368,13 @@
           <label for="fullName" class="col-sm-2 control-label">Full Name:</label>
           <div class="col-sm-10">
             <input id="fullName" type="text" class="form-control" size="35" name="fullName" value="<%= (fullName == null? "" : fullName) %>" />
+          </div>
+        </div>
+
+	<div class="form-group">
+          <label for="regionId" class="col-sm-2 control-label">Region:</label>
+          <div class="col-sm-10">
+            <%= createRegionSelectList("regionId", allRegions, regionId) %>
           </div>
         </div>
 

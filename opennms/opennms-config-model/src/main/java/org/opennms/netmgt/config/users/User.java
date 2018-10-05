@@ -49,7 +49,7 @@ import org.opennms.netmgt.config.utils.ConfigUtils;
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
 @ValidateUsing("users.xsd")
-@XmlType(propOrder={"m_userId", "m_fullName", "m_userComments", "m_password", "contacts", "dutySchedules", "roles", "m_tuiPin"})
+@XmlType(propOrder={"m_userId", "m_fullName", "m_regionId", "m_userComments", "m_password", "contacts", "dutySchedules", "roles", "m_tuiPin"})
 public class User implements Serializable {
     private static final long serialVersionUID = 2L;
 
@@ -60,6 +60,9 @@ public class User implements Serializable {
     @XmlElement(name = "full-name")
     @XmlJavaTypeAdapter(StringTrimAdapter.class)
     private String m_fullName;
+
+    @XmlElement(name = "region-id")
+    private Integer m_regionId;
 
     @XmlElement(name = "user-comments")
     @XmlJavaTypeAdapter(StringTrimAdapter.class)
@@ -106,6 +109,14 @@ public class User implements Serializable {
 
     public void setFullName(final String fullName) {
         m_fullName = ConfigUtils.normalizeString(fullName);
+    }
+
+    public Optional<Integer> getRegionId() {
+        return Optional.ofNullable(m_regionId);
+    }
+
+    public void setRegionId(final Integer regionId) {
+        m_regionId = regionId;
     }
 
     public Optional<String> getUserComments() {
@@ -196,7 +207,7 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(m_userId, m_fullName, m_userComments,
+        return Objects.hash(m_userId, m_fullName, m_regionId, m_userComments,
                             m_password, m_contacts, m_dutySchedules,
                             m_roles, m_tuiPin);
     }
@@ -211,6 +222,7 @@ public class User implements Serializable {
             final User temp = (User) obj;
             return Objects.equals(temp.m_userId, m_userId)
                     && Objects.equals(temp.m_fullName, m_fullName)
+                    && Objects.equals(temp.m_regionId, m_regionId)
                     && Objects.equals(temp.m_userComments, m_userComments)
                     && Objects.equals(temp.m_password, m_password)
                     && Objects.equals(temp.m_contacts, m_contacts)
@@ -224,6 +236,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User[userId=" + m_userId + ", fullName=" + m_fullName
+                + ", regionId=" + m_regionId
                 + ", userComments=" + m_userComments + ", password="
                 + m_password + ", contacts=" + m_contacts
                 + ", dutySchedules=" + m_dutySchedules + ", roles="

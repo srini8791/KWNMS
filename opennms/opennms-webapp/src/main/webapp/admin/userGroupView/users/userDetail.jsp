@@ -39,6 +39,10 @@
 		org.opennms.web.servlet.MissingParameterException
 	"
 %>
+<%@page import="org.opennms.netmgt.model.OnmsRegion"%>
+<%@page import="org.opennms.netmgt.dao.api.RegionDao"%>
+<%@page import="org.springframework.web.context.WebApplicationContext"%>
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
 
 <%
 	User user = null;
@@ -58,6 +62,22 @@
 	if (user == null) {
       		throw new ServletException("Could not find user " + userID);
 	}
+
+  // we got the user, load user region detail
+  String regionName = "";
+  Integer regionId = user.getRegionId().orElse(null);
+  if (regionId != null) {
+      WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+      RegionDao regionDao = context.getBean(RegionDao.class);
+      OnmsRegion userRegion = regionDao.get(regionId);
+      if (userRegion != null) {
+          regionName = userRegion.getName();
+      }
+  }
+
+
+
+
 %>
 
 <jsp:include page="/includes/bootstrap.jsp" flush="false" >
@@ -89,6 +109,14 @@
           </th>
           <td width="75%">
             <%=org.apache.commons.lang.StringUtils.join(user.getRoles().toArray(new String[user.getRoles().size()]), "<br/>")%>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Region:
+          </th>
+          <td width="75%">
+            <%= regionName %>
           </td>
         </tr>
         <tr>
