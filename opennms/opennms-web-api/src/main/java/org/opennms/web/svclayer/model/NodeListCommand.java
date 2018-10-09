@@ -55,7 +55,7 @@ public class NodeListCommand {
     private String m_statusRowLabel = null;
     private boolean m_nodesWithOutages = false;
     private boolean m_nodesWithDownAggregateStatus = false;
-    private boolean m_listInterfaces = false;
+    private boolean m_listInterfaces = true;
     private String m_nodeId;
     private String m_monitoringLocation;
     

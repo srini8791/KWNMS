@@ -82,7 +82,7 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
 %>
 
 <jsp:include page="/includes/bootstrap.jsp" flush="false" >
-    <jsp:param name="title" value="Add Include Range" />
+    <jsp:param name="title" value="Add Include IP Range" />
     <jsp:param name="headTitle" value="Admin" />
     <jsp:param name="quiet" value="true" />
 </jsp:include>
@@ -175,7 +175,7 @@ function doAddIncludeRange(){
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Add Include Range to Discovery</h3>
+        <h3 class="panel-title">Add Include IP Range to Discovery</h3>
       </div>
       <div class="panel-body">
         <p>Add a range of IP addresses to include in discovery.<br/>

@@ -226,6 +226,7 @@
     </c:if>
   </c:url>
 
+  <%--
   <c:choose>
     <c:when test="${!command.listInterfaces}">
     <a href="${thisURL}">Show interfaces</a>
@@ -234,6 +235,7 @@
     <a href="${thisURL}">Hide interfaces</a>
     </c:otherwise>
   </c:choose>
+  --%>
 </p>
 
 <jsp:include page="/includes/bootstrap-footer.jsp" flush="false"/>

@@ -311,7 +311,7 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
       <div class="col-xs-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Upload Include Ranges File</h3>
+            <h3 class="panel-title">Upload Include IP Ranges File</h3>
           </div>
           <div class="panel-body">
             <table>
@@ -360,7 +360,7 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
       <div class="col-xs-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Include Ranges</h3>
+            <h3 class="panel-title">Include IP Ranges</h3>
           </div>
                 <%if(currConfig.getIncludeRanges().size()>0){
                   IncludeRange[] irange = currConfig.getIncludeRanges().toArray(new IncludeRange[0]);
@@ -405,7 +405,7 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
       <div class="col-xs-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Exclude Ranges</h3>
+            <h3 class="panel-title">Exclude IP Ranges</h3>
           </div>
               <%if(currConfig.getExcludeRanges().size()>0){
                 ExcludeRange[] irange = currConfig.getExcludeRanges().toArray(new ExcludeRange[0]);

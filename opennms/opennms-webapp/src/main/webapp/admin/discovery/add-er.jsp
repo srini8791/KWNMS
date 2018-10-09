@@ -40,7 +40,7 @@
 %>
 
 <jsp:include page="/includes/bootstrap.jsp" flush="false" >
-    <jsp:param name="title" value="Add Exclude Range" />
+    <jsp:param name="title" value="Add Exclude IP Range" />
     <jsp:param name="headTitle" value="Admin" />
     <jsp:param name="quiet" value="true" />
 </jsp:include>
@@ -83,7 +83,7 @@ function doAddExcludeRange(){
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Add Range to Exclude from Discovery</h3>
+        <h3 class="panel-title">Add IP Range to Exclude from Discovery</h3>
       </div>
       <div class="panel-body">
         <form role="form" class="form-horizontal">
