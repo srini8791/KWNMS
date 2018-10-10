@@ -3,15 +3,15 @@
     <!--
       optional attribute "timezone":
           - if set it will be used as default timezone if no timezone is given
-          - if not set the system time zone will be used
+	  - if not set the system time zone will be used
+		forwarding-regexp="^(.*\:)\s(.*)\s\((.*,?)$"
     -->
     <configuration
-            syslog-port="10514"
+            syslog-port="514"
             new-suspect-on-message="false"
-            parser="org.opennms.netmgt.syslogd.CustomSyslogParser"
-            forwarding-regexp="^.*\s(19|20)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])(\s+)(\S+)(\s)(\S.+)"
-            matching-group-host="6"
-            matching-group-message="8"
+            parser="org.opennms.netmgt.syslogd.KeywestSyslogParser"
+            matching-group-host="3"
+            matching-group-message="5"
             discard-uei="DISCARD-MATCHING-MESSAGES"
             timezone=""
             />
