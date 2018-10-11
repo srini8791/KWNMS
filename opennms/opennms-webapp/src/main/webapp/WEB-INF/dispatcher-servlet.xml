@@ -467,6 +467,11 @@
                     <property name="entries">
                         <list>
                             <bean class="org.opennms.web.navigate.LocationBasedNavBarEntry">
+                                <property name="name" value="Inventory"/>
+                                <property name="url" value="inventory/index.jsp"/>
+                                <property name="locationMatch" value="inventory"/>
+                            </bean>
+                            <bean class="org.opennms.web.navigate.LocationBasedNavBarEntry">
                                 <property name="name" value="Charts"/>
                                 <property name="url" value="charts/index.jsp"/>
                                 <property name="locationMatch" value="chart"/>
