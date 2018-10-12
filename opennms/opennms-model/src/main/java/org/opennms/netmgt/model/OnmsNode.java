@@ -1070,9 +1070,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * @return a {@link OnmsProfile} object.
      */
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinTable(name="profile_nodes",
-            joinColumns={@JoinColumn(name="nodeid", referencedColumnName="nodeid")},
-            inverseJoinColumns={@JoinColumn(name="profileid", referencedColumnName="id")})
+    @JoinColumn(name="profileId")
     public OnmsProfile getProfile() {
         return m_profile;
     }

@@ -43,25 +43,74 @@
     <jsp:param name="breadcrumb" value="Inventory" />
 </jsp:include>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Inventory</h3>
-        </div>
-        <div class="panel-body" id="onms-search">
-            <div class="row">
-                <div class="col-md-12">
-                    ** REPORT GOES HERE **
+<jsp:include page="/assets/load-assets.jsp" flush="false">
+  <jsp:param name="asset" value="onms-assets"/>
+</jsp:include>
+
+<div ng-app="onms-assets">
+  <div id="inventoryCtrl" class="container-fluid" ng-controller="InventoryCtrl" ng-init="init()">
+  <div growl></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <h3 class="panel-title">List of Inventory</h3>
+          </div>
+          <div class="panel-body" id="onms-search">
+              <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4" align="right">
+                  <select ng-model="limit" ng-change="loadNodes()">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                  </select>
                 </div>
-            </div>
-        </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12">
+                      <table class="table table-condensed table-bordered">
+                        <thead>
+                          <tr>
+                            <th>System Name</th>
+                            <th>IP Address</th>
+                            <th>Serial Number</th>
+                            <th>MAC Address</th>
+                            <th>Model</th>
+                            <th>Firmware</th>
+                            <th>Channel</th>
+                            <th>Bandwidth</th>
+                            <th>Ethernet Speed</th>
+                            <th>I/O Bandwidth Limit</th>
+                            <th>Modulation</th>
+                            <th>Operation Mode</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="node in nodes">
+                            <td>{{node.sysName}}</td>
+                            <td>{{node.label}}</td>
+                            <td>{{node.assetRecord.serialNumber}}</td>
+                            <td>{{node.macAddress}}</td>
+                            <td>{{node.assetRecord.modelNumber}}</td>
+                            <td>{{node.assetRecord.firmware}}</td>
+                            <td>{{node.channel}}</td>
+                            <td>{{node.bandwidth.label}}</td>
+                            <td>{{node.assetRecord.ethernetSpeed}}</td>
+                            <td>{{node.assetRecord.ioBandwidthLimit}}</td>
+                            <td>{{node.assetRecord.modulation}}</td>
+                            <td>{{node.opMode.label}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div> <!-- panel ends -->
     </div>
   </div>
-
 </div>
 <hr />
 
-<jsp:include page="/js/angular.min.jsp" flush="false" />
-<jsp:include page="/js/search.min.jsp" flush="false" />
 <jsp:include page="/includes/bootstrap-footer.jsp" flush="false" />

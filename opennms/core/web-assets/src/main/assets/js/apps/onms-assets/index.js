@@ -198,7 +198,7 @@ angular.module('onms-assets', [
   };
 
   $scope.apply = function() {
-    if ($scope.profileToApply == '' || $scope.nodesToApply.length == 0) {
+    if ($scope.profileToApply === '' || $scope.nodesToApply.length === 0) {
       growl.error('Select a profile and nodes to apply');
       return;
     }
@@ -217,6 +217,34 @@ angular.module('onms-assets', [
     });
   };
 
+
+
+}])
+
+.controller('InventoryCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
+
+  $scope.nodes = [];
+  $scope.limit = 10;
+
+  $scope.init = function() {
+    $scope.loadNodes();
+  };
+
+  $scope.loadNodes = function() {
+    var configObj = {
+      'params': {
+        'limit': $scope.limit
+      }
+    };
+
+    $http.get('api/v2/nodes', configObj)
+      .success(function(result) {
+        $scope.nodes = result.node;
+      })
+      .error(function(msg) {
+        growl.error(msg);
+      });
+  };
 
 
 }]);

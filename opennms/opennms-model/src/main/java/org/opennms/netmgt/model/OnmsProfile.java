@@ -28,14 +28,11 @@
 
 package org.opennms.netmgt.model;
 
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -94,7 +91,7 @@ public class OnmsProfile implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date m_modifiedOn;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="profile_nodes",
             joinColumns={@JoinColumn(name="profileid", referencedColumnName="id")},
             inverseJoinColumns={@JoinColumn(name="nodeid", referencedColumnName="nodeid")})

@@ -54,7 +54,9 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Basic Web Service using REST for {@link OnmsProfile} entity
@@ -106,16 +108,16 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                                   @RequestBody List<Integer> nodesToApply) {
         writeLock();
         try {
-            System.out.println("id = " + id);
             OnmsProfile profile = getDao().findProfileById(id);
-            System.out.println("nodesToApply = " + nodesToApply);
+            LOG.debug("applyingProfiles: profileId = {}, nodesToApply = {}", id, nodesToApply);
+            Set<OnmsNode> nodesSet = new HashSet<>();
             for (Integer nodeId : nodesToApply) {
-                System.out.println(" ==> node = " + nodeId);
                 OnmsNode node = nodeDao.load(nodeId);
-                node.setProfile(profile);
-                nodeDao.update(node);
-                System.out.println(" node to profile updated ");
+                nodesSet.add(node);
             }
+            profile.setNodes(nodesSet);
+            getDao().update(profile);
+            LOG.debug("applyingProfiles: successful");
 
             return Response.accepted().build();
         } finally {

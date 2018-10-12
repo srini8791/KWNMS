@@ -100,6 +100,7 @@
       <column name="opmode"     type="integer" />
       <column name="bandwidth"  type="integer" />
       <column name="channel"    type="integer" />
+      <column name="profileid"  type="integer" />
       <column name="active"     type="boolean" defaultValueBoolean="false">
         <constraints nullable="false" />
       </column>
@@ -112,6 +113,7 @@
       <dropColumn tableName="node" columnName="opmode" />
       <dropColumn tableName="node" columnName="bandwidth" />
       <dropColumn tableName="node" columnName="channel" />
+      <dropColumn tableName="node" columnName="profileid" />
       <dropColumn tableName="node" columnName="active" />
     </rollback>
 
@@ -294,6 +296,8 @@
 
   </changeSet>
 
+  <!-- profile_nodes table stores the records temporarily -->
+  <!-- once a profile is applied on a node, it is stored in profileid field of node table -->
   <changeSet author="ndarbha" id="22.0.1-profile-nodes">
     <validCheckSum>ANY</validCheckSum>
 
