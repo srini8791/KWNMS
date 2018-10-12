@@ -41,7 +41,7 @@ public class KeywestSyslogParser extends SyslogParser {
     private static final Logger LOG = LoggerFactory.getLogger(KeywestSyslogParser.class);
 
     //                                                                PRI         TIMESTAMP                                          HOST      PROCESS/ID          MESSAGE
-    private static final Pattern m_keywestPattern = Pattern.compile("^<(\\d\\d)>(\\w*\\s\\s\\d\\d?\\s[0-9:]*\\s)([\\w0-9-]*\\s)?([^:]*:)(.*)$", Pattern.MULTILINE);
+    private static final Pattern m_keywestPattern = Pattern.compile("^<(\\d\\d)>(\\w*\\s{1,2}\\d\\d?\\s[0-9:]*\\s)([\\w0-9-]*\\s)?([^:]*:)(.*)$", Pattern.MULTILINE);
 
     public KeywestSyslogParser(final SyslogdConfig config, final ByteBuffer text) {
         super(config, text);
