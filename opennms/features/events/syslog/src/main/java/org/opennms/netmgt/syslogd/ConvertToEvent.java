@@ -39,7 +39,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SyslogdConfig;
 import org.opennms.netmgt.config.syslogd.HideMatch;
@@ -239,6 +238,10 @@ public class ConvertToEvent {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("got syslog message {}", SyslogParser.fromByteBuffer(buffer));
+        }
+
+        if (message.getHostAddress() == null) {
+            message.setHostName(addr.getHostName());
         }
 
         final String priorityTxt = message.getSeverity().toString();
