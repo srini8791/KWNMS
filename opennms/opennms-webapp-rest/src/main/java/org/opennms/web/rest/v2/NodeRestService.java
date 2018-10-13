@@ -33,13 +33,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.container.ResourceContext;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.cxf.jaxrs.ext.search.SearchBean;
 import org.opennms.core.config.api.JaxbListWrapper;
@@ -258,6 +257,13 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
     @Path("{nodeCriteria}/categories")
     public NodeCategoriesRestService getCategoriesResource(@Context final ResourceContext context) {
         return context.getResource(NodeCategoriesRestService.class);
+    }
+
+    @GET
+    @Path("active/count")
+    @Produces({MediaType.TEXT_PLAIN})
+    public Response getActiveNodeCount() {
+        return Response.ok(String.valueOf(getDao().getActiveNodeCount())).build();
     }
 
 }

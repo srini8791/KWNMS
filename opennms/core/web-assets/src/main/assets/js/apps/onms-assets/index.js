@@ -225,9 +225,12 @@ angular.module('onms-assets', [
 
   $scope.nodes = [];
   $scope.limit = 10;
+  $scope.totalNodesCount = 0;
+  $scope.activeNodesCount = 0;
 
   $scope.init = function() {
     $scope.loadNodes();
+    $scope.loadActiveNodesCount();
   };
 
   $scope.loadNodes = function() {
@@ -239,6 +242,7 @@ angular.module('onms-assets', [
 
     $http.get('api/v2/nodes', configObj)
       .success(function(result) {
+        $scope.totalNodesCount = result.totalCount;
         $scope.nodes = result.node;
       })
       .error(function(msg) {
@@ -246,5 +250,14 @@ angular.module('onms-assets', [
       });
   };
 
+  $scope.loadActiveNodesCount = function() {
+    $http.get('api/v2/nodes/active/count')
+      .success(function(result) {
+        $scope.activeNodesCount = result;
+      })
+      .error(function(msg) {
+        growl.error(msg);
+      });
+  };
 
 }]);

@@ -353,4 +353,9 @@ public class MockNodeDao implements NodeDao {
     public List<OnmsNode> findAllHavingFlows() {
         return Collections.emptyList();
     }
+
+    @Override
+    public Integer getActiveNodeCount() {
+        return 0;
+    }
 }

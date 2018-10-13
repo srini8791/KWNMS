@@ -58,8 +58,11 @@
           </div>
           <div class="panel-body" id="onms-search">
               <div class="row">
-                <div class="col-md-8"></div>
-                <div class="col-md-4" align="right">
+                <div class="col-md-2"><b>Total: </b><span>{{totalNodesCount}}</span></div>
+                <div class="col-md-2"><b>Active: </b>{{activeNodesCount}}</div>
+                <div class="col-md-2"><b>In-active: </b>{{totalNodesCount - activeNodesCount}}</div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3" align="right">
                   <select ng-model="limit" ng-change="loadNodes()">
                     <option>10</option>
                     <option>20</option>
@@ -68,6 +71,7 @@
                   </select>
                 </div>
               </div>
+              <br/>
               <div class="row">
                   <div class="col-md-12">
                       <table class="table table-condensed table-bordered">

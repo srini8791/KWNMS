@@ -531,4 +531,9 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
     public List<OnmsNode> findAllHavingFlows() {
         return find("from OnmsNode as n where n.hasFlows = true");
     }
+
+    @Override
+    public Integer getActiveNodeCount() {
+        return queryInt("select count(*) from OnmsNode as n where n.active = true");
+    }
 }

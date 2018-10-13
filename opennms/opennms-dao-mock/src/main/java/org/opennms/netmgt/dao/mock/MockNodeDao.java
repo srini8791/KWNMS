@@ -489,5 +489,10 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
         return Collections.emptyList();
     }
 
+    @Override
+    public Integer getActiveNodeCount() {
+        return 0;
+    }
+
 
 }
