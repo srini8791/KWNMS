@@ -45,6 +45,12 @@
                   "type": "static"
                 },
                 {
+                  "label": "Provisioned",
+                  "tooltip": "System is provisioned or not",
+                  "model": "isProvisioned",
+                  "type": "static"
+                },
+                {
                   "label": "Latitude",
                   "tooltip": "Geo Latitude",
                   "model": "latitude",

@@ -1457,6 +1457,32 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     }
 
     /**
+     * <p>getPrimaryIP</p>
+     * @return primary IP address of the node
+     */
+    @Transient
+    @XmlAttribute(name = "primaryIP")
+    public String getPrimaryIP() {
+        OnmsIpInterface primary = getPrimaryInterface();
+        if (primary == null) { // if there are no primary interfaces, return the first one in the list
+            primary = getIpInterfaces().iterator().next();
+        }
+        return primary != null ? primary.getIpAddressAsString() : "";
+    }
+
+
+    /**
+     * <p>getIsProvisioned</p>
+     * @return a boolean indicating whether the node is provisioned or not
+     */
+    @Transient
+    @XmlAttribute(name = "isProvisioned")
+    public Boolean getIsProvisioned() {
+        return (getProfile() != null);
+    }
+
+
+    /**
      * <p>getInterfaceWithService</p>
      *
      * @param svcName a {@link java.lang.String} object.
