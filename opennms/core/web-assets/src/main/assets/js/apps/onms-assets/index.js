@@ -35,7 +35,7 @@ angular.module('onms-assets', [
 .controller('NodeAssetsCtrl', ['$scope', '$http', '$q', 'growl', 'uibDateParser', function($scope, $http, $q, growl, uibDateParser) {
 
   $scope.blackList = [ 'id', 'lastModifiedDate', 'lastModifiedBy', 'lastCapsdPoll', 'createTime' ];
-  $scope.infoKeys = [ 'sysObjectId', 'sysName', 'sysLocation', 'sysContact', 'sysDescription', 'macAddress', 'ssid', 'radioMode', 'opMode', 'bandwidth', 'channel' ];
+  $scope.infoKeys = [ 'sysObjectId', 'sysName', 'sysLocation', 'sysContact', 'sysDescription', 'macAddress', 'provisioned', 'ssid', 'radioMode', 'opMode', 'bandwidth', 'channel' ];
   $scope.dateKeys = [ 'dateInstalled', 'leaseExpires', 'maintContractExpiration' ];
 
   $scope.dateFormat = 'yyyy-MM-dd';

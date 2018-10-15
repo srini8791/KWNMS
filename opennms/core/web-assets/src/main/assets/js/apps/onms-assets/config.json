@@ -47,7 +47,7 @@
                 {
                   "label": "Provisioned",
                   "tooltip": "System is provisioned or not",
-                  "model": "isProvisioned",
+                  "model": "provisioned",
                   "type": "static"
                 },
                 {

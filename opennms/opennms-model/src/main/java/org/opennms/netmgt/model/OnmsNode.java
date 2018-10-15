@@ -1472,12 +1472,12 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
 
     /**
-     * <p>getIsProvisioned</p>
+     * <p>isProvisioned</p>
      * @return a boolean indicating whether the node is provisioned or not
      */
     @Transient
-    @XmlAttribute(name = "isProvisioned")
-    public Boolean getIsProvisioned() {
+    @XmlAttribute(name = "provisioned")
+    public Boolean isProvisioned() {
         return (getProfile() != null);
     }
 
