@@ -249,7 +249,7 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
         final EventAccumulator accumulator = new EventAccumulator(m_eventForwarder);
         dbNode.mergeNode(node, accumulator, false);
 
-        updateNodeHostname(dbNode);
+        //updateNodeHostname(dbNode);
         m_nodeDao.update(dbNode);
         m_nodeDao.flush();
 
@@ -264,29 +264,35 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
             if (primary == null && node.getIpInterfaces() != null) {
                 primary = node.getIpInterfaces().iterator().next();
             }
-
-            final InetAddress primaryAddr = primary.getIpAddress();
+            // Modified By Srinivas
+            // By default displaying the IP address instead of host resolving
+            /*final InetAddress primaryAddr = primary.getIpAddress();
             final String primaryHostname = getHostnameResolver().getHostname(primaryAddr, node.getLocation().getLocationName());
 
             if (primaryHostname == null && node.getLabel() != null && NodeLabelSource.HOSTNAME.equals((node.getLabelSource()))) {
                 LOG.warn("Previous node label source for address {} was hostname, but it does not currently resolve.  Skipping update.", InetAddressUtils.str(primaryAddr));
                 return;
-            }
+            }*/
 
             for (final OnmsIpInterface iface : node.getIpInterfaces()) {
                 final InetAddress addr = iface.getIpAddress();
                 final String ipAddress = str(addr);
-                final String hostname = getHostnameResolver().getHostname(addr, node.getLocation().getLocationName());
-
+                // Modified By Srinivas
+                // By default displaying the IP address instead of host resolving.
+                // Always primary Ip address will the node lable
+                //final String hostname = getHostnameResolver().getHostname(addr, node.getLocation().getLocationName());
+                final String hostname = null;
                 if (iface.equals(primary)) {
                     LOG.debug("Node Label was set by hostname or address.  Re-setting.");
-                    if (hostname == null || ipAddress.equals(hostname)) {
+                    node.setLabel(ipAddress);
+                    node.setLabelSource(NodeLabelSource.ADDRESS);
+                    /*if (hostname == null || ipAddress.equals(hostname)) {
                         node.setLabel(ipAddress);
                         node.setLabelSource(NodeLabelSource.ADDRESS);
                     } else {
                         node.setLabel(hostname);
                         node.setLabelSource(NodeLabelSource.HOSTNAME);
-                    }
+                    }*/
                 }
 
                 if (hostname == null) {
@@ -1022,7 +1028,7 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
                 final boolean deviceModeUpdated = handleDeviceModeChanges(dbNode);
 
                 dbNode.mergeNodeAttributes(node, accumulator);
-                updateNodeHostname(dbNode);
+                //updateNodeHostname(dbNode);
                 final OnmsNode ret = saveOrUpdate(dbNode);
 
                 if (deviceModeUpdated) {
