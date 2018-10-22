@@ -366,23 +366,36 @@
 							<th width="1%">&nbsp;</th>
 						<% } %>
           <% } %>
-          <th width="01%"><%=this.makeSortLink(callback, parms, SortStyle.ID,            SortStyle.REVERSE_ID,            "id",           "ID"                  , favorite)%></th>
-          <th width="06%"><%=this.makeSortLink(callback, parms, SortStyle.SEVERITY,      SortStyle.REVERSE_SEVERITY,      "severity",     "Severity"            , favorite)%></th>
+          <th width="05%"><%=this.makeSortLink(callback, parms, SortStyle.ID,            SortStyle.REVERSE_ID,            "id",           "ID"                  , favorite)%></th>
+          <th width="10%"><%=this.makeSortLink(callback, parms, SortStyle.SEVERITY,      SortStyle.REVERSE_SEVERITY,      "severity",     "Severity"            , favorite)%></th>
+          <th width="15%"><%=this.makeSortLink(callback, parms, SortStyle.TIME,          SortStyle.REVERSE_TIME,          "time",         "Time"                , favorite)%></th>
+<!--
           <th width="10%"><%=this.makeSortLink(callback, parms, SortStyle.TIME,          SortStyle.REVERSE_TIME,          "time",         "Time"                , favorite)%></th>
           <th width="05%"><%=this.makeSortLink(callback, parms, SortStyle.LOCATION,      SortStyle.REVERSE_LOCATION,      "location",     "Source&nbsp;Location", favorite)%></th>
           <th width="19%"><%=this.makeSortLink(callback, parms, SortStyle.SYSTEMID,      SortStyle.REVERSE_SYSTEMID,      "systemid",     "System-ID"           , favorite)%></th>
-          <th width="18%"><%=this.makeSortLink(callback, parms, SortStyle.NODE,          SortStyle.REVERSE_NODE,          "node",         "Node"                , favorite)%></th>
+-->
+          <th width="10%"><%=this.makeSortLink(callback, parms, SortStyle.NODE,          SortStyle.REVERSE_NODE,          "node",         "Node"                , favorite)%></th>
+<!--
           <th width="05%"><%=this.makeSortLink(callback, parms, SortStyle.NODE_LOCATION, SortStyle.REVERSE_NODE_LOCATION, "nodelocation", "Node&nbsp;Location"  , favorite)%></th>
           <th width="14%"><%=this.makeSortLink(callback, parms, SortStyle.INTERFACE,     SortStyle.REVERSE_INTERFACE,     "interface",    "Interface"           , favorite)%></th>
           <th width="8%"><%=this.makeSortLink(callback, parms, SortStyle.SERVICE,       SortStyle.REVERSE_SERVICE,       "service",      "Service"              , favorite)%></th>
           <th width="5%"><%=this.makeSortLink(callback, parms, SortStyle.ALARMID,       SortStyle.REVERSE_ALARMID,       "alarm",      "Alarm ID"                  , favorite)%></th>
+-->
+          <th width="60%">Message</th>
         </tr>
         </thead>     
       <% for( int i=0; i < events.length; i++ ) {
         Event event = events[i];
       	pageContext.setAttribute("event", event);
       %>
-      
+        <tr valign="top" class="severity-<%=events[i].getSeverity().getLabel()%>">
+          <td><%= events[i].getId() %></td>
+          <td><strong><%= events[i].getSeverity().getLabel() %></strong></td>
+          <td><%= events[i].getTime() %></td>
+          <td><%= events[i].getNodeLabel() %></td>
+          <td><%=WebSecurityUtils.sanitizeString(events[i].getLogMessage(), true)%></td>
+        </tr>
+<!--
         <tr valign="top" class="severity-<%=events[i].getSeverity().getLabel()%>">
           <% if( "true".equals(acknowledgeEvent) ) { %>
 						<% if( request.isUserInRole( Authentication.ROLE_ADMIN ) || !req.isUserInRole( Authentication.ROLE_READONLY ) ) { %>
@@ -551,7 +564,7 @@
         <tr valign="top" class="severity-<%= events[i].getSeverity().getLabel() %>">
           <td colspan="8"><%=WebSecurityUtils.sanitizeString(events[i].getLogMessage(), true)%></td>
         </tr>
-       
+-->
       <% } /*end for*/%>
       </table>
         
