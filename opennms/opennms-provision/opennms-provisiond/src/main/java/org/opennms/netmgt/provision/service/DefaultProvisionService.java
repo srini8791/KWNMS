@@ -249,7 +249,7 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
         final EventAccumulator accumulator = new EventAccumulator(m_eventForwarder);
         dbNode.mergeNode(node, accumulator, false);
 
-        //updateNodeHostname(dbNode);
+        updateNodeHostname(dbNode);
         m_nodeDao.update(dbNode);
         m_nodeDao.flush();
 
@@ -1028,7 +1028,7 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
                 final boolean deviceModeUpdated = handleDeviceModeChanges(dbNode);
 
                 dbNode.mergeNodeAttributes(node, accumulator);
-                //updateNodeHostname(dbNode);
+                updateNodeHostname(dbNode);
                 final OnmsNode ret = saveOrUpdate(dbNode);
 
                 if (deviceModeUpdated) {
