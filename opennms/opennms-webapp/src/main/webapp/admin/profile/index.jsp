@@ -95,12 +95,12 @@
               <div class="row">
                 <label for="input_nodeIp" class="col-sm-4 control-label">Load Profile from Device</label>
                 <div class="col-sm-5">
-                  <select class="form-control" id="nodeIp">
+                  <select class="form-control" id="nodeIp" ng-model="nodeId">
                     <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
                   </select>
                 </div>
                 <div class="col-sm-3">
-                  <button class="btn btn-default">Populate Form</button>
+                  <button class="btn btn-default" ng-click="retrieveNodeProfile(nodeId)">Populate Form</button>
                 </div>
               </div>
             </div>
