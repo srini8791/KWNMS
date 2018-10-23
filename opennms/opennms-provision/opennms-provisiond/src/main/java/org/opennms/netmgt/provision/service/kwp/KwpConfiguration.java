@@ -136,12 +136,8 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
             node.setBandwidth(this.channelBW);
             node.setRadioMode(this.deviceMode);
             node.setMacAddress(this.deviceMac);
-            //TODO
-            // Add bsu/su node detected event
-            /*EventBuilder builder = new EventBuilder(EventConstants.NODE_ADDED_EVENT_UEI, Provisioner.NAME);
-            builder.setNodeid(node.getId());
-            builder.getEvent().setDescr(this.deviceMode.toString()  + " discovered");
-            builder.s*/
+            System.out.println("**** KwpConfiguration.updateKwpDataforNode -- assetRecord = " + node.getAssetRecord());
+            //TODO country code might need to be set
             node.setActive(true);
         }
     }

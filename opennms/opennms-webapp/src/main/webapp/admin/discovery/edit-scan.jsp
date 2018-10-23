@@ -171,6 +171,9 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
 <input type="hidden" id="iuforeignsource" name="iuforeignsource" value=""/>
 <input type="hidden" id="iulocation" name="iulocation" value=""/>
 
+<input type="hidden" id="irbymask" name="irbymask" value=""/>
+<input type="hidden" id="irnetip" name="irnetip" value=""/>
+<input type="hidden" id="irnetmask" name="irnetmask" value=""/>
 <input type="hidden" id="irbase" name="irbase" value=""/>
 <input type="hidden" id="irend" name="irend" value=""/>
 <input type="hidden" id="irtimeout" name="irtimeout" value=""/>

@@ -276,10 +276,10 @@
       <column name="channel" type="integer">
         <constraints nullable="true" />
       </column>
-      <column name="ipaddress" type="text">
+      <column name="countrycode" type="integer">
         <constraints nullable="true" />
       </column>
-      <column name="countrycode" type="integer">
+      <column name="min_firmware" type="text">
         <constraints nullable="true" />
       </column>
       <column name="filepath" type="text">

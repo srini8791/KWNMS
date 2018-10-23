@@ -29,6 +29,10 @@
 *******************************************************************************/
 
 --%>
+
+<%@ page import="org.opennms.netmgt.model.Bandwidth" %>
+<%@ page import="org.opennms.netmgt.model.OpMode" %>
+
 <jsp:include page="/includes/bootstrap.jsp" flush="false">
   <jsp:param name="norequirejs" value="true"/>
 
@@ -89,9 +93,22 @@
           <form method="post" name="profileForm" novalidate>
             <div class="form-group">
               <div class="row">
+                <label for="input_nodeIp" class="col-sm-4 control-label">Load Profile from Device</label>
+                <div class="col-sm-5">
+                  <select class="form-control" id="nodeIp">
+                    <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <button class="btn btn-default">Populate Form</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
                 <label for="input_profileName" class="col-sm-4 control-label">Profile Name</label>
                 <div class="col-sm-8">
-                  <input id="input_profileName" name="profileName" ng-model="profile.name" class="form-control"/>
+                  <input id="input_profileName" name="profileName" ng-model="profile.name" class="form-control" ng-required="true"/>
                 </div>
               </div>
             </div>
@@ -109,11 +126,14 @@
                 <div class="col-sm-8">
                   <select id="input_opMode" name="opMode" ng-model="profile.opMode.id" class="form-control">
                     <option value="0">Select Operation Mode</option>
-                    <option value="1">11g</option>
-                    <option value="2">11ng</option>
-                    <option value="3">11a</option>
-                    <option value="4">11na</option>
-                    <option value="5">11ac</option>
+                    <%
+                      for (OpMode opMode : OpMode.values()) {
+                        if (opMode.getId() == 0) {
+                          continue;
+                        }
+                    %>
+                    <option value="<%= opMode.getId() %>"><%= opMode.getLabel() %></option>
+                    <% } %>
                   </select>
                 </div>
               </div>
@@ -124,11 +144,14 @@
                 <div class="col-sm-8">
                   <select id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth.id" class="form-control">
                     <option value="0">Select Bandwidth</option>
-                    <option value="1">5MHz</option>
-                    <option value="2">10MHz</option>
-                    <option value="3">20MHz</option>
-                    <option value="4">40MHz</option>
-                    <option value="5">80MHz</option>
+                    <%
+                      for (Bandwidth bandwidth : Bandwidth.values()) {
+                        if (bandwidth.getId() == 0) {
+                          continue;
+                        }
+                    %>
+                    <option value="<%= bandwidth.getId() %>"><%= bandwidth.getLabel() %></option>
+                    <% } %>
                   </select>
                 </div>
               </div>
@@ -143,9 +166,9 @@
             </div>
             <div class="form-group">
               <div class="row">
-                <label for="input_ipAddress" class="col-sm-4 control-label">IP Address</label>
+                <label for="input_minimumFirmware" class="col-sm-4 control-label">Minimum Firmware Version</label>
                 <div class="col-sm-8">
-                  <input id="input_ipAddress" name="ipAddress" ng-model="profile.ipAddress" class="form-control"/>
+                  <input id="input_minimumFirmware" name="minimumFirmware" ng-model="profile.minimumFirmware" class="form-control"/>
                 </div>
               </div>
             </div>
@@ -169,8 +192,7 @@
                 <label for="input_nodeId" class="col-sm-4 control-label">Select Device</label>
                 <div class="col-sm-8">
                   <select id="input_nodeId" name="nodeId" class="form-control" required>
-                    <option value="12">192.168.0.2</option>
-                    <option value="15">192.168.0.5</option>
+                    <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
                   </select>
                 </div>
               </div>

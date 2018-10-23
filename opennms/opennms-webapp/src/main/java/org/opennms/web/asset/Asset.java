@@ -60,11 +60,26 @@ public class Asset extends Object {
     /** Constant <code>TELEPHONY_CATEGORY="Telephony"</code> */
     public static final String TELEPHONY_CATEGORY = "Telephony";
 
+    /** Constant <code>OUTDOORBASE_CATEGORY="Outdoor Base"</code> */
+    public static final String OUTDOORBASE_CATEGORY = "Outdoor Base";
+
+    /** Constant <code>OUTDOORSUBSCRIBER_CATEGORY="Outdoor Subscriber"</code> */
+    public static final String OUTDOORSUBSCRIBER_CATEGORY = "Outdoor Subscriber";
+
+    /** Constant <code>ACCESSPOINT_CATEGORY="Access Point"</code> */
+    public static final String ACCESSPOINT_CATEGORY = "Access Point";
+
+    /** Constant <code>CLIENT_CATEGORY="Client"</code> */
+    public static final String CLIENT_CATEGORY = "Client";
+
     /** Constant <code>OTHER_CATEGORY="Other"</code> */
     public static final String OTHER_CATEGORY = "Other";
 
     /** Constant <code>CATEGORIES="new String[] { UNSPECIFIED_CATEGORY, IN"{trunked}</code> */
-    public static final String[] CATEGORIES = new String[] { UNSPECIFIED_CATEGORY, INFRASTRUCTURE_CATEGORY, SERVER_CATEGORY, DESKTOP_CATEGORY, LAPTOP_CATEGORY, PRINTER_CATEGORY, TELEPHONY_CATEGORY, OTHER_CATEGORY };
+    public static final String[] CATEGORIES = new String[] { UNSPECIFIED_CATEGORY,
+            INFRASTRUCTURE_CATEGORY, SERVER_CATEGORY, DESKTOP_CATEGORY, LAPTOP_CATEGORY, PRINTER_CATEGORY, TELEPHONY_CATEGORY,
+            OUTDOORBASE_CATEGORY, OUTDOORSUBSCRIBER_CATEGORY, ACCESSPOINT_CATEGORY, CLIENT_CATEGORY,
+            OTHER_CATEGORY };
 
     /** Constant <code>AUTOENABLE="A"</code> */
     public static final String AUTOENABLE = "A";

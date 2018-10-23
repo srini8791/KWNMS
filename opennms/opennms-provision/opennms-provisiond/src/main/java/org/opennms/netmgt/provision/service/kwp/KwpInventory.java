@@ -70,6 +70,9 @@ public class KwpInventory extends AbstractKwpProxiableTracker {
             node.getAssetRecord().setFirmware(firmwareVersion);
             node.getAssetRecord().setEthernetSpeed(ethSpeed);
             node.getAssetRecord().setIoBandwidthLimit(bandwidthLimit);
+            if (node.getRadioMode() != null) {
+                node.getAssetRecord().setCategory(node.getRadioMode().getLabel());
+            }
         }
     }
 }
