@@ -33,18 +33,15 @@ import org.opennms.core.config.api.JaxbListWrapper;
 import org.opennms.core.criteria.CriteriaBuilder;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SnmpConfigAccessService;
-import org.opennms.netmgt.config.api.SnmpAgentConfigFactory;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsProfile;
 import org.opennms.netmgt.model.OnmsProfileList;
-import org.opennms.netmgt.provision.service.ProvisionService;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
 import org.opennms.netmgt.snmp.SnmpObjId;
 import org.opennms.netmgt.snmp.SnmpValue;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
-import org.opennms.netmgt.snmp.snmp4j.Snmp4JValue;
 import org.opennms.netmgt.snmp.snmp4j.Snmp4JValueFactory;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.RedirectHelper;
@@ -55,17 +52,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 import java.net.InetAddress;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Basic Web Service using REST for {@link OnmsProfile} entity
@@ -145,44 +139,99 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     @POST
     @Path("/createProfileOnDevice")
     @Transactional
-    public Response createProfileOnDevice(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
-                                            @RequestBody Integer nodeId) {
+    public Response createProfileOnDevice(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
+        MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+        Integer nodeId = null;
+        if (params.containsKey("nodeId")) {
+            String nodeIdStr = params.getFirst("nodeId");
+            params.remove("nodeId");
+            if (nodeIdStr != null) {
+                nodeId = Integer.parseInt(nodeIdStr);
+            }
+        } else {
+            return Response.status(Status.BAD_REQUEST).entity("Missing parameter: nodeId").build();
+        }
+
         OnmsNode  node = nodeDao.get(nodeId);
         final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
+        LOG.debug("createProfileOnDevice: nodeId = {}, addr = {}", nodeId, addr);
         final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
         SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0");
         SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.9.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.10.0")};
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
-        SnmpValue[] values = {factory.getOctetString(node.getPrimaryIP().getBytes()),
-                factory.getInt32(7),factory.getGauge32(3),factory.getGauge32(1)};
+        SnmpValue[] values = {
+                factory.getOctetString(node.getPrimaryIP().getBytes()),
+                factory.getInt32(7),
+                factory.getGauge32(3),
+                factory.getGauge32(1)
+        };
+        String errorMessage = "";
         try {
             List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
         } catch(Exception ex) {
-
+            errorMessage = ex.getMessage();
         }
-        return null;
+
+        if (errorMessage.length() > 0) {
+            return Response.serverError().entity(errorMessage).build();
+        }
+        return Response.ok().build();
     }
 
 
-    @POST
-    @Path("/retreiveprofile")
+    @GET
+    @Path("/retrieveProfile")
     @Transactional
-    public Response retreiveProfile(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
-                                          @RequestBody Integer nodeId,@RequestBody String tftpAddress) {
+    public Response retrieveProfile(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
+        MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+        Integer nodeId = null;
+        if (params.containsKey("nodeId")) {
+            String nodeIdStr = params.getFirst("nodeId");
+            params.remove("nodeId");
+            if (nodeIdStr != null) {
+                nodeId = Integer.parseInt(nodeIdStr);
+            }
+        } else {
+            return Response.status(Status.BAD_REQUEST).entity("Missing parameter: nodeId").build();
+        }
+
+        String tftpAddress = null;
+        if (params.containsKey("tftpAddress")) {
+            tftpAddress = params.getFirst("tftpAddress");
+            params.remove("tftpAddress");
+        } else {
+            return Response.status(Status.BAD_REQUEST).entity("Missing parameter: tftpAddress").build();
+        }
+
+        LOG.info("retreiveProfile: nodeId = {}, tftpAddress = {}", nodeId, tftpAddress);
+
         OnmsNode  node = nodeDao.get(nodeId);
         final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
         final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
         SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.6.0");
         SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.4.0")};
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
-        SnmpValue[] values = {factory.getOctetString(tftpAddress.getBytes()),
-                factory.getOctetString(node.getPrimaryIP().getBytes()),factory.getInt32(7),factory.getInt32(1)};
+        SnmpValue[] values = {
+                factory.getOctetString(tftpAddress.getBytes()),
+                factory.getOctetString(node.getPrimaryIP().getBytes()),
+                factory.getInt32(7),
+                factory.getInt32(1)
+        };
+        String errorMessage = "";
         try {
             List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
         } catch(Exception ex) {
-
+            ex.printStackTrace();
+            errorMessage = ex.getMessage();
+            if (ex.getCause() != null) {
+                errorMessage += ": " + ex.getCause().getMessage();
+            }
         }
-        return null;
+
+        if (errorMessage.length() > 0) {
+            return Response.serverError().entity(errorMessage).build();
+        }
+        return Response.ok().build();
     }
 
 
@@ -197,17 +246,23 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0");
         SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.9.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.10.0")};
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
-        SnmpValue[] values = {factory.getOctetString("testFile.fil".getBytes()),
-                factory.getInt32(7),factory.getGauge32(3),factory.getGauge32(1)};
+        SnmpValue[] values = {
+                factory.getOctetString("testFile.fil".getBytes()),
+                factory.getInt32(7),
+                factory.getGauge32(3),
+                factory.getGauge32(1)
+        };
+        String errorMessage = "";
         try {
             List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
         } catch(Exception ex) {
-
+            errorMessage = ex.getMessage();
         }
 
-
-
-        return null;
+        if (errorMessage.length() > 0) {
+            return Response.serverError().entity(errorMessage).build();
+        }
+        return Response.ok().build();
     }
 
     @Override
