@@ -28,19 +28,13 @@
 
 package org.opennms.netmgt.snmp.proxy.common;
 
+import org.opennms.core.rpc.api.RpcRequest;
+import org.opennms.netmgt.snmp.SnmpAgentConfig;
+
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import org.opennms.core.rpc.api.RpcRequest;
-import org.opennms.netmgt.snmp.SnmpAgentConfig;
 
 @XmlRootElement(name="snmp-request")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -63,6 +57,9 @@ public class SnmpRequestDTO implements RpcRequest {
 
     @XmlElement(name="walk")
     private List<SnmpWalkRequestDTO> walks = new ArrayList<>(0);
+
+    @XmlElement(name="get")
+    private List<SnmpSetRequestDTO> sets = new ArrayList<>(0);
 
     @XmlTransient
     private Long timeToLive;
@@ -93,12 +90,20 @@ public class SnmpRequestDTO implements RpcRequest {
         this.agent = agent;
     }
 
+    public void setSetRequests(List<SnmpSetRequestDTO> sets) {
+        this.sets = sets;
+    }
+
     public void setGetRequests(List<SnmpGetRequestDTO> gets) {
         this.gets = gets;
     }
 
     public List<SnmpGetRequestDTO> getGetRequests() {
         return gets;
+    }
+
+    public List<SnmpSetRequestDTO> getSetRequests() {
+        return sets;
     }
 
     public void setWalkRequests(List<SnmpWalkRequestDTO> walks) {
@@ -149,6 +154,7 @@ public class SnmpRequestDTO implements RpcRequest {
                 && Objects.equals(this.agent, other.agent)
                 && Objects.equals(this.gets, other.gets)
                 && Objects.equals(this.walks, other.walks)
+                && Objects.equals(this.sets, other.sets)
                 && Objects.equals(this.description, other.description)
                 && Objects.equals(this.timeToLive, other.timeToLive);
     }

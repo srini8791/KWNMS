@@ -122,6 +122,11 @@ public class LocationAwareSnmpClientRpcImpl implements LocationAwareSnmpClient, 
         return new SNMPMultiGetBuilder(this, agent, oids);
     }
 
+    @Override
+    public SNMPRequestBuilder<List<SnmpValue>> set(SnmpAgentConfig agent, List<SnmpObjId> oids, List<SnmpValue> values) {
+        return new SNMPMultiSetBuilder(this,agent,oids,values);
+    }
+
     public CompletableFuture<SnmpMultiResponseDTO> execute(SnmpRequestDTO request) {
         return delegate.execute(request);
     }

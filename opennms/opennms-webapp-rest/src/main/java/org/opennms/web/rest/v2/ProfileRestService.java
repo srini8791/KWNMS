@@ -31,11 +31,21 @@ package org.opennms.web.rest.v2;
 import org.apache.cxf.jaxrs.ext.search.SearchBean;
 import org.opennms.core.config.api.JaxbListWrapper;
 import org.opennms.core.criteria.CriteriaBuilder;
+import org.opennms.core.utils.InetAddressUtils;
+import org.opennms.netmgt.config.SnmpConfigAccessService;
+import org.opennms.netmgt.config.api.SnmpAgentConfigFactory;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsProfile;
 import org.opennms.netmgt.model.OnmsProfileList;
+import org.opennms.netmgt.provision.service.ProvisionService;
+import org.opennms.netmgt.snmp.SnmpAgentConfig;
+import org.opennms.netmgt.snmp.SnmpObjId;
+import org.opennms.netmgt.snmp.SnmpValue;
+import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
+import org.opennms.netmgt.snmp.snmp4j.Snmp4JValue;
+import org.opennms.netmgt.snmp.snmp4j.Snmp4JValueFactory;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.RedirectHelper;
 import org.slf4j.Logger;
@@ -53,10 +63,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.net.InetAddress;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Basic Web Service using REST for {@link OnmsProfile} entity
@@ -73,6 +82,13 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
     @Autowired
     private NodeDao nodeDao;
+
+    @Autowired
+    private LocationAwareSnmpClient m_locationAwareSnmpClient;
+
+
+    @Autowired
+    private SnmpConfigAccessService m_accessService;
 
     @Override
     protected ProfileDao getDao() {
@@ -125,6 +141,74 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         }
     }
 
+
+    @POST
+    @Path("/createProfileOnDevice")
+    @Transactional
+    public Response createProfileOnDevice(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                                            @RequestBody Integer nodeId) {
+        OnmsNode  node = nodeDao.get(nodeId);
+        final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
+        final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
+        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0");
+        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.9.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.10.0")};
+        Snmp4JValueFactory factory = new Snmp4JValueFactory();
+        SnmpValue[] values = {factory.getOctetString(node.getPrimaryIP().getBytes()),
+                factory.getInt32(7),factory.getGauge32(3),factory.getGauge32(1)};
+        try {
+            List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
+        } catch(Exception ex) {
+
+        }
+        return null;
+    }
+
+
+    @POST
+    @Path("/retreiveprofile")
+    @Transactional
+    public Response retreiveProfile(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                                          @RequestBody Integer nodeId,@RequestBody String tftpAddress) {
+        OnmsNode  node = nodeDao.get(nodeId);
+        final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
+        final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
+        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.6.0");
+        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.4.0")};
+        Snmp4JValueFactory factory = new Snmp4JValueFactory();
+        SnmpValue[] values = {factory.getOctetString(tftpAddress.getBytes()),
+                factory.getOctetString(node.getPrimaryIP().getBytes()),factory.getInt32(7),factory.getInt32(1)};
+        try {
+            List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
+        } catch(Exception ex) {
+
+        }
+        return null;
+    }
+
+
+    @POST
+    @Path("/{nodeId}/testprofile")
+    @Transactional
+    public Response testProfile(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                                          @PathParam("nodeId") Integer nodeId) {
+        OnmsNode  node = nodeDao.get(nodeId);
+        final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
+        final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
+        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0");
+        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.9.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.1.4.10.0")};
+        Snmp4JValueFactory factory = new Snmp4JValueFactory();
+        SnmpValue[] values = {factory.getOctetString("testFile.fil".getBytes()),
+                factory.getInt32(7),factory.getGauge32(3),factory.getGauge32(1)};
+        try {
+            List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
+        } catch(Exception ex) {
+
+        }
+
+
+
+        return null;
+    }
 
     @Override
     public Response doCreate(final SecurityContext securityContext, final UriInfo uriInfo, final OnmsProfile profile) {

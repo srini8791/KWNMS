@@ -28,30 +28,15 @@
 
 package org.opennms.netmgt.snmp.proxy.common;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import org.opennms.core.rpc.xml.AbstractXmlRpcModule;
+import org.opennms.netmgt.snmp.*;
+
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
-
-import org.opennms.core.rpc.xml.AbstractXmlRpcModule;
-import org.opennms.netmgt.snmp.AggregateTracker;
-import org.opennms.netmgt.snmp.Collectable;
-import org.opennms.netmgt.snmp.CollectionTracker;
-import org.opennms.netmgt.snmp.ColumnTracker;
-import org.opennms.netmgt.snmp.SingleInstanceTracker;
-import org.opennms.netmgt.snmp.SnmpInstId;
-import org.opennms.netmgt.snmp.SnmpObjId;
-import org.opennms.netmgt.snmp.SnmpResult;
-import org.opennms.netmgt.snmp.SnmpUtils;
-import org.opennms.netmgt.snmp.SnmpValue;
-import org.opennms.netmgt.snmp.SnmpWalkCallback;
-import org.opennms.netmgt.snmp.SnmpWalker;
 
 /**
  * Executes SNMP requests locally using the current {@link org.opennms.netmgt.snmp.SnmpStrategy}.
@@ -92,6 +77,18 @@ public class SnmpProxyRpcModule extends AbstractXmlRpcModule<SnmpRequestDTO, Snm
                 m.getResponses().addAll(s);
                 return m;
             });
+        }
+        if (request.getSetRequests().size() > 0) {
+            for (SnmpSetRequestDTO setRequest : request.getSetRequests()) {
+                SnmpResponseDTO response = set(request,setRequest);
+                CompletableFuture<SnmpResponseDTO> future = new CompletableFuture<>();
+                future.complete(response);
+                combinedFuture = combinedFuture.thenCombine(future,(m,s) -> {
+                    m.getResponses().add(s);
+                    return m;
+                });
+            }
+
         }
         return combinedFuture;
     }
@@ -185,6 +182,32 @@ public class SnmpProxyRpcModule extends AbstractXmlRpcModule<SnmpRequestDTO, Snm
             responseDTO.setResults(results);
             return responseDTO;
         });
+    }
+
+    private SnmpResponseDTO set(SnmpRequestDTO request, SnmpSetRequestDTO set) {
+        final SnmpObjId[] oids = set.getOids().toArray(new SnmpObjId[set.getOids().size()]);
+        final SnmpValue[] values = set.getValues().toArray(new SnmpValue[set.getValues().size()]);
+        SnmpValue[] results = SnmpUtils.set(request.getAgent(),oids,values);
+        List<SnmpResult> returnResults = new ArrayList<>(oids.length);
+        for(int i = 0; i < oids.length; i++) {
+            final SnmpResult res = new SnmpResult(oids[i],null,results[i]);
+            returnResults.add(res);
+        }
+        final SnmpResponseDTO responseDTO = new SnmpResponseDTO();
+        responseDTO.setCorrelationId(set.getCorrelationId());
+        responseDTO.setResults(returnResults);
+        return responseDTO;
+        /*return future.thenApply(values -> {
+            final List<SnmpResult> results = new ArrayList<>(oids.length);
+            for (int i = 0; i < oids.length; i++) {
+                final SnmpResult result = new SnmpResult(oids[i], null, values[i]);
+                results.add(result);
+            }
+            final SnmpResponseDTO responseDTO = new SnmpResponseDTO();
+            responseDTO.setCorrelationId(get.getCorrelationId());
+            responseDTO.setResults(results);
+            return responseDTO;
+        });*/
     }
 
     @Override
