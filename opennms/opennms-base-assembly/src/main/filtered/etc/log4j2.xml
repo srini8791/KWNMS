@@ -22,7 +22,8 @@
 
   <properties>
     <property name="prefix">uncategorized</property>
-    <property name="logdir">${install.logs.dir}</property>
+    <property name="logdir">/opt/onms/onms/opennms/target/opennms-22.0.1/logs</property>
+    <property name="syslogdir">/opt/onms/onms/opennms/target/opennms-22.0.1/syslogs</property>
   </properties>
 
   <!--
@@ -37,8 +38,8 @@
     <Routing name="RoutingAppender">
       <Routes pattern="$${ctx:prefix}">
         <Route>
-          <RollingFile name="Rolling-\${ctx:prefix}" fileName="\${logdir}/\${ctx:prefix}.log"
-                       filePattern="\${logdir}/\${ctx:prefix}.%i.log.gz">
+          <RollingFile name="Rolling-${ctx:prefix}" fileName="${logdir}/${ctx:prefix}.log"
+                       filePattern="${logdir}/${ctx:prefix}.%i.log.gz">
             <PatternLayout>
               <pattern>%d %-5p [%t] %c{1.}: %m%n</pattern>
             </PatternLayout>
@@ -56,8 +57,8 @@
               pattern.
 	  -->
         <Route key="instrumentation">
-          <RollingFile name="Rolling-instrumentation" fileName="\${logdir}/instrumentation.log"
-                       filePattern="\${logdir}/instrumentation.%i.log">
+          <RollingFile name="Rolling-instrumentation" fileName="${logdir}/instrumentation.log"
+                       filePattern="${logdir}/instrumentation.%i.log">
             <PatternLayout>
               <!-- the logging class is not included here since its is verbose and always the same -->
               <pattern>%d %-5p [%t] %m%n</pattern>
@@ -65,6 +66,24 @@
 
             <!-- Rotate logs at 100MB-->
             <SizeBasedTriggeringPolicy size="100MB" />
+
+            <!-- Rotate through 4 logs -->
+            <DefaultRolloverStrategy max="4" fileIndex="min" />
+          </RollingFile>
+        </Route>
+      </Routes>
+    </Routing>
+    <Routing name="FileNameAppender">
+      <Routes pattern="$${ctx:logFolder}">
+        <Route>
+          <RollingFile name="Rolling-${ctx:logFolder}" fileName="${syslogdir}/${ctx:logFolder}/${date:yyyy-dd-MM}.log"
+                       filePattern="${logdir}/${ctx:logFolder}/${ctx:logFolder}_${date:yyyy-dd-MM}.%i.log.gz">
+            <PatternLayout>
+              <pattern>%m%n</pattern>
+            </PatternLayout>
+
+            <!-- Rotate logs at 100MB-->
+            <SizeBasedTriggeringPolicy size="10MB" />
 
             <!-- Rotate through 4 logs -->
             <DefaultRolloverStrategy max="4" fileIndex="min" />
@@ -84,6 +103,9 @@
       Set the threshold for individual loggers that may be too chatty at the default 
       level for their prefix.
     -->
+     <Logger name="org.opennms.netmgt.syslogd.KwpSyslogFile" level="DEBUG" additivity="false">
+        <AppenderRef ref="FileNameAppender"/>
+    </Logger>
     <logger name="com.google.gwt.user.server" additivity="false" level="INFO">
       <appender-ref ref="RoutingAppender"/>
     </logger>
