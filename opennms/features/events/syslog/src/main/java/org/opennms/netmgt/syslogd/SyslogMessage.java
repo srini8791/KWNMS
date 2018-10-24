@@ -345,6 +345,10 @@ public class SyslogMessage implements Cloneable {
         }
     }
 
+    public String asFileMessage() {
+        return String.format("%s %s %s %s %s", getRfc3164FormattedDate(),m_facility.toString(),m_severity.toString(), getHostName(),  getMessage());
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)

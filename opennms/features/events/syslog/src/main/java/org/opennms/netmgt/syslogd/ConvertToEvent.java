@@ -113,6 +113,7 @@ public class ConvertToEvent {
     }
 
     public static final EventBuilder toEventBuilder(SyslogMessage message, String systemId, String location) {
+
         if (message == null) {
             return null;
         }
@@ -266,6 +267,8 @@ public class ConvertToEvent {
         * on the ONMS host actually can resolve the
         * node to match against nodeId.
          */
+
+        KwpSyslogFile.getInstance().logMessage(message,location);
 
         // Time to verify UEI matching.
 
