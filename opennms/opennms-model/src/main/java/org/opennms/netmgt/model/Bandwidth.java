@@ -43,11 +43,11 @@ import java.util.Map;
 public enum Bandwidth {
 
     BANDWIDTH_UNKNOWN(0,"Unknown"),
-    BANDWIDTH_5MHZ(1, "Bw5MHz"),
-    BANDWIDTH_10MHZ(2, "Bw10MHz"),
-    BANDWIDTH_20MHZ(3, "Bw20MHz"),
-    BANDWIDTH_40MHZ(4, "Bw40MHz"),
-    BANDWIDTH_80MHZ(5, "Bw80MHz");
+    BANDWIDTH_5MHZ(1, "5MHz"),
+    BANDWIDTH_10MHZ(2, "10MHz"),
+    BANDWIDTH_20MHZ(3, "20MHz"),
+    BANDWIDTH_40MHZ(4, "40MHz"),
+    BANDWIDTH_80MHZ(5, "80MHz");
 
     private static final Map<Integer, Bandwidth> m_idMap;
 

@@ -152,6 +152,7 @@ angular.module('onms-assets', [
 
   $scope.profiles = [];
   $scope.profile = {};
+  $scope.nodeProfile = {};
 
   $scope.nodes = [];
   $scope.profileToApply = '';
@@ -166,6 +167,22 @@ angular.module('onms-assets', [
     $http.get('api/v2/profiles')
       .success(function(result) {
         $scope.profiles = result.profile;
+      })
+      .error(function(msg) {
+        growl.error(msg);
+      });
+  };
+
+  $scope.retrieveNodeProfile = function(nodeId) {
+    var configObj = {
+      'params': {
+        'nodeId': nodeId
+      }
+    };
+
+    $http.get('api/v2/profiles/retrieveProfile', configObj)
+      .success(function(result) {
+        $scope.nodeProfile = result;
       })
       .error(function(msg) {
         growl.error(msg);

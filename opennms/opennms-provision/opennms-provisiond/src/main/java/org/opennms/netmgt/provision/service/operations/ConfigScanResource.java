@@ -91,6 +91,7 @@ public class ConfigScanResource {
         if (m_node != null && value != null) {
             if (KwpConfigurationGroup.RADIO_MODE_ALIAS.equals(key)) {
                 m_node.setRadioMode(RadioMode.get((Integer) value));
+                System.out.println("**** ConfigScanResource.setAttribute -- assetRecord = " + m_node.getAssetRecord());
             } else if (KwpConfigurationGroup.WIRELESS_BANDWIDTH_ALIAS.equals(key)) {
                 m_node.setBandwidth(Bandwidth.get((Integer) value));
             } else if (KwpConfigurationGroup.WIRELESS_CHANNEL_ALIAS.equals(key)) {

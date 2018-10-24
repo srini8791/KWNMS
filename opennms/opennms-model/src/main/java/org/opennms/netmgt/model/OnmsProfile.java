@@ -74,9 +74,9 @@ public class OnmsProfile implements Serializable {
     @Column(name = "channel")
     private Integer m_channel;
 
-    @XmlAttribute(name = "ipAddress")
-    @Column(name = "ipAddress")
-    private String m_ipAddress;
+    @XmlAttribute(name = "minimumFirmware")
+    @Column(name = "min_firmware")
+    private String m_minimumFirmware;
 
     @XmlAttribute(name = "countryCode")
     @Column(name = "countryCode")
@@ -214,21 +214,21 @@ public class OnmsProfile implements Serializable {
     }
 
     /**
-     * <p>getIpAddress</p>
+     * <p>getMinimumFirmware</p>
      *
      * @return a {@link String} object.
      */
-    public String getIpAddress() {
-        return m_ipAddress;
+    public String getMinimumFirmware() {
+        return m_minimumFirmware;
     }
 
     /**
-     * <p>setIpAddress</p>
+     * <p>setMinimumFirmware</p>
      *
-     * @param ipAddress a {@link String} object.
+     * @param minimumFirmware a {@link String} object.
      */
-    public void setIpAddress(String ipAddress) {
-        this.m_ipAddress = ipAddress;
+    public void setMinimumFirmware(String minimumFirmware) {
+        this.m_minimumFirmware = minimumFirmware;
     }
 
     /**
@@ -316,7 +316,7 @@ public class OnmsProfile implements Serializable {
         creator.append("opMode", getOpMode());
         creator.append("bandwidth", getBandwidth());
         creator.append("channel", getChannel());
-        creator.append("ipAddress", getIpAddress());
+        creator.append("minFirmware", getMinimumFirmware());
         creator.append("countryCode", getCountryCode());
         creator.append("filePath", getFilePath());
         creator.append("modifiedOn", getModifiedOn());
