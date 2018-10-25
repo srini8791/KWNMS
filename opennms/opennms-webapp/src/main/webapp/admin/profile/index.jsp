@@ -108,7 +108,7 @@
               <div class="row">
                 <label for="input_profileName" class="col-sm-4 control-label">Profile Name</label>
                 <div class="col-sm-8">
-                  <input id="input_profileName" name="profileName" ng-model="profile.name" class="form-control" ng-required="true"/>
+                  <input id="input_profileName" name="profileName" ng-model="newProfile.name" class="form-control" ng-required="true"/>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@
               <div class="row">
                 <label for="input_ssid" class="col-sm-4 control-label">SSID</label>
                 <div class="col-sm-8">
-                  <input id="input_ssid" name="ssid" ng-model="profile.ssid" class="form-control"/>
+                  <input id="input_ssid" name="ssid" ng-model="newProfile.ssid" class="form-control"/>
                 </div>
               </div>
             </div>
@@ -124,7 +124,7 @@
               <div class="row">
                 <label for="input_opMode" class="col-sm-4 control-label">Operation Mode</label>
                 <div class="col-sm-8">
-                  <select id="input_opMode" name="opMode" ng-model="profile.opMode.id" class="form-control">
+                  <select id="input_opMode" name="opMode" ng-model="newProfile.opMode.id" class="form-control">
                     <option value="0">Select Operation Mode</option>
                     <%
                       for (OpMode opMode : OpMode.values()) {
@@ -142,7 +142,7 @@
               <div class="row">
                 <label for="input_bandwidth" class="col-sm-4 control-label">Bandwidth</label>
                 <div class="col-sm-8">
-                  <select id="input_bandwidth" name="bandwidth" ng-model="profile.bandwidth.id" class="form-control">
+                  <select id="input_bandwidth" name="bandwidth" ng-model="newProfile.bandwidth.id" class="form-control">
                     <option value="0">Select Bandwidth</option>
                     <%
                       for (Bandwidth bandwidth : Bandwidth.values()) {
@@ -160,7 +160,7 @@
               <div class="row">
                 <label for="input_channel" class="col-sm-4 control-label">Channel</label>
                 <div class="col-sm-8">
-                  <input id="input_channel" name="channel" ng-model="profile.channel" class="form-control"/>
+                  <input id="input_channel" name="channel" ng-model="newProfile.channel" class="form-control"/>
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@
               <div class="row">
                 <label for="input_minimumFirmware" class="col-sm-4 control-label">Minimum Firmware Version</label>
                 <div class="col-sm-8">
-                  <input id="input_minimumFirmware" name="minimumFirmware" ng-model="profile.minimumFirmware" class="form-control"/>
+                  <input id="input_minimumFirmware" name="minimumFirmware" ng-model="newProfile.minimumFirmware" class="form-control"/>
                 </div>
               </div>
             </div>
