@@ -224,7 +224,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
         SnmpValue[] values = {
                 factory.getOctetString(tftpAddress.getBytes()),
-                factory.getOctetString(node.getPrimaryIP().getBytes()),
+                factory.getOctetString(node.getPrimaryIP().replaceAll(".","_").getBytes()),
                 factory.getInt32(7),
                 factory.getInt32(1)
         };
@@ -250,11 +250,48 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         if (errorMessage.length() > 0) {
             return Response.serverError().entity(errorMessage).build();
         }
+        CompletableFuture<SnmpValue> futureStatus = asynRerun(config);
+        try {
+            futureStatus.whenComplete((m,ex)-> {
+                if(ex != null) {
+                    builder.append(ex.getMessage());
+                }
+            }).get();
+            errorMessage = builder.toString();
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
+        }
+
+        if (errorMessage.length() > 0) {
+            return Response.serverError().entity(errorMessage).build();
+        }
 
         Properties profileProperties = readProfileProperties(node.getPrimaryIP());
         return Response.ok().entity(profileProperties).build();
     }
 
+    private CompletableFuture<SnmpValue> asynRerun(final SnmpAgentConfig config) {
+        SnmpObjId statusOid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.5.0");
+        CompletableFuture<SnmpValue> future = m_locationAwareSnmpClient.get(config,statusOid).execute();
+        SnmpValue value = null;
+        try {
+            value = future.get();
+
+        } catch (Exception e) {
+            future.completeExceptionally(e);
+            return future;
+        }
+        if (value.toLong() == 9) {
+            return asynRerun(config);
+        } else if(value.toLong() == 11) {
+            future.completeExceptionally(new Exception("failed to download profile"));
+            return future;
+        } else {
+            CompletableFuture<SnmpValue> response = new CompletableFuture<>();
+            response.complete(value);
+            return response;
+        }
+    }
 
     @POST
     @Path("/{nodeId}/testprofile")
