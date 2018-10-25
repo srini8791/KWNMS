@@ -78,7 +78,7 @@ public class SnmpProxyRpcModule extends AbstractXmlRpcModule<SnmpRequestDTO, Snm
                 return m;
             });
         }
-        if (request.getSetRequests().size() > 0) {
+        if (request.getSetRequests() != null && request.getSetRequests().size() > 0) {
             for (SnmpSetRequestDTO setRequest : request.getSetRequests()) {
                 CompletableFuture<SnmpResponseDTO> future = setAsync(request,setRequest);
                 combinedFuture = combinedFuture.thenCombine(future,(m,s) -> {
