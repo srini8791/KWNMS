@@ -151,7 +151,7 @@ angular.module('onms-assets', [
 .controller('ProfileCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
 
   $scope.profiles = [];
-  $scope.profile = {};
+  $scope.newProfile = {};
   $scope.nodeProfile = {};
 
   $scope.nodes = [];
@@ -182,7 +182,11 @@ angular.module('onms-assets', [
 
     $http.get('api/v2/profiles/retrieveProfile', configObj)
       .success(function(result) {
-        $scope.nodeProfile = result;
+        $scope.newProfile = result;
+//        $scope.newProfile.ssid = result.ssid;
+//        $scope.newProfile.opMode.id = result.opModeId;
+//        $scope.newProfile.bandwidth.id = result.bandwidthId;
+//        $scope.newProfile.channel = result.channel;
       })
       .error(function(msg) {
         growl.error(msg);
@@ -194,10 +198,10 @@ angular.module('onms-assets', [
       method: 'POST',
       url: 'api/v2/profiles',
       headers: {'Content-Type': 'application/json'},
-      data: $scope.profile
+      data: $scope.newProfile
     }).success(function() {
       growl.success('The profile has been successfully created.');
-      $scope.profile = {};
+      $scope.newProfile = {};
       $scope.loadProfiles();
     }).error(function(msg) {
       growl.error('Cannot create the profile: ' + msg);

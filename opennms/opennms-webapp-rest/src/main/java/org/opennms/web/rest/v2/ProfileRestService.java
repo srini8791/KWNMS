@@ -31,6 +31,7 @@ package org.opennms.web.rest.v2;
 import org.apache.cxf.jaxrs.ext.search.SearchBean;
 import org.opennms.core.config.api.JaxbListWrapper;
 import org.opennms.core.criteria.CriteriaBuilder;
+import org.opennms.core.resource.Vault;
 import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SnmpConfigAccessService;
 import org.opennms.netmgt.dao.api.NodeDao;
@@ -58,7 +59,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
+import java.io.*;
 import java.net.InetAddress;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -181,9 +185,6 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 }
             }).get();
             errorMessage = builder.toString();
-            if (resultValues == null || resultValues.size() != oids.length) {
-                errorMessage = "Error Occurred while PDU set";
-            }
         } catch(Exception ex) {
             errorMessage = ex.getMessage();
         }
@@ -211,13 +212,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             return Response.status(Status.BAD_REQUEST).entity("Missing parameter: nodeId").build();
         }
 
-        String tftpAddress = null;
-        if (params.containsKey("tftpAddress")) {
-            tftpAddress = params.getFirst("tftpAddress");
-            params.remove("tftpAddress");
-        } else {
-            return Response.status(Status.BAD_REQUEST).entity("Missing parameter: tftpAddress").build();
-        }
+        String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
 
         LOG.info("retreiveProfile: nodeId = {}, tftpAddress = {}", nodeId, tftpAddress);
 
@@ -248,9 +243,6 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 }
             }).get();
             errorMessage = builder.toString();
-            if (resultValues == null || resultValues.size() != oids.length) {
-                errorMessage = "Error Occurred while PDU set";
-            }
         } catch(Exception ex) {
             errorMessage = ex.getMessage();
         }
@@ -258,7 +250,9 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         if (errorMessage.length() > 0) {
             return Response.serverError().entity(errorMessage).build();
         }
-        return Response.ok().build();
+
+        Properties profileProperties = readProfileProperties(node.getPrimaryIP());
+        return Response.ok().entity(profileProperties).build();
     }
 
 
@@ -296,9 +290,6 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 //return resultValues;
             }).get();
             errorMessage = builder.toString();
-            if (resultValues1 == null || resultValues1.size() != oids.length) {
-                errorMessage = "Error Occurred while PDU set";
-            }
         } catch(Exception ex) {
             errorMessage = ex.getMessage();
         }
@@ -335,6 +326,47 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     @Override
     protected OnmsProfile doGet(UriInfo uriInfo, String id) {
         return getDao().get(Integer.parseInt(id));
+    }
+
+
+    // private utility methods
+    /*
+        $scope.newProfile.ssid (wireless.@wifi-iface[1].ssid)
+        $scope.newProfile.opMode.id (wireless.wifi1.hwmode)
+        $scope.newProfile.bandwidth.id (wireless.wifi1.htmode)
+        $scope.newProfile.channel (wireless.wifi1.channel)
+     */
+    private static final List<String> PROFILE_KEYS = Arrays.asList(
+            "wireless.@wifi-iface[1].ssid",
+            "wireless.wifi1.hwmode",
+            "wireless.wifi1.htmode",
+            "wireless.wifi1.channel"
+    );
+
+    private Properties readProfileProperties(String nodePrimaryIP) {
+        Properties properties = new Properties();
+        String tftpRootPath = Vault.getProperty("org.opennms.tftp.rootpath");
+        String filePath = tftpRootPath + File.separator + nodePrimaryIP.replaceAll("\\.", "_");
+        try {
+            List<String> props = Files.readAllLines(Paths.get(filePath));
+            for (String prop : props) {
+                int delimiterIndex = prop.indexOf("=");
+                if (delimiterIndex == -1) {
+                    continue;
+                }
+                String key = prop.substring(0, delimiterIndex).trim();
+                String value = prop.substring(delimiterIndex+1).trim();
+                value = value.substring(1, value.length()-1); // stripping single quotes
+                if (PROFILE_KEYS.contains(key)) {
+                    properties.put(key, value);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            LOG.error("readProfileProperties: No file found at: {}", filePath);
+        } catch (IOException e) {
+            LOG.error("readProfileProperties: Unable to load profile content as properties.");
+        }
+        return properties;
     }
 
 }
