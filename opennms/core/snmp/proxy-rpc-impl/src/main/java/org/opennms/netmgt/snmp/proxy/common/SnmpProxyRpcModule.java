@@ -80,13 +80,18 @@ public class SnmpProxyRpcModule extends AbstractXmlRpcModule<SnmpRequestDTO, Snm
         }
         if (request.getSetRequests().size() > 0) {
             for (SnmpSetRequestDTO setRequest : request.getSetRequests()) {
-                SnmpResponseDTO response = set(request,setRequest);
+                CompletableFuture<SnmpResponseDTO> future = setAsync(request,setRequest);
+                combinedFuture = combinedFuture.thenCombine(future,(m,s) -> {
+                    m.getResponses().add(s);
+                    return m;
+                });
+                /*SnmpResponseDTO response = set(request,setRequest);
                 CompletableFuture<SnmpResponseDTO> future = new CompletableFuture<>();
                 future.complete(response);
                 combinedFuture = combinedFuture.thenCombine(future,(m,s) -> {
                     m.getResponses().add(s);
                     return m;
-                });
+                });*/
             }
 
         }
@@ -179,6 +184,23 @@ public class SnmpProxyRpcModule extends AbstractXmlRpcModule<SnmpRequestDTO, Snm
             }
             final SnmpResponseDTO responseDTO = new SnmpResponseDTO();
             responseDTO.setCorrelationId(get.getCorrelationId());
+            responseDTO.setResults(results);
+            return responseDTO;
+        });
+    }
+
+    private CompletableFuture<SnmpResponseDTO> setAsync(SnmpRequestDTO request, SnmpSetRequestDTO set) {
+        final SnmpObjId[] oids = set.getOids().toArray(new SnmpObjId[set.getOids().size()]);
+        final SnmpValue[] vars = set.getValues().toArray(new SnmpValue[set.getValues().size()]);
+        final CompletableFuture<SnmpValue[]> future = SnmpUtils.setAsync(request.getAgent(), oids,vars);
+        return future.thenApply(values -> {
+            final List<SnmpResult> results = new ArrayList<>(oids.length);
+            for (int i = 0; i < oids.length; i++) {
+                final SnmpResult result = new SnmpResult(oids[i], null, values[i]);
+                results.add(result);
+            }
+            final SnmpResponseDTO responseDTO = new SnmpResponseDTO();
+            responseDTO.setCorrelationId(set.getCorrelationId());
             responseDTO.setResults(results);
             return responseDTO;
         });

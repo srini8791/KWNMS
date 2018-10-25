@@ -42,6 +42,8 @@ public interface SnmpStrategy {
 
     SnmpValue[] set(SnmpAgentConfig agentConfig, SnmpObjId[] oid, SnmpValue[] value);
 
+    CompletableFuture<SnmpValue[]> setAsync(SnmpAgentConfig agentConfig, SnmpObjId[] oids,SnmpValue[] value);
+
     SnmpValue get(SnmpAgentConfig agentConfig, SnmpObjId oid);
     SnmpValue[] get(SnmpAgentConfig agentConfig, SnmpObjId[] oids);
     CompletableFuture<SnmpValue[]> getAsync(SnmpAgentConfig agentConfig, SnmpObjId[] oids);

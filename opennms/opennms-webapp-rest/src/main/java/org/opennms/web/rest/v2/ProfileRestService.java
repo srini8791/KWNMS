@@ -60,6 +60,7 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Basic Web Service using REST for {@link OnmsProfile} entity
@@ -166,8 +167,23 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 factory.getGauge32(1)
         };
         String errorMessage = "";
+        final StringBuilder builder = new StringBuilder();
         try {
-            List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
+
+            CompletableFuture<List<SnmpValue>> future =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute();
+            List<SnmpValue> resultValues = future.whenComplete((m,ex) -> {
+                if(ex != null) {
+                    builder.append(ex.getMessage());
+                } else {
+                    if(m == null || m.size() != oids.length) {
+                        builder.append("Error Occurred while PDU set");
+                    }
+                }
+            }).get();
+            errorMessage = builder.toString();
+            if (resultValues == null || resultValues.size() != oids.length) {
+                errorMessage = "Error Occurred while PDU set";
+            }
         } catch(Exception ex) {
             errorMessage = ex.getMessage();
         }
@@ -218,14 +234,25 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 factory.getInt32(1)
         };
         String errorMessage = "";
+        final StringBuilder builder = new StringBuilder();
         try {
-            List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            errorMessage = ex.getMessage();
-            if (ex.getCause() != null) {
-                errorMessage += ": " + ex.getCause().getMessage();
+
+            CompletableFuture<List<SnmpValue>> future =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute();
+            List<SnmpValue> resultValues = future.whenComplete((m,ex) -> {
+                if(ex != null) {
+                    builder.append(ex.getMessage());
+                } else {
+                    if(m == null || m.size() != oids.length) {
+                        builder.append("Error Occurred while PDU set");
+                    }
+                }
+            }).get();
+            errorMessage = builder.toString();
+            if (resultValues == null || resultValues.size() != oids.length) {
+                errorMessage = "Error Occurred while PDU set";
             }
+        } catch(Exception ex) {
+            errorMessage = ex.getMessage();
         }
 
         if (errorMessage.length() > 0) {
@@ -253,8 +280,25 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 factory.getGauge32(1)
         };
         String errorMessage = "";
+        final StringBuilder builder = new StringBuilder();
         try {
-            List<SnmpValue>  results =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute().get();
+
+            CompletableFuture<List<SnmpValue>> future =  m_locationAwareSnmpClient.set(config,Arrays.asList(oids),Arrays.asList(values)).execute();
+            List<SnmpValue> resultValues1 = future.whenComplete((resultValues,ex) -> {
+                if(ex != null) {
+                    //return null;
+                    builder.append(ex.getMessage());
+                } else {
+                    if(resultValues == null || resultValues.size() != oids.length) {
+                        builder.append("Error Occurred while PDU set");
+                    }
+                }
+                //return resultValues;
+            }).get();
+            errorMessage = builder.toString();
+            if (resultValues1 == null || resultValues1.size() != oids.length) {
+                errorMessage = "Error Occurred while PDU set";
+            }
         } catch(Exception ex) {
             errorMessage = ex.getMessage();
         }

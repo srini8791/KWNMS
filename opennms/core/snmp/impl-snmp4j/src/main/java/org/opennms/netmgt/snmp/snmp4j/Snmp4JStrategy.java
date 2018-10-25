@@ -93,6 +93,7 @@ import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 public class Snmp4JStrategy implements SnmpStrategy {
+
     private static final transient Logger LOG = LoggerFactory.getLogger(Snmp4JStrategy.class);
 
     private static final ExecutorService REAPER_EXECUTOR = Executors.newCachedThreadPool(new ThreadFactory() {
@@ -197,6 +198,8 @@ public class Snmp4JStrategy implements SnmpStrategy {
         return buildAndSendPdu(agentConfig, PDU.SET, oids, values);
     }
 
+
+
     /**
      * SNMP4J get helper that takes a single SnmpObjId
      * and calls get with an array.lenght =1 and returns
@@ -238,6 +241,18 @@ public class Snmp4JStrategy implements SnmpStrategy {
         final CompletableFuture<SnmpValue[]> future = new CompletableFuture<>();
         final Snmp4JAgentConfig snmp4jAgentConfig = new Snmp4JAgentConfig(agentConfig);
         final PDU pdu = buildPdu(snmp4jAgentConfig, PDU.GET, oids, null);
+        if (pdu == null) {
+            future.completeExceptionally(new Exception("Invalid PDU for OIDs: " + Arrays.toString(oids)));
+        }
+        send(snmp4jAgentConfig, pdu, true, future);
+        return future;
+    }
+
+    @Override
+    public CompletableFuture<SnmpValue[]> setAsync(SnmpAgentConfig agentConfig, SnmpObjId[] oids, SnmpValue[] value) {
+        final CompletableFuture<SnmpValue[]> future = new CompletableFuture<>();
+        final Snmp4JAgentConfig snmp4jAgentConfig = new Snmp4JAgentConfig(agentConfig);
+        final PDU pdu = buildPdu(snmp4jAgentConfig, PDU.SET, oids, value);
         if (pdu == null) {
             future.completeExceptionally(new Exception("Invalid PDU for OIDs: " + Arrays.toString(oids)));
         }
@@ -326,7 +341,30 @@ public class Snmp4JStrategy implements SnmpStrategy {
 
             try {
                 final Snmp mySession = session;
-                mySession.send(pdu, agentConfig.getTarget(), null, new ResponseListener() {
+                ResponseListener listener = new ResponseListener() {
+                    @Override
+                    public void onResponse(final ResponseEvent responseEvent) {
+                        try {
+                            //SnmpValue[] rValues = processResponse(agentConfig, responseEvent);
+                            future.complete(processResponse(agentConfig, responseEvent));
+                        } catch (final Exception e) {
+                            future.completeExceptionally(new SnmpException(e));
+                        } finally {
+                            // Close the tracker using a separate thread
+                            // This allows the SnmpWalker to clean up properly instead
+                            // of interrupting execution as it's executing the callback
+                            REAPER_EXECUTOR.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    closeQuietly(mySession);
+                                }
+                            });
+                        }
+                    }
+                };
+
+                mySession.send(pdu,agentConfig.getTarget(),null,listener);
+                /*mySession.send(pdu, agentConfig.getTarget(), null, new ResponseListener() {
                     @Override
                     public void onResponse(final ResponseEvent responseEvent) {
                         try {
@@ -345,7 +383,7 @@ public class Snmp4JStrategy implements SnmpStrategy {
                             });
                         }
                     }
-                });
+                });*/
             } catch (final Exception e) {
                 // The ResponseListener will not be called since an exception occurred in the send,
                 // so we make sure to close the session here
@@ -400,13 +438,18 @@ public class Snmp4JStrategy implements SnmpStrategy {
     /**
      * TODO: Merge this logic with {@link Snmp4JWalker.Snmp4JResponseListener} #processResponse(PDU response)
      */
-    private static SnmpValue[] processResponse(Snmp4JAgentConfig agentConfig, ResponseEvent responseEvent) throws IOException {
+    private static SnmpValue[] processResponse(Snmp4JAgentConfig agentConfig, ResponseEvent responseEvent) throws Exception {
         SnmpValue[] retvalues = { null };
 
         if (responseEvent.getResponse() == null) {
             LOG.warn("processResponse: Timeout.  Agent: {}, requestID={}", agentConfig, responseEvent.getRequest().getRequestID());
+            throw responseEvent.getError();
         } else if (responseEvent.getError() != null) {
             LOG.warn("processResponse: Error during get operation.  Error: {}, requestID={}", responseEvent.getError().getLocalizedMessage(), responseEvent.getError(), responseEvent.getRequest().getRequestID());
+            throw responseEvent.getError();
+        } else if (responseEvent.getResponse().getErrorStatus() != PDU.noError) {
+            LOG.warn("processResponse: Error during get operation.  Error type: {}, requestID={}", responseEvent.getResponse().getErrorStatusText(), responseEvent.getRequest().getRequestID());
+            throw new Exception(responseEvent.getResponse().getErrorStatusText());
         } else if (responseEvent.getResponse().getType() == PDU.REPORT) {
             LOG.warn("processResponse: Error during get operation.  Report returned with varbinds: {}, requestID={}", responseEvent.getResponse().getVariableBindings(), responseEvent.getRequest().getRequestID());
         } else if (responseEvent.getResponse().getVariableBindings().size() < 1) {
