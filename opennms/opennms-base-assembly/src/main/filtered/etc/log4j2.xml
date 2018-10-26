@@ -22,8 +22,8 @@
 
   <properties>
     <property name="prefix">uncategorized</property>
-    <property name="logdir">/opt/onms/onms/opennms/target/opennms-22.0.1/logs</property>
-    <property name="syslogdir">/opt/onms/onms/opennms/target/opennms-22.0.1/syslogs</property>
+    <property name="logdir">${install.logs.dir}</property>
+    <property name="syslogdir">${install.dir}/syslogs</property>
   </properties>
 
   <!--
@@ -38,8 +38,8 @@
     <Routing name="RoutingAppender">
       <Routes pattern="$${ctx:prefix}">
         <Route>
-          <RollingFile name="Rolling-${ctx:prefix}" fileName="${logdir}/${ctx:prefix}.log"
-                       filePattern="${logdir}/${ctx:prefix}.%i.log.gz">
+		<RollingFile name="Rolling-${ctx:prefix}" fileName="${logdir}/${ctx:prefix}.log"
+			filePattern="${logdir}/${ctx:prefix}.%i.log.gz">
             <PatternLayout>
               <pattern>%d %-5p [%t] %c{1.}: %m%n</pattern>
             </PatternLayout>
@@ -57,8 +57,8 @@
               pattern.
 	  -->
         <Route key="instrumentation">
-          <RollingFile name="Rolling-instrumentation" fileName="${logdir}/instrumentation.log"
-                       filePattern="${logdir}/instrumentation.%i.log">
+		<RollingFile name="Rolling-instrumentation" fileName="${logdir}/instrumentation.log"
+			filePattern="${logdir}/instrumentation.%i.log">
             <PatternLayout>
               <!-- the logging class is not included here since its is verbose and always the same -->
               <pattern>%d %-5p [%t] %m%n</pattern>
@@ -76,8 +76,8 @@
     <Routing name="FileNameAppender">
       <Routes pattern="$${ctx:logFolder}">
         <Route>
-          <RollingFile name="Rolling-${ctx:logFolder}" fileName="${syslogdir}/${ctx:logFolder}/${date:yyyy-dd-MM}.log"
-                       filePattern="${logdir}/${ctx:logFolder}/${ctx:logFolder}_${date:yyyy-dd-MM}.%i.log.gz">
+		<RollingFile name="Rolling-${ctx:logFolder}" fileName="${syslogdir}/${ctx:logFolder}/${date:yyyy-dd-MM}.log"
+			filePattern="${syslogdir}/${ctx:logFolder}/${ctx:logFolder}_${date:yyyy-dd-MM}.%i.log.gz">
             <PatternLayout>
               <pattern>%m%n</pattern>
             </PatternLayout>
