@@ -36,19 +36,23 @@ import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SnmpConfigAccessService;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
+import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsProfile;
 import org.opennms.netmgt.model.OnmsProfileList;
+import org.opennms.netmgt.model.events.EventUtils;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
 import org.opennms.netmgt.snmp.SnmpObjId;
 import org.opennms.netmgt.snmp.SnmpValue;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
 import org.opennms.netmgt.snmp.snmp4j.Snmp4JValueFactory;
+import org.opennms.netmgt.xml.event.Event;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.RedirectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +63,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -88,6 +94,10 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
     @Autowired
     private SnmpConfigAccessService m_accessService;
+
+    @Autowired
+    @Qualifier("eventProxy")
+    private EventProxy m_eventProxy;
 
     @Override
     protected ProfileDao getDao() {
@@ -129,6 +139,8 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             for (Integer nodeId : nodesToApply) {
                 OnmsNode node = nodeDao.load(nodeId);
                 nodesSet.add(node);
+                Event event = EventUtils.createNodeProfileApplyEvent("ReST",nodeId,profile.getId());
+                sendEvent(event);
             }
             profile.setNodes(nodesSet);
             getDao().update(profile);
@@ -141,22 +153,8 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     }
 
 
-    @POST
-    @Path("/createProfileOnDevice")
-    @Transactional
-    public Response createProfileOnDevice(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
-        MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
-        Integer nodeId = null;
-        if (params.containsKey("nodeId")) {
-            String nodeIdStr = params.getFirst("nodeId");
-            params.remove("nodeId");
-            if (nodeIdStr != null) {
-                nodeId = Integer.parseInt(nodeIdStr);
-            }
-        } else {
-            return Response.status(Status.BAD_REQUEST).entity("Missing parameter: nodeId").build();
-        }
 
+    public String createProfileOnDevice(Integer nodeId) {
         OnmsNode  node = nodeDao.get(nodeId);
         final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
         LOG.debug("createProfileOnDevice: nodeId = {}, addr = {}", nodeId, addr);
@@ -189,10 +187,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             errorMessage = ex.getMessage();
         }
 
-        if (errorMessage.length() > 0) {
-            return Response.serverError().entity(errorMessage).build();
-        }
-        return Response.ok().build();
+        return errorMessage;
     }
 
 
@@ -212,11 +207,18 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             return Response.status(Status.BAD_REQUEST).entity("Missing parameter: nodeId").build();
         }
 
+        String errorMessage = createProfileOnDevice(nodeId);
+        if (errorMessage.length() > 0) {
+            return Response.serverError().entity(errorMessage).build();
+        }
+
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
+
 
         LOG.info("retreiveProfile: nodeId = {}, tftpAddress = {}", nodeId, tftpAddress);
 
         OnmsNode  node = nodeDao.get(nodeId);
+        String ipAddress = node.getPrimaryIP().replaceAll("\\.","_") + ".cfg";
         final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
         final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
         SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.6.0");
@@ -224,11 +226,11 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
         SnmpValue[] values = {
                 factory.getOctetString(tftpAddress.getBytes()),
-                factory.getOctetString(node.getPrimaryIP().replaceAll(".","_").getBytes()),
+                factory.getOctetString(ipAddress.getBytes()),
                 factory.getInt32(7),
                 factory.getInt32(1)
         };
-        String errorMessage = "";
+
         final StringBuilder builder = new StringBuilder();
         try {
 
@@ -266,8 +268,8 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             return Response.serverError().entity(errorMessage).build();
         }
 
-        Properties profileProperties = readProfileProperties(node.getPrimaryIP());
-        return Response.ok().entity(profileProperties).build();
+        //Properties profileProperties = readProfileProperties(node.getPrimaryIP());
+        return Response.ok().build();
     }
 
     private CompletableFuture<SnmpValue> asynRerun(final SnmpAgentConfig config) {
