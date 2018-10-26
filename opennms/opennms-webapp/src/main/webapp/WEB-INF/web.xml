@@ -275,6 +275,10 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>AddRefreshHeader-120</filter-name>
+    <url-pattern>/event/syslog</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>AddRefreshHeader-120</filter-name>
     <url-pattern>/alarm/list</url-pattern>
   </filter-mapping>
   <filter-mapping>
@@ -1075,6 +1079,10 @@
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/event/list</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/event/syslog</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>

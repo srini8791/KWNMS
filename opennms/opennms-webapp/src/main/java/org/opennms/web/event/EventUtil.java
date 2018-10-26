@@ -37,35 +37,7 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
 
 import org.opennms.core.utils.WebSecurityUtils;
-import org.opennms.web.event.filter.AcknowledgedByFilter;
-import org.opennms.web.event.filter.AfterDateFilter;
-import org.opennms.web.event.filter.AlarmIDFilter;
-import org.opennms.web.event.filter.BeforeDateFilter;
-import org.opennms.web.event.filter.EventIdFilter;
-import org.opennms.web.event.filter.ExactUEIFilter;
-import org.opennms.web.event.filter.IPAddrLikeFilter;
-import org.opennms.web.event.filter.IfIndexFilter;
-import org.opennms.web.event.filter.InterfaceFilter;
-import org.opennms.web.event.filter.LocationFilter;
-import org.opennms.web.event.filter.LogMessageMatchesAnyFilter;
-import org.opennms.web.event.filter.LogMessageSubstringFilter;
-import org.opennms.web.event.filter.NegativeAcknowledgedByFilter;
-import org.opennms.web.event.filter.NegativeExactUEIFilter;
-import org.opennms.web.event.filter.NegativeInterfaceFilter;
-import org.opennms.web.event.filter.NegativeLocationFilter;
-import org.opennms.web.event.filter.NegativeNodeFilter;
-import org.opennms.web.event.filter.NegativeNodeLocationFilter;
-import org.opennms.web.event.filter.NegativePartialUEIFilter;
-import org.opennms.web.event.filter.NegativeServiceFilter;
-import org.opennms.web.event.filter.NegativeSeverityFilter;
-import org.opennms.web.event.filter.NegativeSystemIdFilter;
-import org.opennms.web.event.filter.NodeFilter;
-import org.opennms.web.event.filter.NodeLocationFilter;
-import org.opennms.web.event.filter.NodeNameLikeFilter;
-import org.opennms.web.event.filter.PartialUEIFilter;
-import org.opennms.web.event.filter.ServiceFilter;
-import org.opennms.web.event.filter.SeverityFilter;
-import org.opennms.web.event.filter.SystemIdFilter;
+import org.opennms.web.event.filter.*;
 import org.opennms.web.filter.Filter;
 
 /**
@@ -136,6 +108,8 @@ public abstract class EventUtil {
             filter = new EventIdFilter(WebSecurityUtils.safeParseInt(value));
         } else if (type.equals(EventIdFilter.TYPE)) {
             filter = new EventIdFilter(WebSecurityUtils.safeParseInt(value));
+        } else if (type.equals(EventSourceFilter.TYPE)) {
+            filter = new EventSourceFilter(value);
         } else if (type.equals(IPAddrLikeFilter.TYPE)) {
             filter = new IPAddrLikeFilter(value);
         } else if (type.equals(LogMessageSubstringFilter.TYPE)) {
