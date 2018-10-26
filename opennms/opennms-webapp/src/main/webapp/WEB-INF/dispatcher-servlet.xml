@@ -417,6 +417,11 @@
                                 <property name="locationMatch" value="event"/>
                             </bean>
                             <bean class="org.opennms.web.navigate.LocationBasedNavBarEntry">
+                                <property name="name" value="Syslog Events"/>
+                                <property name="url" value="event/syslog"/>
+                                <property name="locationMatch" value="event"/>
+                            </bean>
+                            <bean class="org.opennms.web.navigate.LocationBasedNavBarEntry">
                                 <property name="name" value="Alarms"/>
                                 <property name="url" value="alarm/index.htm"/>
                                 <property name="locationMatch" value="alarm"/>

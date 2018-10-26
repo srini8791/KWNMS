@@ -36,6 +36,7 @@ import org.opennms.web.event.*;
 import org.opennms.web.event.filter.EventCriteria;
 import org.opennms.web.event.filter.EventIdFilter;
 import org.opennms.web.event.filter.EventIdListFilter;
+import org.opennms.web.event.filter.EventSourceFilter;
 import org.opennms.web.filter.Filter;
 import org.opennms.web.filter.FilterUtil;
 import org.opennms.web.filter.NormalizedQueryParameters;
@@ -134,7 +135,25 @@ public class EventController extends MultiActionController implements Initializi
         modelAndView.setViewName("event/list");
         return modelAndView;
     }
-    
+
+    public ModelAndView syslog(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        OnmsFilterFavorite favorite = getFavorite(
+                request.getParameter("favoriteId"),
+                request.getRemoteUser(),
+                request.getParameterValues("filter"));
+        return syslog(request, favorite); //new String[] {"eventSource=syslogd"}
+    }
+
+    private ModelAndView syslog(HttpServletRequest request, OnmsFilterFavorite favorite) {
+        AcknowledgeType ackType = getAcknowledgeType(request);
+        List<Filter> filters = getFilterCallback().parse(request.getParameterValues("filter"));
+        filters.add(new EventSourceFilter("syslogd"));
+        ModelAndView modelAndView = createListModelAndView(request, filters, ackType);
+        modelAndView.addObject("favorite", favorite);
+        modelAndView.setViewName("event/syslog");
+        return modelAndView;
+    }
+
     public ModelAndView detail(HttpServletRequest request, HttpServletResponse response) throws Exception {
     	String idString = request.getParameter("id");
     	// asking for a specific ID; only filter should be event ID
