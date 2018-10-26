@@ -51,5 +51,13 @@ public interface ProfileDao extends OnmsDao<OnmsProfile, Integer> {
      */
     public OnmsProfile findProfileByName(String name);
 
+    /**
+     * Delete the record of profile and node identifiers
+     * after applying the profile to the given node
+     * @param profileId profile identifier
+     * @param nodeId node identifier
+     * @return
+     */
+    public int deleteProcessedProfileNode(Integer profileId, Integer nodeId);
 
 }

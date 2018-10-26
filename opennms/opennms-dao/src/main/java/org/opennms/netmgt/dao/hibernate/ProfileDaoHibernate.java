@@ -59,4 +59,19 @@ public class ProfileDaoHibernate extends AbstractDaoHibernate<OnmsProfile, Integ
         return (OnmsProfile) findUnique("from OnmsProfile e where e.name = ?", name);
     }
 
+    /**
+     * (non-Javadoc)
+     * @param profileId profile identifier
+     * @param nodeId node identifier
+     * @return
+     */
+    @Override
+    public int deleteProcessedProfileNode(Integer profileId, Integer nodeId) {
+        final String query = "delete from profile_nodes where nodeId = :nodeId and profileId = :profileId";
+        Integer result = getHibernateTemplate().executeWithNativeSession(session -> session.createSQLQuery(query)
+                .setParameter("nodeId", nodeId)
+                .setParameter("profileId", profileId)
+                .executeUpdate());
+        return result;
+    }
 }
