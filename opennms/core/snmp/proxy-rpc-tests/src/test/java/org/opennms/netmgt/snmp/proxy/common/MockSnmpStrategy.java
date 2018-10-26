@@ -28,24 +28,12 @@
 
 package org.opennms.netmgt.snmp.proxy.common;
 
+import org.opennms.netmgt.snmp.*;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import org.opennms.netmgt.snmp.CollectionTracker;
-import org.opennms.netmgt.snmp.SnmpAgentConfig;
-import org.opennms.netmgt.snmp.SnmpObjId;
-import org.opennms.netmgt.snmp.SnmpStrategy;
-import org.opennms.netmgt.snmp.SnmpTrapBuilder;
-import org.opennms.netmgt.snmp.SnmpV1TrapBuilder;
-import org.opennms.netmgt.snmp.SnmpV2TrapBuilder;
-import org.opennms.netmgt.snmp.SnmpV3TrapBuilder;
-import org.opennms.netmgt.snmp.SnmpV3User;
-import org.opennms.netmgt.snmp.SnmpValue;
-import org.opennms.netmgt.snmp.SnmpValueFactory;
-import org.opennms.netmgt.snmp.SnmpWalker;
-import org.opennms.netmgt.snmp.TrapNotificationListener;
 
 public class MockSnmpStrategy implements SnmpStrategy {
 
@@ -63,6 +51,11 @@ public class MockSnmpStrategy implements SnmpStrategy {
 
     @Override
     public SnmpValue[] set(SnmpAgentConfig agentConfig, SnmpObjId[] oid, SnmpValue[] value) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<SnmpValue[]> setAsync(SnmpAgentConfig agentConfig, SnmpObjId[] oids, SnmpValue[] value) {
         return null;
     }
 
