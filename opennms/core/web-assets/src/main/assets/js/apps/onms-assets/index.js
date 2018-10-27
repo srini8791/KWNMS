@@ -173,7 +173,7 @@ angular.module('onms-assets', [
       });
   };
 
-  $scope.retrieveNodeProfile = function(nodeId) {
+  $scope.retrieveProfile = function(nodeId) {
     var configObj = {
       'params': {
         'nodeId': nodeId
@@ -181,15 +181,43 @@ angular.module('onms-assets', [
     };
 
     $http.get('api/v2/profiles/retrieveProfile', configObj)
-      .success(function(result) {
-        $scope.newProfile = result;
-//        $scope.newProfile.ssid = result.ssid;
-//        $scope.newProfile.opMode.id = result.opModeId;
-//        $scope.newProfile.bandwidth.id = result.bandwidthId;
-//        $scope.newProfile.channel = result.channel;
+      .then(function(response) {
+        if (response.status === 200) {
+          growl.success('Successfully retrieved profile to server.');
+        }
       })
-      .error(function(msg) {
-        growl.error(msg);
+      .catch(function(response) {
+        if (response.data['errorMessage']) {
+          growl.error(response.data['errorMessage']);
+        } else {
+          growl.error('Error retrieving profile.');
+        }
+
+      });
+  };
+
+  $scope.populateFormWithProfile = function(nodeId) {
+    var configObj = {
+      'params': {
+        'nodeId': nodeId
+      }
+    };
+
+    $http.get('api/v2/profiles/extractProfile', configObj)
+      .then(function(response) {
+        if (response.data) {
+          $scope.newProfile.ssid = response.data['ssid'];
+          $scope.newProfile.opMode.id = response.data['opModeId'];
+          $scope.newProfile.bandwidth.id = response.data['bandwidthId'];
+          $scope.newProfile.channel = response.data['channel'];
+        }
+      })
+      .catch(function(response) {
+        if (response.data['errorMessage']) {
+          growl.error(response.data['errorMessage']);
+        } else {
+          growl.error('Error retrieving profile.');
+        }
       });
   };
 
@@ -200,7 +228,7 @@ angular.module('onms-assets', [
       headers: {'Content-Type': 'application/json'},
       data: $scope.newProfile
     }).success(function() {
-      growl.success('The profile has been successfully created.');
+      growl.success('The profile has been created successfully.');
       $scope.newProfile = {};
       $scope.loadProfiles();
     }).error(function(msg) {

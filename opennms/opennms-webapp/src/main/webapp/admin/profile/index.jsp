@@ -100,7 +100,7 @@
                   </select>
                 </div>
                 <div class="col-sm-3">
-                  <button class="btn btn-default" ng-click="retrieveNodeProfile(nodeId)">Populate Form</button>
+                  <button class="btn btn-default" ng-click="populateFormWithProfile(nodeId)">Populate Form</button>
                 </div>
               </div>
             </div>
@@ -181,17 +181,19 @@
           </button>
         </div> <!-- panel-footer -->
       </div> <!-- panel -->
+
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Retrieve Profile from Device</h3>
         </div>
         <div class="panel-body">
-          <form method="post" name="downloadProfile" onsubmit="return downloadProfile();">
+          <form method="post" name="downloadProfile">
             <div class="form-group">
               <div class="row">
                 <label for="input_nodeId" class="col-sm-4 control-label">Select Device</label>
                 <div class="col-sm-8">
-                  <select id="input_nodeId" name="nodeId" class="form-control" required>
+                  <select id="input_nodeId" name="nodeId" ng-model="profileToRetrieve" class="form-control" required>
                     <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
                   </select>
                 </div>
@@ -200,11 +202,13 @@
           </form>
         </div> <!-- panel-body -->
         <div class="panel-footer">
-          <button type="button" class="btn btn-default" ng-click="download()" id="download-profile">
+          <button type="button" class="btn btn-default" ng-click="retrieveProfile(profileToRetrieve)" id="download-profile">
             Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
           </button>
         </div> <!-- panel-footer -->
       </div> <!-- panel -->
+
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Apply Profile to Devices</h3>

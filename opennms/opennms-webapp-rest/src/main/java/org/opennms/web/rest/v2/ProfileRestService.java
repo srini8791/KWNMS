@@ -40,13 +40,13 @@ import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsProfile;
 import org.opennms.netmgt.model.OnmsProfileList;
-import org.opennms.netmgt.model.events.EventUtils;
+//import org.opennms.netmgt.model.events.EventUtils;
+//import org.opennms.netmgt.xml.event.Event;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
 import org.opennms.netmgt.snmp.SnmpObjId;
 import org.opennms.netmgt.snmp.SnmpValue;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
 import org.opennms.netmgt.snmp.snmp4j.Snmp4JValueFactory;
-import org.opennms.netmgt.xml.event.Event;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.RedirectHelper;
 import org.slf4j.Logger;
@@ -139,8 +139,8 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             for (Integer nodeId : nodesToApply) {
                 OnmsNode node = nodeDao.load(nodeId);
                 nodesSet.add(node);
-                Event event = EventUtils.createNodeProfileApplyEvent("ReST",nodeId,profile.getId());
-                sendEvent(event);
+                //Event event = EventUtils.createNodeProfileApplyEvent("ReST",nodeId,profile.getId());
+                //sendEvent(event);
             }
             profile.setNodes(nodesSet);
             getDao().update(profile);
@@ -191,6 +191,35 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     }
 
 
+
+    @GET
+    @Path("/extractProfile")
+    @Transactional
+    public Response extractProfile(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
+        MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+        Integer nodeId = null;
+        if (params.containsKey("nodeId")) {
+            String nodeIdStr = params.getFirst("nodeId");
+            params.remove("nodeId");
+            if (nodeIdStr != null) {
+                nodeId = Integer.parseInt(nodeIdStr);
+            }
+        } else {
+            return Response.status(Status.BAD_REQUEST).entity(prepareErrorObject("Missing parameter: nodeId")).build();
+        }
+
+        OnmsNode  node = nodeDao.get(nodeId);
+        String primaryIP = node.getPrimaryIP();
+        Properties properties = readProfileProperties(primaryIP);
+        if (properties == null) {
+            return Response.status(Status.NOT_FOUND).entity(prepareErrorObject("Profile not retrieved for this device. Please retrieve the profile from the device.")).build();
+        } else if (properties.isEmpty()) {
+            return Response.status(Status.NOT_FOUND).entity(prepareErrorObject("No profile properties found for this device.")).build();
+        } else {
+            return Response.ok().entity(properties).build();
+        }
+    }
+
     @GET
     @Path("/retrieveProfile")
     @Transactional
@@ -204,12 +233,12 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 nodeId = Integer.parseInt(nodeIdStr);
             }
         } else {
-            return Response.status(Status.BAD_REQUEST).entity("Missing parameter: nodeId").build();
+            return Response.status(Status.BAD_REQUEST).entity(prepareErrorObject("Missing parameter: nodeId")).build();
         }
 
         String errorMessage = createProfileOnDevice(nodeId);
         if (errorMessage.length() > 0) {
-            return Response.serverError().entity(errorMessage).build();
+            return Response.serverError().entity(prepareErrorObject(errorMessage)).build();
         }
 
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
@@ -250,7 +279,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         }
 
         if (errorMessage.length() > 0) {
-            return Response.serverError().entity(errorMessage).build();
+            return Response.serverError().entity(prepareErrorObject(errorMessage)).build();
         }
         CompletableFuture<SnmpValue> futureStatus = asynRerun(config);
         try {
@@ -265,10 +294,9 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         }
 
         if (errorMessage.length() > 0) {
-            return Response.serverError().entity(errorMessage).build();
+            return Response.serverError().entity(prepareErrorObject(errorMessage)).build();
         }
 
-        //Properties profileProperties = readProfileProperties(node.getPrimaryIP());
         return Response.ok().build();
     }
 
@@ -334,7 +362,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         }
 
         if (errorMessage.length() > 0) {
-            return Response.serverError().entity(errorMessage).build();
+            return Response.serverError().entity(prepareErrorObject(errorMessage)).build();
         }
         return Response.ok().build();
     }
@@ -375,17 +403,24 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         $scope.newProfile.bandwidth.id (wireless.wifi1.htmode)
         $scope.newProfile.channel (wireless.wifi1.channel)
      */
-    private static final List<String> PROFILE_KEYS = Arrays.asList(
-            "wireless.@wifi-iface[1].ssid",
-            "wireless.wifi1.hwmode",
-            "wireless.wifi1.htmode",
-            "wireless.wifi1.channel"
-    );
+    private static final Map<String, String> PROFILE_PROPS_MAP = new HashMap<>();
+
+    static {
+        PROFILE_PROPS_MAP.put("wireless.@wifi-iface[1].ssid", "ssid");
+        PROFILE_PROPS_MAP.put("wireless.wifi1.hwmode", "opModeId");
+        PROFILE_PROPS_MAP.put("wireless.wifi1.htmode", "bandwidthId");
+        PROFILE_PROPS_MAP.put("wireless.wifi1.channel", "channel");
+    }
 
     private Properties readProfileProperties(String nodePrimaryIP) {
         Properties properties = new Properties();
         String tftpRootPath = Vault.getProperty("org.opennms.tftp.rootpath");
-        String filePath = tftpRootPath + File.separator + nodePrimaryIP.replaceAll("\\.", "_");
+        String filePath = tftpRootPath + File.separator + nodePrimaryIP.replaceAll("\\.", "_") + ".cfg";
+        boolean profileExists = Files.exists(Paths.get(filePath));
+        if (!profileExists) {
+            return null;
+        }
+
         try {
             List<String> props = Files.readAllLines(Paths.get(filePath));
             for (String prop : props) {
@@ -396,7 +431,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 String key = prop.substring(0, delimiterIndex).trim();
                 String value = prop.substring(delimiterIndex+1).trim();
                 value = value.substring(1, value.length()-1); // stripping single quotes
-                if (PROFILE_KEYS.contains(key)) {
+                if (PROFILE_PROPS_MAP.containsKey(key)) {
                     properties.put(key, value);
                 }
             }
@@ -408,4 +443,11 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         return properties;
     }
 
+
+    // utility methods
+    public Map<String, String> prepareErrorObject(String errorMessage) {
+        Map<String, String> object = new HashMap<>();
+        object.put("errorMessage", errorMessage);
+        return object;
+    }
 }

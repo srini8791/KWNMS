@@ -218,8 +218,6 @@
 <div class="row">
 <div class="col-md-12">
   <!-- start menu -->
-  <a class="btn btn-default" href="<%=this.makeLink(callback, parms, new ArrayList<Filter>(), favorite)%>">View all events</a>
-  <button type="button" class="btn btn-default" onClick="$('#advancedSearchModal').modal()">Search</button>
   <button type="button" class="btn btn-default" onClick="$('#severityLegendModal').modal()">Severity Legend</button>
         <% if( req.isUserInRole( Authentication.ROLE_ADMIN ) || !req.isUserInRole( Authentication.ROLE_READONLY ) ) { %>
           <% if ( eventCount > 0 ) { %>
@@ -258,65 +256,6 @@
 <br/>
 </div>
 
-<div class="row">
-  <div class="col-sm-6 col-md-3">
-  <div class="input-group">
-    <span class="input-group-addon">
-      <c:choose>
-      <c:when test="${favorite == null}">
-      <a onclick="createFavorite()">
-        <!-- Star outline -->
-        <i class="fa fa-lg fa-star-o"></i>
-      </a>
-      </c:when>
-      <c:otherwise>
-      <a onclick="deleteFavorite(${favorite.id})">
-        <i class="fa fa-lg fa-star"></i>
-      </a>
-      </c:otherwise>
-      </c:choose>
-    </span>
-    <!-- Use background-color:white to make it look less disabled -->
-    <input type="text" class="form-control" style="background-color:white;" readonly placeholder="Unsaved filter" value="<c:out value="${favorite.name}"/>"/>
-    <div class="input-group-btn">
-      <div class="dropdown">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          <span class="caret"></span>
-        </button>
-        <!-- I put margin: 0px here because the margin gap was causing the menu to disappear before you could get the mouse on it -->
-        <ul class="dropdown-menu dropdown-menu-right" style="margin: 0px;" role="menu">
-          <c:forEach var="fave" items="${favorites}">
-            <c:if test="${favorite.id != fave.id}">
-              <li>
-                <a onclick="changeFavorite(${fave.id}, '${fave.filter}')">
-                  <c:out value="${fave.name}"/>
-                </a>
-              </li>
-              <c:set var="showDivider" value="${true}"/>
-            </c:if>
-          </c:forEach>
-          <c:if test="${showDivider}"><li class="divider"/></c:if>
-          <li><a onclick="clearFilters()">Clear filters</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  </div>
-
-            <% if( parms.getFilters().size() > 0 || AcknowledgeType.UNACKNOWLEDGED.toNormalizedAcknowledgeType().equals(parms.getAckType()) || AcknowledgeType.ACKNOWLEDGED.toNormalizedAcknowledgeType().equals(parms.getAckType()) ) { %>
-              <div class="col-sm-6 col-md-9">
-                    <onms:filters
-                            context="/event/syslog"
-                            favorite="${favorite}"
-                            parameters="${parms}"
-                            showRemoveLink="true"
-                            showAcknowledgeFilter="true"
-                            acknowledgeFilterPrefix="Event(s)"
-                            acknowledgeFilterSuffix="event(s)"
-                            callback="${callback}" />
-              </div>
-            <% } %>
-</div>
 
 <div class="row">
 <br/>

@@ -147,7 +147,10 @@ public class EventController extends MultiActionController implements Initializi
     private ModelAndView syslog(HttpServletRequest request, OnmsFilterFavorite favorite) {
         AcknowledgeType ackType = getAcknowledgeType(request);
         List<Filter> filters = getFilterCallback().parse(request.getParameterValues("filter"));
-        filters.add(new EventSourceFilter("syslogd"));
+        EventSourceFilter filter = new EventSourceFilter("syslogd");
+        if (!filters.contains(filter)) {
+            filters.add(filter);
+        }
         ModelAndView modelAndView = createListModelAndView(request, filters, ackType);
         modelAndView.addObject("favorite", favorite);
         modelAndView.setViewName("event/syslog");
