@@ -432,7 +432,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 String value = prop.substring(delimiterIndex+1).trim();
                 value = value.substring(1, value.length()-1); // stripping single quotes
                 if (PROFILE_PROPS_MAP.containsKey(key)) {
-                    properties.put(key, value);
+                    properties.put(PROFILE_PROPS_MAP.get(key), value);
                 }
             }
         } catch (FileNotFoundException e) {
