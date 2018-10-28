@@ -36,17 +36,19 @@ import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SnmpConfigAccessService;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
+import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsProfile;
 import org.opennms.netmgt.model.OnmsProfileList;
-//import org.opennms.netmgt.model.events.EventUtils;
-//import org.opennms.netmgt.xml.event.Event;
+import org.opennms.netmgt.model.events.EventBuilder;
+import org.opennms.netmgt.model.events.EventUtils;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
 import org.opennms.netmgt.snmp.SnmpObjId;
 import org.opennms.netmgt.snmp.SnmpValue;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
 import org.opennms.netmgt.snmp.snmp4j.Snmp4JValueFactory;
+import org.opennms.netmgt.xml.event.Event;
 import org.opennms.web.rest.support.Aliases;
 import org.opennms.web.rest.support.RedirectHelper;
 import org.slf4j.Logger;
@@ -71,6 +73,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+
+//import org.opennms.netmgt.model.events.EventUtils;
+//import org.opennms.netmgt.xml.event.Event;
 
 /**
  * Basic Web Service using REST for {@link OnmsProfile} entity
@@ -135,13 +140,21 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         try {
             OnmsProfile profile = getDao().findProfileById(id);
             LOG.debug("applyingProfiles: profileId = {}, nodesToApply = {}", id, nodesToApply);
+           Integer nId = null;
             Set<OnmsNode> nodesSet = new HashSet<>();
             for (Integer nodeId : nodesToApply) {
                 OnmsNode node = nodeDao.load(nodeId);
+                if (nId == null) {
+                    nId = node.getId();
+                }
                 nodesSet.add(node);
-                //Event event = EventUtils.createNodeProfileApplyEvent("ReST",nodeId,profile.getId());
-                //sendEvent(event);
+                Event event = EventUtils.createNodeProfileApplyEvent("ReST",nodeId,profile.getId());
+                sendEvent(event);
             }
+            EventBuilder builder = new EventBuilder(EventConstants.NODES_PROFILE_APPLY_EVENT_UEI, "Provisiond");
+            builder.setNodeid(nId);
+            builder.addParam(EventConstants.PARAM_PROFILE_NAME,profile.getName());
+            sendEvent(builder.getEvent());
             profile.setNodes(nodesSet);
             getDao().update(profile);
             LOG.debug("applyingProfiles: successful");

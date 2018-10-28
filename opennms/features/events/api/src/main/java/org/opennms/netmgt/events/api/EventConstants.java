@@ -115,6 +115,12 @@ public abstract class EventConstants {
     /**
      * The node mode added event UEI.
      */
+    public static final String NODES_PROFILE_APPLY_EVENT_UEI = "uei.opennms.org/nodes/nodesProfileApply";
+
+
+    /**
+     * The node mode added event UEI.
+     */
     public static final String NODE_MODE_DELETED_EVENT_UEI = "uei.opennms.org/nodes/nodeModeDeleted";
 
 
@@ -122,6 +128,11 @@ public abstract class EventConstants {
      * The node updated event UEI (added for the ProvisioningAdapter integration).
      */
     public static final String NODE_UPDATED_EVENT_UEI = "uei.opennms.org/nodes/nodeUpdated";
+
+    /**
+     * The node updated event UEI (added for the ProvisioningAdapter integration).
+     */
+    public static final String NODE_PROFILE_APPLY_EVENT_UEI = "uei.opennms.org/nodes/nodeProfileApply";
     
 	/**
 	 * The node category membership changed UEI.
@@ -867,6 +878,8 @@ public abstract class EventConstants {
     public static final String PARM_RESCAN_EXISTING = "rescanExisting";
     /** Constant <code>PARAM_RADIO_MODE="radioMode"</code> */
     public static final String PARAM_RADIO_MODE = "radioMode";
+    /** Constant <code>PARAM_RADIO_MODE="radioMode"</code> */
+    public static final String PARAM_PROFILE_NAME = "profileName";
     
     /**
      * Parms used for configureSnmp events
@@ -948,6 +961,11 @@ public abstract class EventConstants {
      * Used for indication the second endpoint to a map link.
      */
     public static final String PARM_ENDPOINT2 = "endPoint2";
+
+    /**
+     * Used as a param for eventbuilder for passing profile id for a particular node.
+     */
+    public static final String PARAM_PROFILE_ID = "profileId";
 
     //
     // for Alarmd
