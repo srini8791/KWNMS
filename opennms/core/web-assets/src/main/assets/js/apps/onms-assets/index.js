@@ -309,4 +309,17 @@ angular.module('onms-assets', [
       });
   };
 
+}])
+
+.controller('TreeViewCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
+
+  $scope.loadRegions = function() {
+    var regionsArray = [
+        {'text': 'South', 'id': '1', 'children': true, 'data': {'type': 'region'}},
+        {'text': 'North', 'id': '2', 'children': true, 'data': {'type': 'region'}}
+    ];
+    return regionsArray;
+  }
+
 }]);
+
