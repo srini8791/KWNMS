@@ -744,6 +744,21 @@ public abstract class EventUtils {
         return bldr;
     }
 
+    public static Event createNodeProfileApplyEvent(String source, long nodeId, long profileId) {
+        return createNodeProfileApplyEventBuilder(EventConstants.NODE_PROFILE_APPLY_EVENT_UEI, source, nodeId, profileId).getEvent();
+    }
+
+    private static EventBuilder createNodeProfileApplyEventBuilder(String uei, String source, long nodeId, long profileId) {
+        EventBuilder bldr = new EventBuilder(uei, source);
+
+        bldr.setNodeid(nodeId);
+
+        if (profileId >= 0) {
+            bldr.addParam(EventConstants.PARAM_PROFILE_ID, profileId);
+        }
+        return bldr;
+    }
+
     /**
      * Construct a deleteNode event for the given nodeId.
      *

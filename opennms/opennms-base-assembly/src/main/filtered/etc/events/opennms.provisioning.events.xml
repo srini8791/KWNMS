@@ -55,6 +55,15 @@
         </logmsg>
         <severity>Normal</severity>
     </event>
+    <event>
+        <uei>uei.opennms.org/nodes/nodesProfileApply</uei>
+        <event-label>OpenNMS-defined node event: nodesProfileApply</event-label>
+        <descr>&lt;p>Applying the profile (%parm[profileName]%).&lt;/p></descr>
+        <logmsg dest="logndisplay">
+            Applying the profile (%parm[profileName]%).
+        </logmsg>
+        <severity>Normal</severity>
+    </event>
    <event>
       <uei>uei.opennms.org/internal/importer/importStarted</uei>
       <event-label>OpenNMS-defined internal event: importer process has started</event-label>

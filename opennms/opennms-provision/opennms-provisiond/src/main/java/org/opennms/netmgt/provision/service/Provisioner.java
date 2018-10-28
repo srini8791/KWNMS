@@ -282,6 +282,18 @@ public class Provisioner implements SpringServiceDaemon {
         return new NewSuspectScan(ipAddress, m_provisionService, m_eventForwarder, m_agentConfigFactory, m_taskCoordinator, foreignSource, location);
     }
 
+
+    /**
+     * <p>createNewSuspectScan</p>
+     *
+     * @param ipAddress a {@link java.net.InetAddress} object.
+     * @return a {@link org.opennms.netmgt.provision.service.NewSuspectScan} object.
+     */
+    public NodeApplyProfileScan createNewProfileApply(long nodId, long profileId) {
+        LOG.info("createNewProfileApply called with IP: "+nodId+ "and profileId"+profileId);
+        return new NodeApplyProfileScan((int)nodId, (int)profileId, m_provisionService, m_eventForwarder, m_agentConfigFactory, m_taskCoordinator);
+    }
+
     /**
      * <p>createForceRescanScan</p>
      *
@@ -639,6 +651,53 @@ public class Provisioner implements SpringServiceDaemon {
         m_scheduledExecutor.execute(r);
         
     }
+
+    /**
+     * <p>handleNodeApplyProfileService/p>
+     *
+     * @param event a {@link org.opennms.netmgt.xml.event.Event} object.
+     */
+    @EventHandler(uei=EventConstants.NODE_PROFILE_APPLY_EVENT_UEI)
+    public void handleNodeProfileApplyEvent(Event event) {
+        try {
+            final long param = EventUtils.getLongParm(event,EventConstants.PARAM_PROFILE_ID,0);
+            final long nodeId = event.getNodeid();
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    final NodeApplyProfileScan applyProfileScan = createNewProfileApply(nodeId,param);
+                    Task t = applyProfileScan.createTask();
+                    t.schedule();
+                    try {
+                        t.waitFor();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            m_scheduledExecutor.execute(runnable);
+        } catch (Throwable e) {
+            LOG.error("Unexpected exception processing event: {}", event.getUei(), e);
+        }
+    }
+
+    /**
+     * <p>handleNodeApplyProfileService/p>
+     *
+     * @param event a {@link org.opennms.netmgt.xml.event.Event} object.
+     */
+    /*@EventHandler(uei=EventConstants.NODE_PROFILE_APPLY_EVENT_UEI)
+    public void handleNodeProfileApplyService(Event event) {
+        *//*try {
+            long param = EventUtils.getLongParm(event,EventConstants.PARAM_PROFILE_ID,0);
+            doNodeProfileApplyService(event.getNodeid(), param, event.getService());
+        } catch (Throwable e) {
+            LOG.error("Unexpected exception processing event: {}", event.getUei(), e);
+        }*//*
+    }*/
     
     /**
      * <p>handleNodeUpdated</p>
@@ -822,7 +881,8 @@ public class Provisioner implements SpringServiceDaemon {
             LOG.error("Unexpected exception processing event: {}", event.getUei(), e);
         }
     }
-    
+
+
     private void doDeleteService(long nodeId, InetAddress addr, String service) {
         m_provisionService.deleteService((int)nodeId, addr, service);
     }

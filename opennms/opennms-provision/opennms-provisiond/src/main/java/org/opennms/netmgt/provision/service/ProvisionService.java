@@ -33,12 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsIpInterface;
-import org.opennms.netmgt.model.OnmsMonitoredService;
-import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.OnmsServiceType;
-import org.opennms.netmgt.model.OnmsSnmpInterface;
+import org.opennms.netmgt.model.*;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.provision.IpInterfacePolicy;
 import org.opennms.netmgt.provision.LocationAwareDetectorClient;
@@ -233,6 +228,14 @@ public interface ProvisionService {
 
     @Transactional
     OnmsNode getNode(Integer nodeId);
+
+    OnmsProfile getProfile(Integer profileId);
+
+      /**
+     * Insert the provided node into the database
+     */
+    @Transactional
+    void deleteAfterProfileApply(OnmsNode node, OnmsProfile profile);
 
     public HostnameResolver getHostnameResolver();
     public void setHostnameResolver(final HostnameResolver resolver);

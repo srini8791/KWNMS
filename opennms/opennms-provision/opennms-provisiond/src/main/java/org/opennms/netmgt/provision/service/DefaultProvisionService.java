@@ -28,77 +28,31 @@
 
 package org.opennms.netmgt.provision.service;
 
-import static org.opennms.core.utils.InetAddressUtils.addr;
-import static org.opennms.core.utils.InetAddressUtils.str;
-
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.google.common.base.Strings;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.opennms.core.spring.BeanUtils;
 import org.opennms.core.utils.InetAddressUtils;
-import org.opennms.netmgt.dao.api.CategoryDao;
-import org.opennms.netmgt.dao.api.IpInterfaceDao;
-import org.opennms.netmgt.dao.api.MonitoredServiceDao;
-import org.opennms.netmgt.dao.api.MonitoringLocationDao;
-import org.opennms.netmgt.dao.api.MonitoringLocationUtils;
-import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.dao.api.RequisitionedCategoryAssociationDao;
-import org.opennms.netmgt.dao.api.ServiceTypeDao;
-import org.opennms.netmgt.dao.api.SnmpInterfaceDao;
+import org.opennms.netmgt.dao.api.*;
 import org.opennms.netmgt.dao.support.CreateIfNecessaryTemplate;
 import org.opennms.netmgt.dao.support.UpsertTemplate;
 import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.events.api.EventForwarder;
-import org.opennms.netmgt.model.AbstractEntityVisitor;
-import org.opennms.netmgt.model.EntityVisitor;
-import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsIpInterface;
-import org.opennms.netmgt.model.OnmsMonitoredService;
-import org.opennms.netmgt.model.OnmsNode;
+import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
+import org.opennms.netmgt.model.*;
 import org.opennms.netmgt.model.OnmsNode.NodeLabelSource;
 import org.opennms.netmgt.model.OnmsNode.NodeType;
-import org.opennms.netmgt.model.OnmsServiceType;
-import org.opennms.netmgt.model.OnmsSnmpInterface;
-import org.opennms.netmgt.model.PathElement;
-import org.opennms.netmgt.model.PrimaryType;
-import org.opennms.netmgt.model.RequisitionedCategoryAssociation;
-import org.opennms.netmgt.model.events.AddEventVisitor;
-import org.opennms.netmgt.model.events.DeleteEventVisitor;
-import org.opennms.netmgt.model.events.EventBuilder;
-import org.opennms.netmgt.model.events.EventUtils;
-import org.opennms.netmgt.model.events.UpdateEventVisitor;
+import org.opennms.netmgt.model.events.*;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
-import org.opennms.netmgt.provision.IpInterfacePolicy;
-import org.opennms.netmgt.provision.LocationAwareDetectorClient;
-import org.opennms.netmgt.provision.LocationAwareDnsLookupClient;
-import org.opennms.netmgt.provision.NodePolicy;
-import org.opennms.netmgt.provision.SnmpInterfacePolicy;
+import org.opennms.netmgt.provision.*;
 import org.opennms.netmgt.provision.persist.ForeignSourceRepository;
 import org.opennms.netmgt.provision.persist.ForeignSourceRepositoryException;
 import org.opennms.netmgt.provision.persist.OnmsNodeRequisition;
 import org.opennms.netmgt.provision.persist.RequisitionFileUtils;
 import org.opennms.netmgt.provision.persist.foreignsource.ForeignSource;
 import org.opennms.netmgt.provision.persist.foreignsource.PluginConfig;
-import org.opennms.netmgt.provision.persist.requisition.Requisition;
-import org.opennms.netmgt.provision.persist.requisition.RequisitionCategory;
-import org.opennms.netmgt.provision.persist.requisition.RequisitionInterface;
-import org.opennms.netmgt.provision.persist.requisition.RequisitionInterfaceCollection;
-import org.opennms.netmgt.provision.persist.requisition.RequisitionNode;
+import org.opennms.netmgt.provision.persist.requisition.*;
 import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
-import org.opennms.netmgt.kwp.proxy.LocationAwareKwpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -110,7 +64,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.google.common.base.Strings;
+import java.net.InetAddress;
+import java.util.*;
+
+import static org.opennms.core.utils.InetAddressUtils.addr;
+import static org.opennms.core.utils.InetAddressUtils.str;
 
 /**
  * DefaultProvisionService
@@ -145,6 +103,9 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
 
     @Autowired
     private NodeDao m_nodeDao;
+
+    @Autowired
+    private ProfileDao m_profileDao;
 
     @Autowired
     private IpInterfaceDao m_ipInterfaceDao;
@@ -257,6 +218,17 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
         final EntityVisitor eventAccumlator = new UpdateEventVisitor(m_eventForwarder, rescanExisting);
         dbNode.visit(eventAccumlator);
     }
+
+
+    @Transactional
+    @Override
+    public void deleteAfterProfileApply(OnmsNode node, OnmsProfile profile) {
+        m_profileDao.deleteProcessedProfileNode(profile.getId(),node.getId());
+        node.setProfile(profile);
+
+    }
+
+
 
     private void updateNodeHostname(final OnmsNode node) {
         if (NodeLabelSource.HOSTNAME.equals(node.getLabelSource()) || NodeLabelSource.ADDRESS.equals(node.getLabelSource())) {
@@ -460,6 +432,17 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
 
 
     }
+
+    /*@Transactional
+    @Override
+    public  void applyProfileToNode(Integer nodeId, Integer profileId) {
+        final OnmsNode node = m_nodeDao.get(nodeId);
+        final OnmsProfile profile = m_profileDao.get(profileId);
+        if (node != null && profile != null) {
+
+        }
+
+    }*/
 
     /** {@inheritDoc} */
     @Transactional
@@ -1377,6 +1360,14 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
         m_nodeDao.initialize(node.getIpInterfaces());
         m_nodeDao.initialize(node.getLocation());
         return node;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public OnmsProfile getProfile(final Integer profileId) {
+        final OnmsProfile profile = m_profileDao.get(profileId);
+        m_profileDao.initialize(profile);
+        return profile;
     }
 
     /** {@inheritDoc} */

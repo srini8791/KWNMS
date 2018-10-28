@@ -264,6 +264,15 @@
         <severity>Normal</severity>
     </event>
     <event>
+        <uei>uei.opennms.org/nodes/nodesProfileApply</uei>
+        <event-label>OpenNMS-defined node event: nodesProfileApply</event-label>
+        <descr>&lt;p>Applying the profile (%parm[profileName]%).&lt;/p></descr>
+        <logmsg dest="logndisplay">
+            Applying the profile (%parm[profileName]%).
+        </logmsg>
+        <severity>Normal</severity>
+    </event>
+    <event>
         <uei>uei.opennms.org/nodes/nodeModeDeleted</uei>
         <event-label>OpenNMS-defined node event: nodeModeDeleted</event-label>
         <descr>&lt;p>KWP Node with %parm[radioMode]% mode has been deleted.&lt;/p></descr>
