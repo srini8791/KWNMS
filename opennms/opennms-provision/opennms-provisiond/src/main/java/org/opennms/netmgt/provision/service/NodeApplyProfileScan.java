@@ -28,6 +28,7 @@
 
 package org.opennms.netmgt.provision.service;
 
+import org.opennms.core.resource.Vault;
 import org.opennms.core.tasks.BatchTask;
 import org.opennms.core.tasks.RunInBatch;
 import org.opennms.core.tasks.Task;
@@ -131,15 +132,17 @@ public class NodeApplyProfileScan implements Scan {
     }
 
     private void applyProfile(String ipAddress,SnmpAgentConfig config) {
-        String tftpAddress = "";
-        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.6.0");
-        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.4.0")};
+        String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
+        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.3.0");
+        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.1.0"),SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.5.0")};
+        //ipAddress = ipAddress.replaceAll("\\.","_") + ".cfg";
+        String fileName = "profile_" + m_profileId + ".cfg";
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
         SnmpValue[] values = {
                 factory.getOctetString(tftpAddress.getBytes()),
-                factory.getOctetString(ipAddress.replaceAll(".","_").getBytes()),
-                factory.getInt32(7),
-                factory.getInt32(2)
+                factory.getOctetString(fileName.getBytes()),
+                factory.getGauge32(1),
+                factory.getGauge32(1)
         };
 
         CompletableFuture<List<SnmpValue>> future =  m_provisionService.getLocationAwareSnmpClient().set(config,Arrays.asList(oids),Arrays.asList(values)).execute();
@@ -174,7 +177,7 @@ public class NodeApplyProfileScan implements Scan {
     }
 
     private CompletableFuture<SnmpValue> asynRerun(final SnmpAgentConfig config) {
-        SnmpObjId statusOid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.5.0");
+        SnmpObjId statusOid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.4.0");
         CompletableFuture<SnmpValue> future = m_provisionService.getLocationAwareSnmpClient().get(config,statusOid).execute();
         SnmpValue value = null;
         try {
