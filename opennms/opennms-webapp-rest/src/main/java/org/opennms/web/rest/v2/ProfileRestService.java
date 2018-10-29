@@ -69,6 +69,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -136,8 +137,21 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                                   @RequestBody List<Integer> nodesToApply) {
         writeLock();
         try {
-            OnmsProfile profile = getDao().findProfileById(id);
             LOG.debug("applyingProfiles: profileId = {}, nodesToApply = {}", id, nodesToApply);
+            OnmsProfile profile = getDao().findProfileById(id);
+            if (profile != null) {
+                // create profile file on tftproot
+                String tftpRootPath = Vault.getProperty("org.opennms.tftp.rootpath");
+                String profileFile = tftpRootPath + File.separator + "profile_" + id + ".cfg";
+                List<String> propsToWrite = buildPropsToWrite(profile);
+                try {
+                    Files.write(Paths.get(profileFile), propsToWrite, StandardOpenOption.CREATE_NEW);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                LOG.info("applyingProfiles: profile written to : " + profileFile);
+            }
+
             Integer nId = null;
             Set<OnmsNode> nodesSet = new HashSet<>();
             for (Integer nodeId : nodesToApply) {
@@ -163,6 +177,26 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         }
     }
 
+    private List<String> buildPropsToWrite(OnmsProfile profile) {
+        List<String> props = new ArrayList<>();
+        for (String key : PROFILE_PROPS_MAP.keySet()) {
+            String propValue = "";
+            if (key.equals("wireless.@wifi-iface[1].ssid") && profile.getSsid() != null) {
+                propValue =  "'" + profile.getSsid() + "'";
+            } else if (key.equals("wireless.wifi1.hwmode") && profile.getOpMode() != null) {
+                propValue = "'" + String.valueOf(profile.getOpMode().getId()) + "'";
+            } else if (key.equals("wireless.wifi1.htmode") && profile.getBandwidth() != null) {
+                propValue = "'" + String.valueOf(profile.getBandwidth().getId()) + "'";
+            } else if (key.equals("wireless.wifi1.channel") && profile.getChannel() != null) {
+                propValue = "'" + String.valueOf(profile.getChannel()) + "'";
+            }
+
+            if (propValue.length() > 0) {
+                props.add(key + "=" + propValue);
+            }
+        }
+        return props;
+    }
 
 
     public String createProfileOnDevice(Integer nodeId) {
@@ -247,6 +281,14 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             return Response.status(Status.BAD_REQUEST).entity(prepareErrorObject("Missing parameter: nodeId")).build();
         }
 
+        String errorMessage = "";
+/*
+        String errorMessage = createProfileOnDevice(nodeId);
+        if (errorMessage.length() > 0) {
+            return Response.serverError().entity(prepareErrorObject(errorMessage)).build();
+        }
+*/
+
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
 
 
@@ -265,7 +307,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 factory.getGauge32(1),
                 factory.getGauge32(2)
         };
-        String errorMessage = "";
+
         final StringBuilder builder = new StringBuilder();
         try {
 

@@ -324,12 +324,13 @@ angular.module('onms-assets', [
 
 .controller('TreeViewCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
 
+  $scope.regions = [];
+
   $scope.loadRegions = function() {
-    var regionsArray = [
-        {'text': 'South', 'id': '1', 'children': true, 'data': {'type': 'region'}},
-        {'text': 'North', 'id': '2', 'children': true, 'data': {'type': 'region'}}
-    ];
-    return regionsArray;
+    $http.get('api/v2/treeview/regions')
+    .then(function(response) {
+      $scoepe.regions = response.data;
+    });
   }
 
   $scope.init = function() {
@@ -340,8 +341,7 @@ angular.module('onms-assets', [
           if (node.id === '#') {
             callback([{'text': 'Global', 'id': '0', 'children': true, 'data': {'type': 'global'}}]);
           } else {
-            var regions = $scope.loadRegions();
-            callback(regions);
+            callback($scope.regions);
           }
         }
       }
