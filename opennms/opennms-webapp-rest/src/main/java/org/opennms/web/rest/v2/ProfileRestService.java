@@ -138,7 +138,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         try {
             OnmsProfile profile = getDao().findProfileById(id);
             LOG.debug("applyingProfiles: profileId = {}, nodesToApply = {}", id, nodesToApply);
-           Integer nId = null;
+            Integer nId = null;
             Set<OnmsNode> nodesSet = new HashSet<>();
             for (Integer nodeId : nodesToApply) {
                 OnmsNode node = nodeDao.load(nodeId);
@@ -247,11 +247,6 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             return Response.status(Status.BAD_REQUEST).entity(prepareErrorObject("Missing parameter: nodeId")).build();
         }
 
-        String errorMessage = createProfileOnDevice(nodeId);
-        if (errorMessage.length() > 0) {
-            return Response.serverError().entity(prepareErrorObject(errorMessage)).build();
-        }
-
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
 
 
@@ -261,16 +256,16 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         String ipAddress = node.getPrimaryIP().replaceAll("\\.","_") + ".cfg";
         final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
         final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
-        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.6.0");
-        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.4.0")};
+        SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.1.0");
+        SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.3.0"),SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.5.0")};
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
         SnmpValue[] values = {
-                factory.getOctetString(tftpAddress.getBytes()),
                 factory.getOctetString(ipAddress.getBytes()),
-                factory.getInt32(7),
-                factory.getInt32(1)
+                factory.getOctetString(tftpAddress.getBytes()),
+                factory.getGauge32(1),
+                factory.getGauge32(2)
         };
-
+        String errorMessage = "";
         final StringBuilder builder = new StringBuilder();
         try {
 
@@ -312,7 +307,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     }
 
     private CompletableFuture<SnmpValue> asynRerun(final SnmpAgentConfig config) {
-        SnmpObjId statusOid = SnmpObjId.get(".1.3.6.1.4.1.841.1.1.2.5.5.0");
+        SnmpObjId statusOid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.4.0");
         CompletableFuture<SnmpValue> future = m_locationAwareSnmpClient.get(config,statusOid).execute();
         SnmpValue value = null;
         try {
