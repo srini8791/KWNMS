@@ -75,45 +75,12 @@
         </div> <!-- panel ends -->
       </div>
     </div>
+    <script src="treeview/dist/jstree.js"></script>
   </div>
 </div>
 <hr />
 
-<script src="treeview/dist/jstree.js"></script>
-<script>
-$(document).ready(function() {
 
-  $('#nodetree').jstree({
-    'core': {
-      'multiple': false,
-      'data': function(node, callback) {
-        if (node.id === '#') {
-          callback([{'text': 'Global', 'id': '0', 'children': true, 'data': {'type': 'global'}}]);
-        } else {
-          var regions = [
-                                {'text': 'South', 'id': '1', 'children': true, 'data': {'type': 'region'}},
-                                {'text': 'North', 'id': '2', 'children': true, 'data': {'type': 'region'}}
-                            ];
-          callback(regions);
-        }
-      }
-    }
-  });
-
-  $('#nodetree').on("open_node.jstree", function (e, data) {
-    var nodeType = data.node.data ? data.node.data.type : 'global';
-    var info = 'id: ' + data.node.id + ', type: ' + nodeType;
-    $('#nodeinfo').text(info);
-  });
-
-  $('#nodetree').on("changed.jstree", function (e, data) {
-    var nodeType = data.node.data ? data.node.data.type : 'global';
-    var info = 'id: ' + data.node.id + ', type: ' + nodeType;
-    $('#nodeinfo').text(info);
-  });
-
-});
-</script>
 
 <jsp:include page="/includes/bootstrap-footer.jsp" flush="false" />
 

@@ -151,7 +151,18 @@ angular.module('onms-assets', [
 .controller('ProfileCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
 
   $scope.profiles = [];
-  $scope.newProfile = {};
+  $scope.newProfile = {
+    'name': '',
+    'ssid': '',
+    'opMode': {
+      'id': ''
+    },
+    'bandwidth': {
+      'id': ''
+    },
+    'channel': '',
+    'minimumFirmware': ''
+  };
   $scope.nodeProfile = {};
 
   $scope.nodes = [];
@@ -320,6 +331,35 @@ angular.module('onms-assets', [
     ];
     return regionsArray;
   }
+
+  $scope.init = function() {
+    $('#nodetree').jstree({
+      'core': {
+        'multiple': false,
+        'data': function(node, callback) {
+          if (node.id === '#') {
+            callback([{'text': 'Global', 'id': '0', 'children': true, 'data': {'type': 'global'}}]);
+          } else {
+            var regions = $scope.loadRegions();
+            callback(regions);
+          }
+        }
+      }
+    });
+
+    $('#nodetree').on("open_node.jstree", function (e, data) {
+      var nodeType = data.node.data ? data.node.data.type : 'global';
+      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
+      $('#nodeinfo').text(info);
+    });
+
+    $('#nodetree').on("changed.jstree", function (e, data) {
+      var nodeType = data.node.data ? data.node.data.type : 'global';
+      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
+      $('#nodeinfo').text(info);
+    });
+  }
+
 
 }]);
 

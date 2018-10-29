@@ -84,6 +84,15 @@ public enum OpMode {
         }
     }
 
+    public static OpMode get(final String label) {
+        for (OpMode mode : OpMode.values()) {
+            if (mode.getLabel().equals(label)) {
+                return mode;
+            }
+        }
+        return OpMode.MODE_UNKNOWN;
+    }
+
     public Integer getValue() {
         return m_id;
     }

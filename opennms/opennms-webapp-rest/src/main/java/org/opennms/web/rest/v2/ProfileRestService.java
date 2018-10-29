@@ -38,9 +38,7 @@ import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
 import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.events.api.EventProxy;
-import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.OnmsProfile;
-import org.opennms.netmgt.model.OnmsProfileList;
+import org.opennms.netmgt.model.*;
 import org.opennms.netmgt.model.events.EventBuilder;
 import org.opennms.netmgt.model.events.EventUtils;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
@@ -445,7 +443,8 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
                 String value = prop.substring(delimiterIndex+1).trim();
                 value = value.substring(1, value.length()-1); // stripping single quotes
                 if (PROFILE_PROPS_MAP.containsKey(key)) {
-                    properties.put(PROFILE_PROPS_MAP.get(key), value);
+                    String convertedValue = getConvertedValue(key, value);
+                    properties.put(PROFILE_PROPS_MAP.get(key), convertedValue);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -458,7 +457,25 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
 
     // utility methods
-    public Map<String, String> prepareErrorObject(String errorMessage) {
+    private String getConvertedValue(String key, String value) {
+        String convertedValue = value;
+        if (key.equals("wireless.wifi1.hwmode")) {
+            OpMode mode = OpMode.get(value);
+            convertedValue = String.valueOf(mode.getId());
+        } else if (key.equals("wireless.wifi1.htmode")) {
+            String numericalValue = value.substring(2);
+            Bandwidth bandwidth = Bandwidth.get(numericalValue + "MHz");
+            convertedValue = String.valueOf(bandwidth.getId());
+        } else if (key.equals("wireless.wifi1.channel")) {
+            if (value.equals("auto")) {
+                convertedValue = String.valueOf("-1");
+            }
+        }
+        return convertedValue;
+    }
+
+
+    private Map<String, String> prepareErrorObject(String errorMessage) {
         Map<String, String> object = new HashMap<>();
         object.put("errorMessage", errorMessage);
         return object;

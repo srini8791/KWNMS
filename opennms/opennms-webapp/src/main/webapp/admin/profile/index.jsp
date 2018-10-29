@@ -160,7 +160,15 @@
               <div class="row">
                 <label for="input_channel" class="col-sm-4 control-label">Channel</label>
                 <div class="col-sm-8">
-                  <input id="input_channel" name="channel" ng-model="newProfile.channel" class="form-control"/>
+                  <select id="input_channel" name="channel" ng-model="newProfile.channel" class="form-control">
+                    <option value="">Select Channel</option>
+                    <option value="-1">auto</option>
+                    <%
+                      for (int channelNumber = 1; channelNumber <= 255; channelNumber++) {
+                    %>
+                    <option value="<%= channelNumber %>"><%= channelNumber %></option>
+                    <% } %>
+                  </select>
                 </div>
               </div>
             </div>
