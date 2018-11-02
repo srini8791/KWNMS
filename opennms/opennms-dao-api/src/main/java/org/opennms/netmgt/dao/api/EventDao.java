@@ -49,6 +49,8 @@ public interface EventDao extends LegacyOnmsDao<OnmsEvent, Integer> {
      */
     List<OnmsEvent> getEventsAfterDate(List<String> ueiList, Date date);
 
+    List<OnmsEvent> getEventsAfterDate(Date date);
+
     List<OnmsEvent> getEventsForEventParameters(final Map<String, String> eventParameters);
 
 }

@@ -329,34 +329,42 @@ angular.module('onms-assets', [
   $scope.loadRegions = function() {
     $http.get('api/v2/treeview/regions')
     .then(function(response) {
-      $scoepe.regions = response.data;
+      $scope.regions = [];
+      $scope.regions = response.data;
     });
   }
 
   $scope.init = function() {
-    $('#nodetree').jstree({
+    $scope.loadRegions();
+
+    $('#nodetree')
+    .on('open_node.jstree', function (e, data) {
+      var nodeType = data.node.data ? data.node.data.type : 'global';
+      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
+      $('#nodeinfo').text(info);
+    })
+    .on('changed.jstree', function (e, data) {
+      var nodeType = data.node.data ? data.node.data.type : 'global';
+      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
+      $('#nodeinfo').text(info);
+    })
+    .jstree({
       'core': {
         'multiple': false,
         'data': function(node, callback) {
+          console.log('inside data: ' + node);
           if (node.id === '#') {
+            console.log('inside #: ' + node);
             callback([{'text': 'Global', 'id': '0', 'children': true, 'data': {'type': 'global'}}]);
           } else {
-            callback($scope.regions);
+            console.log('inside else: ' + node.data);
+            callback(function() {
+              var dataToReturn = [{'text': 'test', 'children': false}];
+              return dataToReturn;
+            });
           }
         }
       }
-    });
-
-    $('#nodetree').on("open_node.jstree", function (e, data) {
-      var nodeType = data.node.data ? data.node.data.type : 'global';
-      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
-      $('#nodeinfo').text(info);
-    });
-
-    $('#nodetree').on("changed.jstree", function (e, data) {
-      var nodeType = data.node.data ? data.node.data.type : 'global';
-      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
-      $('#nodeinfo').text(info);
     });
   }
 

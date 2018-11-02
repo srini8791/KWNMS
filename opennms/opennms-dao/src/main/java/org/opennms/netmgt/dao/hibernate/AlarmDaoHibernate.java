@@ -238,4 +238,9 @@ public class AlarmDaoHibernate extends AbstractDaoHibernate<OnmsAlarm, Integer> 
             }
         });
     }
+
+    public List<Object[]> getSeverityCountsForPast24Hours() {
+        final String query = "select severity, sum(counter) from alarms where NOW() > lasteventtime AND NOW() - lasteventtime <= interval '24 hours' group by severity";
+        return getHibernateTemplate().executeWithNativeSession(session -> session.createSQLQuery(query).list());
+    }
 }

@@ -70,6 +70,20 @@ public class EventDaoHibernate extends AbstractDaoHibernate<OnmsEvent, Integer> 
         });
     }
 
+    @Override
+    public List<OnmsEvent> getEventsAfterDate(final Date date) {
+        final String hql = "From OnmsEvent e where e.eventTime > :eventTime order by e.eventTime desc";
+
+        return (List<OnmsEvent>)getHibernateTemplate().executeFind(new HibernateCallback<List<OnmsEvent>>() {
+            @Override
+            public List<OnmsEvent> doInHibernate(Session session) throws HibernateException, SQLException {
+                return session.createQuery(hql)
+                        .setParameter("eventTime", date)
+                        .list();
+            }
+        });
+    }
+
     public List<OnmsEvent> getEventsForEventParameters(final Map<String, String> eventParameters) {
         final StringBuffer hqlStringBuffer = new StringBuffer("From OnmsEvent e where ");
         for (int i = 0; i < eventParameters.size(); i++) {

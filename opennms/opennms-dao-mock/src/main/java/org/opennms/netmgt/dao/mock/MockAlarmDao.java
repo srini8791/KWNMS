@@ -118,4 +118,8 @@ public class MockAlarmDao extends AbstractMockDao<OnmsAlarm, Integer> implements
 
         return stream.distinct().collect(Collectors.toList());
     }
+
+    public List<Object[]> getSeverityCountsForPast24Hours() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

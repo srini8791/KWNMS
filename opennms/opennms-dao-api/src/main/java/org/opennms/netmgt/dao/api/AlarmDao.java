@@ -64,4 +64,6 @@ public interface AlarmDao extends LegacyOnmsDao<OnmsAlarm, Integer> {
     List<HeatMapElement> getHeatMapItemsForEntity(String entityNameColumn, String entityIdColumn, boolean processAcknowledgedAlarms, String restrictionColumn, String restrictionValue, String... groupByColumns);
 
     List<OnmsAlarm> getAlarmsForEventParameters(final Map<String, String> eventParameters);
+
+    List<Object[]> getSeverityCountsForPast24Hours();
 }

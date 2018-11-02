@@ -75,6 +75,17 @@ public class MockEventDao extends AbstractMockDao<OnmsEvent, Integer> implements
         return matchingEvents;
     }
 
+    public List<OnmsEvent> getEventsAfterDate(Date date) {
+        List<OnmsEvent> matchingEvents = new ArrayList<OnmsEvent>();
+        List<OnmsEvent> allEvents = findAll();
+        for (OnmsEvent eachEvent : allEvents) {
+            if (eachEvent.getEventTime().after(date)) {
+                matchingEvents.add(eachEvent);
+            }
+        }
+        return matchingEvents;
+    }
+
     @Override
     public Set<CountedObject<String>> getUeiCounts(final Integer limit) {
         final Map<String,Long> counts = new HashMap<String,Long>();
