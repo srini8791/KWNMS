@@ -220,24 +220,24 @@ public final class KwpConfigurationGroup extends AggregateTracker {
     }
 
 
-    public Integer getRadioMode() {
-        return m_store.getInt32(RADIO_MODE);
+    public String getRadioMode() {
+        return m_store.getDisplayString(RADIO_MODE);
     }
 
-    public Integer getWirelessBandwidth() {
-        return m_store.getInt32(WIRELESS_BANDWIDTH);
+    public String getWirelessBandwidth() {
+        return m_store.getDisplayString(WIRELESS_BANDWIDTH);
     }
 
-    public Integer getWirelessChannel() {
-        return m_store.getInt32(WIRELESS_CHANNEL);
+    public String getWirelessChannel() {
+        return m_store.getDisplayString(WIRELESS_CHANNEL);
     }
 
     public Integer getWirelessCountry() {
         return m_store.getInt32(WIRELESS_COUNTRY);
     }
 
-    public Integer getWirelessOpmode() {
-        return m_store.getInt32(WIRELESS_OPMODE);
+    public String getWirelessOpmode() {
+        return m_store.getDisplayString(WIRELESS_OPMODE);
     }
 
     public String getWirelessSsid() {

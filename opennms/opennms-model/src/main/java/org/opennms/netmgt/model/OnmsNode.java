@@ -151,16 +151,16 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private String m_macAddress;
 
     /** nullable persistent field */
-    private RadioMode m_radioMode;
+    private String m_radioMode;
 
     /** nullable persistent field */
-    private OpMode m_opMode;
+    private String m_opMode;
 
     /** nullable persistent field */
-    private Bandwidth m_bandwidth;
+    private String m_bandwidth;
 
     /** nullable persistent field */
-    private Integer m_channel;
+    private String m_channel;
 
     /** nullable persistent field */
     private boolean m_active;
@@ -609,7 +609,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     @XmlElement(name="radioMode")
     @Column(name="radioMode")
     //@Type(type="org.opennms.netmgt.model.RadioModeUserType")
-    public RadioMode getRadioMode() {
+    public String getRadioMode() {
         return m_radioMode;
     }
 
@@ -617,14 +617,14 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setRadioMode</p>
      * @param radioMode
      */
-    public void setRadioMode(RadioMode radioMode) {
+    public void setRadioMode(String radioMode) {
         this.m_radioMode = radioMode;
     }
 
     @XmlElement(name="opMode")
     @Column(name="opMode")
     //@Type(type="org.opennms.netmgt.model.OpModeUserType")
-    public OpMode getOpMode() {
+    public String getOpMode() {
         return m_opMode;
     }
 
@@ -632,14 +632,14 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setOpMode</p>
      * @param opMode
      */
-    public void setOpMode(OpMode opMode) {
+    public void setOpMode(String opMode) {
         this.m_opMode = opMode;
     }
 
     @XmlElement(name="bandwidth")
     @Column(name="bandwidth")
     //@Type(type="org.opennms.netmgt.model.BandwidthUserType")
-    public Bandwidth getBandwidth() {
+    public String getBandwidth() {
         return m_bandwidth;
     }
 
@@ -647,13 +647,13 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setBandwidth</p>
      * @param bandwidth
      */
-    public void setBandwidth(Bandwidth bandwidth) {
+    public void setBandwidth(String bandwidth) {
         this.m_bandwidth = bandwidth;
     }
 
     @XmlElement(name="channel")
     @Column(name="channel")
-    public Integer getChannel() {
+    public String getChannel() {
         return m_channel;
     }
 
@@ -661,7 +661,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setChannel</p>
      * @param channel
      */
-    public void setChannel(Integer channel) {
+    public void setChannel(String channel) {
         this.m_channel = channel;
     }
 

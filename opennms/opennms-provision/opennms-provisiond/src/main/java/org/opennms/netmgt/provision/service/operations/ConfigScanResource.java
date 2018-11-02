@@ -28,10 +28,7 @@
 
 package org.opennms.netmgt.provision.service.operations;
 
-import org.opennms.netmgt.model.Bandwidth;
 import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.OpMode;
-import org.opennms.netmgt.model.RadioMode;
 import org.opennms.netmgt.provision.service.snmp.KwpConfigurationGroup;
 
 import java.util.HashMap;
@@ -90,19 +87,19 @@ public class ConfigScanResource {
         m_attributes.put(key, value);
         if (m_node != null && value != null) {
             if (KwpConfigurationGroup.RADIO_MODE_ALIAS.equals(key)) {
-                m_node.setRadioMode(RadioMode.get((Integer) value));
+                m_node.setRadioMode((String)value);
                 System.out.println("**** ConfigScanResource.setAttribute -- assetRecord = " + m_node.getAssetRecord());
             } else if (KwpConfigurationGroup.WIRELESS_BANDWIDTH_ALIAS.equals(key)) {
-                m_node.setBandwidth(Bandwidth.get((Integer) value));
+                m_node.setBandwidth((String)value);
             } else if (KwpConfigurationGroup.WIRELESS_CHANNEL_ALIAS.equals(key)) {
-                m_node.setChannel((Integer)value);
+                m_node.setChannel((String)value);
             } else if (KwpConfigurationGroup.WIRELESS_COUNTRY_ALIAS.equals(key)) {
                 //TODO : need to add country variable. currently it is getting stored in OnmsGeolocation.country
                 //m_node.getAssetRecord().getGeolocation().set
             } else if (KwpConfigurationGroup.WIRELESS_SSID_ALIAS.equals(key)) {
                 m_node.setSsid(value.toString());
             } else if (KwpConfigurationGroup.WIRELESS_OPMODE_ALIAS.equals(key)) {
-                m_node.setOpMode(OpMode.get((Integer)value));
+                m_node.setOpMode((String)value);
             }
         }
 

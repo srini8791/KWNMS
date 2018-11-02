@@ -31,10 +31,7 @@ package org.opennms.netmgt.provision.service.kwp;
 import org.opennms.netmgt.kwp.AbstractKwpProxiableTracker;
 import org.opennms.netmgt.kwp.KwpLTVPacket;
 import org.opennms.netmgt.kwp.KwpPacket;
-import org.opennms.netmgt.model.Bandwidth;
 import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.OpMode;
-import org.opennms.netmgt.model.RadioMode;
 
 public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
@@ -57,19 +54,11 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
     private String ssid = null;
 
-    private Bandwidth channelBW = Bandwidth.BANDWIDTH_UNKNOWN;
+    private String channelBW = "Unknown";
 
-    private OpMode operationalMode;
+    private String operationalMode;
 
-    private int channel = 0;
-
-    private int ipAddrType = 0;
-
-    private String ipAddress = null;
-
-    private RadioMode deviceMode;
-
-    private String deviceMac = "";
+    private String channel = "auto";
 
     private int countryCode = 0;
 
@@ -81,6 +70,14 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
     private int linkId = -1;
 
+    private String deviceMode;
+
+    private String deviceMac = "";
+
+    private String ipAddrType="";
+
+    private String ipAddress="";
+
     @Override
     public void handleResponses(KwpPacket response) {
         this.packet = response;
@@ -88,28 +85,28 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
         this.ipAddress = packet.getIPAddressBytesFromLTVByType(IPADDRESS_TYPE);
         KwpLTVPacket ltv = packet.getLTVPacketByType(ADDRESS_TYPE);
         if (ltv != null) {
-            this.ipAddrType = ltv.getUnsignedToInt();
+            this.ipAddrType = ltv.getStringValue();
         }
         this.ssid = packet.getStringValueFromLTVByType(SSID_TYPE);
         ltv = packet.getLTVPacketByType(BANDWIDTH_TYPE);
         if (ltv != null) {
             try {
-                this.channelBW = Bandwidth.get(ltv.getUnsignedToInt());
+                this.channelBW = ltv.getStringValue();
             } catch (IllegalArgumentException ex) {
             }
 
         }
         ltv = packet.getLTVPacketByType(MODE_TYPE);
         if (ltv != null) {
-            this.operationalMode = OpMode.get(ltv.getUnsignedToInt());
+            this.operationalMode = ltv.getStringValue();
         }
         ltv = packet.getLTVPacketByType(CHANNEL_TYPE);
         if (ltv != null) {
-            this.channel = ltv.getUnsignedToInt();
+            this.channel = ltv.getStringValue();
         }
         ltv = packet.getLTVPacketByType(DEVICE_MODE);
         if (ltv != null) {
-            this.deviceMode = RadioMode.get(ltv.getUnsignedToInt());
+            this.deviceMode = ltv.getStringValue();
         }
         this.setDeviceMac(packet.getMacAddressFromLTV(DEVICE_MAC));
         ltv = packet.getLTVPacketByType(COUNTRY_CODE);

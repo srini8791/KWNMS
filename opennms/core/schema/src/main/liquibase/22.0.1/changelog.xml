@@ -92,14 +92,14 @@
     </preConditions>
 
     <addColumn tableName="node">
-      <column name="ssid"       type="text" />
-      <column name="macaddress" type="text">
+      <column name="ssid"       type="varchar(30)" />
+      <column name="macaddress" type="varchar(20)">
         <constraints unique="true" />
       </column>
-      <column name="radiomode"  type="integer" />
-      <column name="opmode"     type="integer" />
-      <column name="bandwidth"  type="integer" />
-      <column name="channel"    type="integer" />
+      <column name="radiomode"  type="varchar(20)" />
+      <column name="opmode"     type="varchar(10)" />
+      <column name="bandwidth"  type="varchar(10)" />
+      <column name="channel"    type="varchar(5)" />
       <column name="profileid"  type="integer" />
       <column name="active"     type="boolean" defaultValueBoolean="false">
         <constraints nullable="false" />

@@ -290,7 +290,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 */
 
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
-
+        final InetAddress tftpaddr = InetAddressUtils.addr(tftpAddress);
 
         LOG.info("retreiveProfile: nodeId = {}, tftpAddress = {}", nodeId, tftpAddress);
 
@@ -303,9 +303,9 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
         SnmpValue[] values = {
                 factory.getOctetString(ipAddress.getBytes()),
-                factory.getOctetString(tftpAddress.getBytes()),
-                factory.getGauge32(1),
-                factory.getGauge32(2)
+                factory.getIpAddress(tftpaddr),
+                factory.getInt32(1),
+                factory.getInt32(2)
         };
 
         final StringBuilder builder = new StringBuilder();
@@ -497,12 +497,24 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     private String getConvertedValue(String key, String value) {
         String convertedValue = value;
         if (key.equals("wireless.wifi1.hwmode")) {
-            OpMode mode = OpMode.get(value);
-            convertedValue = String.valueOf(mode.getId());
+            if (value != null && value.length() > 1) {
+                OpMode mode = OpMode.get(value);
+                convertedValue = String.valueOf(mode.getId());
+
+            } else {
+                OpMode mode = OpMode.get(Integer.parseInt(value));
+                convertedValue = String.valueOf(mode.getId());
+            }
+
         } else if (key.equals("wireless.wifi1.htmode")) {
-            String numericalValue = value.substring(2);
-            Bandwidth bandwidth = Bandwidth.get(numericalValue + "MHz");
-            convertedValue = String.valueOf(bandwidth.getId());
+            if (value != null && value.length() > 1) {
+                String numericalValue = value.substring(2);
+                Bandwidth bandwidth = Bandwidth.get(numericalValue + "MHz");
+                convertedValue = String.valueOf(bandwidth.getId());
+            } else {
+                Bandwidth bw = Bandwidth.get(Integer.parseInt(value));
+                convertedValue = String.valueOf(bw.getId());
+            }
         } else if (key.equals("wireless.wifi1.channel")) {
             if (value.equals("auto")) {
                 convertedValue = String.valueOf("-1");

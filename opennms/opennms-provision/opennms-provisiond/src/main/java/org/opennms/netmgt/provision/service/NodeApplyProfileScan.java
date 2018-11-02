@@ -33,6 +33,7 @@ import org.opennms.core.tasks.BatchTask;
 import org.opennms.core.tasks.RunInBatch;
 import org.opennms.core.tasks.Task;
 import org.opennms.core.tasks.TaskCoordinator;
+import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.api.SnmpAgentConfigFactory;
 import org.opennms.netmgt.events.api.EventForwarder;
 import org.opennms.netmgt.model.OnmsIpInterface;
@@ -131,18 +132,53 @@ public class NodeApplyProfileScan implements Scan {
         });
     }
 
+
+    private void applySNMPProfile(String ipAddress,SnmpAgentConfig config) {
+        Snmp4JValueFactory factory = new Snmp4JValueFactory();
+        SnmpObjId[] oids = {
+                SnmpObjId.get(".1.3.6.1.4.1.52619.1.1.1.1.1.2.2"),
+                SnmpObjId.get(".1.3.6.1.4.1.52619.1.1.1.1.1.3.2"),
+                SnmpObjId.get(".1.3.6.1.4.1.52619.1.1.1.1.1.4.2"),
+                SnmpObjId.get(".1.3.6.1.4.1.52619.1.1.1.1.1.5.2"),
+                SnmpObjId.get(".1.3.6.1.4.1.52619.1.1.1.1.1.7.2"),
+                SnmpObjId.get(".1.3.6.1.4.1.52619.1.1.1.1.1.9.2")};
+        SnmpValue[] values = {
+                factory.getOctetString("".getBytes()),
+                factory.getOctetString("".getBytes()),
+                factory.getInt32(1),//country
+                factory.getOctetString("".getBytes()),//opmode
+                factory.getOctetString("".getBytes()),//bandwidth
+                factory.getOctetString("".getBytes())};//channel
+
+        CompletableFuture<List<SnmpValue>> future =  m_provisionService.getLocationAwareSnmpClient().set(config,Arrays.asList(oids),Arrays.asList(values)).execute();
+        try {
+            List<SnmpValue> resultValues = future.whenComplete((m,ex) -> {
+                if(ex != null) {
+                    applyStatus = 1;
+                } else {
+                    if(m == null || m.size() != oids.length) {
+                        applyStatus = 1;
+                    }
+                }
+            }).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void applyProfile(String ipAddress,SnmpAgentConfig config) {
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
         SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.3.0");
         SnmpObjId[] oids = {oid,SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.1.0"),SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.2.0"),SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.5.0")};
         //ipAddress = ipAddress.replaceAll("\\.","_") + ".cfg";
         String fileName = "profile_" + m_profileId + ".cfg";
+        final InetAddress tfaddr = InetAddressUtils.addr(tftpAddress);
         Snmp4JValueFactory factory = new Snmp4JValueFactory();
         SnmpValue[] values = {
-                factory.getOctetString(tftpAddress.getBytes()),
+                factory.getIpAddress(tfaddr),
                 factory.getOctetString(fileName.getBytes()),
-                factory.getGauge32(1),
-                factory.getGauge32(1)
+                factory.getInt32(1),
+                factory.getInt32(1)
         };
 
         CompletableFuture<List<SnmpValue>> future =  m_provisionService.getLocationAwareSnmpClient().set(config,Arrays.asList(oids),Arrays.asList(values)).execute();
