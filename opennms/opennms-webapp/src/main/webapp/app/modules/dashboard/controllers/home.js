@@ -93,8 +93,8 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     ];
 
     // ALARMS
-    $scope.alarms_s7 = "0";
-    $scope.alarms_s6 = "0";
+    vm.dashboard.alarms_s7 = "0";
+    vm.dashboard.alarms_s6 = "0";
 
     var alarmSource = new EventSource('api/v2/dashboard/alarms');
     alarmSource.onmessage = function(event) {
@@ -102,31 +102,42 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
             var alarmsObj = JSON.parse(event.data);
             $scope.$apply(function() {
                 if (alarmsObj.s6) {
-                  $scope.alarms_s6 = alarmsObj.s6;
+                  vm.dashboard.alarms_s6 = alarmsObj.s6;
                 }
                 if (alarmsObj.s7) {
-                  $scope.alarms_s7 = alarmsObj.s7;
+                  vm.dashboard.alarms_s7 = alarmsObj.s7;
                 }
             });
         }
     };
 
     // EVENTS
-    $scope.events = [];
+    vm.dashboard.events = [];
 
-    var eventSource = new EventSource('api/v2/dashboard/events/48');
+    var eventSource = new EventSource('api/v2/dashboard/events/1');
     eventSource.onmessage = function(event) {
         if (event.data) {
-            console.log(event.data);
             var eventsArr = JSON.parse(event.data);
             $scope.$apply(function() {
                 if (eventsArr) {
-                  $scope.events = eventsArr;
+                  vm.dashboard.events = eventsArr;
                 }
             });
         }
     };
 
-    
+    vm.dashboard.activeNodes = "0";
+
+    var nodesSource = new EventSource('api/v2/dashboard/nodes/active');
+    nodesSource.onmessage = function(event) {
+        if (event.data) {
+            var nodesObj = JSON.parse(event.data);
+            $scope.$apply(function() {
+              vm.dashboard.activeNodes = nodesObj.active;
+            });
+        }
+    };
+
+
 }]);
 

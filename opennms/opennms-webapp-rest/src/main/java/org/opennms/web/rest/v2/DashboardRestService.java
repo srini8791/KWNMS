@@ -100,8 +100,21 @@ public class DashboardRestService {
         Date date = calendar.getTime();
         List<OnmsEvent> latestEvents = eventDao.getEventsAfterDate(date);
         StringBuilder buffer = new StringBuilder("data: ");
-        JSONArray array = new JSONArray(latestEvents);
-        buffer.append(array.toString());
+        buffer.append("[");
+        int counter = 0;
+        for (OnmsEvent event : latestEvents) {
+            if (counter != 0) {
+                buffer.append(",");
+            }
+            buffer.append("{");
+            buffer.append("  \"id\": \"").append(event.getId()).append("\"");
+            buffer.append(", \"time\": \"").append(event.getEventTime()).append("\"");
+            buffer.append(", \"severity\": \"").append(event.getEventSeverity()).append("\"");
+            buffer.append(", \"message\": \"").append(event.getEventDisplay()).append("\"");
+            buffer.append("}");
+            counter = 1;
+        }
+        buffer.append("]");
         buffer.append("\n\n");
         return Response.ok().entity(buffer.toString()).build();
     }

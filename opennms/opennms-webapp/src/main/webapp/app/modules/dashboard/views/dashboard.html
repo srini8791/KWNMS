@@ -37,7 +37,7 @@
                   </div>
                   <div class="col-md-3 col-sm-6 text-green">
                     <h4>Good</h4>
-                    <h4>{{ activeNodes }}</h4>
+                    <h4>{{ vm.dashboard.activeNodes }}</h4>
                   </div>
                   <div class="col-md-3 col-sm-6 text-default">
                     <h4>Unassigned</h4>
@@ -58,13 +58,13 @@
                   <div class="col-md-4">
                     <div class="peity_line_neutral text-center">
                       <h6>Critical</h6>
-                      <h4>{{ alarms_s7 }}</h4>
+                      <h4>{{ vm.dashboard.alarms_s7 }}</h4>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="peity_line_neutral text-center">
                       <h6>Major</h6>
-                      <h4>{{ alarms_s6 }}</h4>
+                      <h4>{{ vm.dashboard.alarms_s6 }}</h4>
                     </div>
                   </div>
                 </div>
@@ -116,32 +116,17 @@
       <div class="col-md-3">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title m-b-0">News Updates
-              <span class="float-right">
-                  <select>
-                     <option>All</option>
-                  </select>   
-
-                  <select>
-                     <option>48 Hours</option>
-                  </select>  
-                  </span>
-
-            </h4>
+            <h4 class="card-title m-b-0">Events</h4>
           </div>
           <ul class="list-style-none">
-            <li class="" data-ng-repeat="data in vm.dashboard.notification" style="padding:10px;">
+            <li class="" data-ng-repeat="event in vm.dashboard.events" style="padding:10px;">
 
               <div class="panel panel-default"
                    style="background: #f4f4f4; border-radius: 5px; border:1px solid #f4f4f4;">
                 <div class="panel-heading" style="background: #ebebeb; padding:10px;">
-                  <h4><img src="{{data.userimage}}" width="20px" height="20px"> {{data.username}}
-                    <span class="float-right">
-                              {{data.time}} 
-                        </span></h4>
-
+                  <h4>{{event.id}} <span class="float-right">{{event.time}}</span></h4>
                 </div>
-                <div class="panel-body" style="padding:10px;">{{data.message}}</div>
+                <div class="panel-body" style="padding:10px;">{{event.message}}</div>
               </div>
 
 
