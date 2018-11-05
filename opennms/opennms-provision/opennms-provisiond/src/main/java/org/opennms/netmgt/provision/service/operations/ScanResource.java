@@ -101,13 +101,18 @@ public class ScanResource {
                 m_node.setSysObjectId(value);
             } else if (key.equals("longitude")) {
                 try {
-                    m_node.getAssetRecord().getGeolocation().setLongitude(Double.parseDouble(value));
+                    if (m_node.getAssetRecord().getGeolocation() != null) {
+                        m_node.getAssetRecord().getGeolocation().setLongitude(Double.parseDouble(value));
+                    }
+
                 } catch (NumberFormatException ne) {
 
                 }
             } else if (key.equals("latitude")) {
                 try {
-                    m_node.getAssetRecord().getGeolocation().setLatitude(Double.parseDouble(value));
+                    if (m_node.getAssetRecord().getGeolocation() != null) {
+                        m_node.getAssetRecord().getGeolocation().setLatitude(Double.parseDouble(value));
+                    }
                 } catch (NumberFormatException ne) {
 
                 }

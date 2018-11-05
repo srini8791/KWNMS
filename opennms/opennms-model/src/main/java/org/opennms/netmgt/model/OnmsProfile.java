@@ -63,16 +63,16 @@ public class OnmsProfile implements Serializable {
     @XmlElement(name = "opMode")
     //@XmlJavaTypeAdapter(OpModeAdapter.class)
     @Column(name = "opMode")
-    private OpMode m_opMode;
+    private String m_opMode;
 
     @XmlElement(name = "bandwidth")
     @Column(name = "bandwidth")
     //@XmlJavaTypeAdapter(BandwidthAdapter.class)
-    private Bandwidth m_bandwidth;
+    private String m_bandwidth;
 
     @XmlAttribute(name = "channel")
     @Column(name = "channel")
-    private Integer m_channel;
+    private String m_channel;
 
     @XmlAttribute(name = "minimumFirmware")
     @Column(name = "min_firmware")
@@ -164,7 +164,7 @@ public class OnmsProfile implements Serializable {
      *
      * @return a {@link OpMode} object.
      */
-    public OpMode getOpMode() {
+    public String getOpMode() {
         return m_opMode;
     }
 
@@ -173,7 +173,7 @@ public class OnmsProfile implements Serializable {
      *
      * @param opMode a {@link OpMode} object.
      */
-    public void setOpMode(OpMode opMode) {
+    public void setOpMode(String opMode) {
         this.m_opMode = opMode;
     }
 
@@ -182,7 +182,7 @@ public class OnmsProfile implements Serializable {
      *
      * @return a {@link Bandwidth} object.
      */
-    public Bandwidth getBandwidth() {
+    public String getBandwidth() {
         return m_bandwidth;
     }
 
@@ -191,7 +191,7 @@ public class OnmsProfile implements Serializable {
      *
      * @param bandwidth a {@link Bandwidth} object.
      */
-    public void setBandwidth(Bandwidth bandwidth) {
+    public void setBandwidth(String bandwidth) {
         this.m_bandwidth = bandwidth;
     }
 
@@ -200,7 +200,7 @@ public class OnmsProfile implements Serializable {
      *
      * @return a {@link Integer} object.
      */
-    public Integer getChannel() {
+    public String getChannel() {
         return m_channel;
     }
 
@@ -209,7 +209,7 @@ public class OnmsProfile implements Serializable {
      *
      * @param channel a {@link Integer} object.
      */
-    public void setChannel(Integer channel) {
+    public void setChannel(String channel) {
         this.m_channel = channel;
     }
 

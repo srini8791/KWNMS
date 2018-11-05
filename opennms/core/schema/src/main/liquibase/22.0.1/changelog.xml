@@ -267,13 +267,13 @@
       <column name="ssid" type="text">
         <constraints nullable="true" />
       </column>
-      <column name="opmode" type="integer">
+      <column name="opmode" type="varchar(10)">
         <constraints nullable="true" />
       </column>
-      <column name="bandwidth" type="integer">
+      <column name="bandwidth" type="varchar(10)">
         <constraints nullable="true" />
       </column>
-      <column name="channel" type="integer">
+      <column name="channel" type="varchar(10)">
         <constraints nullable="true" />
       </column>
       <column name="countrycode" type="integer">

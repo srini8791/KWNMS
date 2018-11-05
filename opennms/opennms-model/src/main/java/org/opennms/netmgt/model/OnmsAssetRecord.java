@@ -761,6 +761,9 @@ public class OnmsAssetRecord implements Serializable {
     @Embedded
     @XmlTransient
     public OnmsGeolocation getGeolocation() {
+        if (m_geolocation == null) {
+            m_geolocation = new OnmsGeolocation();
+        }
         return m_geolocation;
     }
 

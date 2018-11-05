@@ -82,7 +82,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
 
     /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
     public static final String WIRELESS_CHANNEL_ALIAS = "wirelessChannel";
-    private static final String WIRELESS_CHANNEL = " .1.3.6.1.4.1.52619.1.1.1.1.1.7.2";
+    private static final String WIRELESS_CHANNEL = " .1.3.6.1.4.1.52619.1.1.1.1.1.9.2";
 
     /**
      * <P>
@@ -116,7 +116,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
          * should be a US-ASCII display string.
          * </P>
          */
-        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, RADIO_MODE_ALIAS, RADIO_MODE);
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, RADIO_MODE_ALIAS, RADIO_MODE);
 
         /**
          * <P>
@@ -142,7 +142,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
          * initialized. This will be in 1/100th of a second increments.
          * </P>
          */
-        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_OPMODE_ALIAS, WIRELESS_OPMODE);
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, WIRELESS_OPMODE_ALIAS, WIRELESS_OPMODE);
 
         /**
          * <P>
@@ -153,7 +153,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
          * depending on the environment.
          * </P>
          */
-        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_BANDWIDTH_ALIAS, WIRELESS_BANDWIDTH);
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, WIRELESS_BANDWIDTH_ALIAS, WIRELESS_BANDWIDTH);
 
         /**
          * <P>
@@ -162,7 +162,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
          * site's implementation.
          * </P>
          */
-        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_CHANNEL_ALIAS, WIRELESS_CHANNEL);
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, WIRELESS_CHANNEL_ALIAS, WIRELESS_CHANNEL);
 
 
         /**

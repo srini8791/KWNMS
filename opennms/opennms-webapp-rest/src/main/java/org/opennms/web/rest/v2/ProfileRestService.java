@@ -179,16 +179,21 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
     private List<String> buildPropsToWrite(OnmsProfile profile) {
         List<String> props = new ArrayList<>();
+        String profileSsid = profile.getSsid();
+        String profileOpMode = profile.getOpMode();
+        String profileBandwidth = profile.getBandwidth();
+        String profileChannel = profile.getChannel();
+
         for (String key : PROFILE_PROPS_MAP.keySet()) {
             String propValue = "";
-            if (key.equals("wireless.@wifi-iface[1].ssid") && profile.getSsid() != null) {
-                propValue =  "'" + profile.getSsid() + "'";
-            } else if (key.equals("wireless.wifi1.hwmode") && profile.getOpMode() != null) {
-                propValue = "'" + String.valueOf(profile.getOpMode().getId()) + "'";
-            } else if (key.equals("wireless.wifi1.htmode") && profile.getBandwidth() != null) {
-                propValue = "'" + String.valueOf(profile.getBandwidth().getId()) + "'";
+            if (key.equals("wireless.@wifi-iface[1].ssid") && profileSsid != null) {
+                propValue =  "'" + profileSsid + "'";
+            } else if (key.equals("wireless.wifi1.hwmode") && profileOpMode != null/* && profileOpMode != OpMode.MODE_UNKNOWN*/) {
+                propValue = "'" + profileOpMode + "'";
+            } else if (key.equals("wireless.wifi1.htmode") && profileBandwidth != null/* && profileBandwidth != Bandwidth.BANDWIDTH_UNKNOWN*/) {
+                propValue = "'HT" + profileBandwidth + "'";
             } else if (key.equals("wireless.wifi1.channel") && profile.getChannel() != null) {
-                propValue = "'" + String.valueOf(profile.getChannel()) + "'";
+                propValue = "'" + profileChannel + "'";
             }
 
             if (propValue.length() > 0) {
