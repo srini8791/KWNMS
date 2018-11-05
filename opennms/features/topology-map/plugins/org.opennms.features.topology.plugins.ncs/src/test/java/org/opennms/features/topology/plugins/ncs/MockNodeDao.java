@@ -358,4 +358,8 @@ public class MockNodeDao implements NodeDao {
     public Integer getActiveNodeCount() {
         return 0;
     }
+
+    public Integer[] getNodeStatusSummary() {
+        return new Integer[] {0, 0, 0};
+    }
 }

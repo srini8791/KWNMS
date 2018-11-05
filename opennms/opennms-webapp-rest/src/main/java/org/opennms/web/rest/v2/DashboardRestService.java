@@ -122,17 +122,19 @@ public class DashboardRestService {
 
     /**
      * outages count: select count(nodeid) from ipinterface where id in (select ipinterfaceid from ifservices where id in (select ifserviceid from outages where ifregainedservice is null));
-     * active/inactive/unprovisioned: select activenodes,inactivenodes,unprovisioned from (select count(*) activenodes from node where nodetype='A' and active=true) t1, (select count(*) inactivenodes from node where nodetype='A' and active=false) t2, (select count(*) unprovisioned from node where nodetype='A' and profileid is null) t3;
+     * active/inactive/unprovisioned: select activenodes, inactivenodes, unprovisioned from (select count(*) activenodes from node where nodetype='A' and active=true) t1, (select count(*) inactivenodes from node where nodetype='A' and active=false) t2, (select count(*) unprovisioned from node where nodetype='A' and profileid is null) t3;
      *
      */
     @GET
-    @Path("/nodes/active")
+    @Path("/nodes/counts_summary")
     @Produces({"text/event-stream"})
     public Response getNodeCounts(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
-        Integer activeCount = nodeDao.getActiveNodeCount();
-        StringBuilder buffer = new StringBuilder("data: ");
-        buffer.append("{ \"active\": ").append(activeCount).append("}");
-        buffer.append("\n\n");
+        Integer[] counts = nodeDao.getNodeStatusSummary();
+        StringBuilder buffer = new StringBuilder("data: {");
+        buffer.append("\"active\": \"").append(counts[0]).append("\", ");
+        buffer.append("\"inactive\": \"").append(counts[0]).append("\", ");
+        buffer.append("\"unprovisioned\": \"").append(counts[0]).append("\"");
+        buffer.append("}\n\n");
         return Response.ok().entity(buffer.toString()).build();
     }
 

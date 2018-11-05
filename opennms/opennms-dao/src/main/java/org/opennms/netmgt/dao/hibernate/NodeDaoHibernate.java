@@ -536,4 +536,15 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
     public Integer getActiveNodeCount() {
         return queryInt("select count(*) from OnmsNode as n where n.active = true");
     }
+
+    public Integer[] getNodeStatusSummary() {
+        String query = "select activenodes, inactivenodes, unprovisioned from ";
+        query += "(select count(*) activenodes from node where nodetype='A' and active=true) t1, ";
+        query += "(select count(*) inactivenodes from node where nodetype='A' and active=false) t2, ";
+        query += "(select count(*) unprovisioned from node where nodetype='A' and profileid is null) t3";
+        final String finalQuery = query;
+        return (Integer[]) getHibernateTemplate().executeWithNativeSession(
+                session -> session.createSQLQuery(finalQuery).uniqueResult()
+        );
+    }
 }

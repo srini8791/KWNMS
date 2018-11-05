@@ -79,6 +79,7 @@ public class EventDaoHibernate extends AbstractDaoHibernate<OnmsEvent, Integer> 
             public List<OnmsEvent> doInHibernate(Session session) throws HibernateException, SQLException {
                 return session.createQuery(hql)
                         .setParameter("eventTime", date)
+                        .setMaxResults(20)
                         .list();
             }
         });

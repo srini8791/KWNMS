@@ -292,4 +292,6 @@ public interface NodeDao extends LegacyOnmsDao<OnmsNode, Integer> {
     List<OnmsNode> findAllHavingFlows();
 
     Integer getActiveNodeCount();
+
+    Integer[] getNodeStatusSummary();
 }

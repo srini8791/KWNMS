@@ -126,14 +126,19 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
         }
     };
 
+    // NODES
     vm.dashboard.activeNodes = "0";
+    vm.dashboard.inactiveNodes = "0";
+    vm.dashboard.unprovisionedNodes = "0";
 
-    var nodesSource = new EventSource('api/v2/dashboard/nodes/active');
+    var nodesSource = new EventSource('api/v2/dashboard/nodes/counts_summary');
     nodesSource.onmessage = function(event) {
         if (event.data) {
             var nodesObj = JSON.parse(event.data);
             $scope.$apply(function() {
               vm.dashboard.activeNodes = nodesObj.active;
+              vm.dashboard.inactiveNodes = nodesObj.inactive;
+              vm.dashboard.unprovisionedNodes = nodesObj.unprovisioned;
             });
         }
     };
