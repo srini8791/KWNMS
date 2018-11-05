@@ -494,7 +494,7 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
         return 0;
     }
 
-    public Integer[] getNodeStatusSummary() {
+    public Number[] getNodeStatusSummary() {
         return new Integer[] {0, 0, 0};
     }
 

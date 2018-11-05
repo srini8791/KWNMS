@@ -359,7 +359,7 @@ public class MockNodeDao implements NodeDao {
         return 0;
     }
 
-    public Integer[] getNodeStatusSummary() {
+    public Number[] getNodeStatusSummary() {
         return new Integer[] {0, 0, 0};
     }
 }

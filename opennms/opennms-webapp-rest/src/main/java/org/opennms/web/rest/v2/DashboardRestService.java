@@ -30,10 +30,9 @@ package org.opennms.web.rest.v2;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.opennms.netmgt.dao.api.AlarmDao;
-import org.opennms.netmgt.dao.api.EventDao;
-import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.dao.api.RegionDao;
+import org.opennms.core.utils.InetAddressUtils;
+import org.opennms.core.utils.WebSecurityUtils;
+import org.opennms.netmgt.dao.api.*;
 import org.opennms.netmgt.model.OnmsEvent;
 import org.opennms.netmgt.model.OnmsRegion;
 import org.opennms.netmgt.model.OnmsSeverity;
@@ -68,6 +67,9 @@ public class DashboardRestService {
 
     @Autowired
     private NodeDao nodeDao;
+
+    @Autowired
+    private OutageDao outageDao;
 
     @GET
     @Path("/alarms")
@@ -108,9 +110,24 @@ public class DashboardRestService {
             }
             buffer.append("{");
             buffer.append("  \"id\": \"").append(event.getId()).append("\"");
-            buffer.append(", \"time\": \"").append(event.getEventTime()).append("\"");
+            if (event.getNodeLabel() == null) {
+                String ipAddress = event.getIpAddr() == null ? "" : InetAddressUtils.toIpAddrString(event.getIpAddr());
+                buffer.append(", \"ipaddress\": \"").append(ipAddress).append("\"");
+            } else {
+                buffer.append(", \"ipaddress\": \"").append(event.getNodeLabel()).append("\"");
+            }
+            // remove milliseconds from time
+            String time = event.getEventTime().toString();
+            time = time.substring(0, time.length()-4);
+            buffer.append(", \"time\": \"").append(time).append("\"");
             buffer.append(", \"severity\": \"").append(event.getEventSeverity()).append("\"");
-            buffer.append(", \"message\": \"").append(event.getEventDisplay()).append("\"");
+            String eventLogMessage = event.getEventLogMsg();
+            eventLogMessage = eventLogMessage.trim();
+            eventLogMessage = eventLogMessage.replaceAll("\\<p\\>", "");
+            eventLogMessage = eventLogMessage.replaceAll("\\</p\\>", "");
+            eventLogMessage = eventLogMessage.replaceAll("\n", "");
+            eventLogMessage = eventLogMessage.replaceAll("\"", "\\\\\"");
+            buffer.append(", \"message\": \"").append(eventLogMessage).append("\"");
             buffer.append("}");
             counter = 1;
         }
@@ -120,20 +137,17 @@ public class DashboardRestService {
     }
 
 
-    /**
-     * outages count: select count(nodeid) from ipinterface where id in (select ipinterfaceid from ifservices where id in (select ifserviceid from outages where ifregainedservice is null));
-     * active/inactive/unprovisioned: select activenodes, inactivenodes, unprovisioned from (select count(*) activenodes from node where nodetype='A' and active=true) t1, (select count(*) inactivenodes from node where nodetype='A' and active=false) t2, (select count(*) unprovisioned from node where nodetype='A' and profileid is null) t3;
-     *
-     */
     @GET
     @Path("/nodes/counts_summary")
     @Produces({"text/event-stream"})
     public Response getNodeCounts(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
-        Integer[] counts = nodeDao.getNodeStatusSummary();
+        Integer outagesCount = outageDao.currentOutageCount();
+        Number[] counts = nodeDao.getNodeStatusSummary();
         StringBuilder buffer = new StringBuilder("data: {");
+        buffer.append("\"outages\": \"").append(outagesCount).append("\", ");
         buffer.append("\"active\": \"").append(counts[0]).append("\", ");
-        buffer.append("\"inactive\": \"").append(counts[0]).append("\", ");
-        buffer.append("\"unprovisioned\": \"").append(counts[0]).append("\"");
+        buffer.append("\"inactive\": \"").append(counts[1]).append("\", ");
+        buffer.append("\"unprovisioned\": \"").append(counts[2]).append("\"");
         buffer.append("}\n\n");
         return Response.ok().entity(buffer.toString()).build();
     }

@@ -6,21 +6,17 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     vm.showDetails = true;
     vm.dashboard = {};
     
-        vm.dashboard.chart = [
+    vm.dashboard.chart = [
         {
           chartnumber: "1"
-        },        
+        },
         {
           chartnumber: "2"
         },
         {
           chartnumber: "3"
         }
-
-
-
-
-        ];
+    ];
 
     vm.dashboard.notification = [
         {
@@ -114,7 +110,7 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     // EVENTS
     vm.dashboard.events = [];
 
-    var eventSource = new EventSource('api/v2/dashboard/events/1');
+    var eventSource = new EventSource('api/v2/dashboard/events/24');
     eventSource.onmessage = function(event) {
         if (event.data) {
             var eventsArr = JSON.parse(event.data);
@@ -127,6 +123,7 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     };
 
     // NODES
+    vm.dashboard.outagesCount = "0";
     vm.dashboard.activeNodes = "0";
     vm.dashboard.inactiveNodes = "0";
     vm.dashboard.unprovisionedNodes = "0";
@@ -134,8 +131,11 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     var nodesSource = new EventSource('api/v2/dashboard/nodes/counts_summary');
     nodesSource.onmessage = function(event) {
         if (event.data) {
+            console.log(event.data);
             var nodesObj = JSON.parse(event.data);
+            console.log(nodesObj);
             $scope.$apply(function() {
+              vm.dashboard.outagesCount = nodesObj.outages;
               vm.dashboard.activeNodes = nodesObj.active;
               vm.dashboard.inactiveNodes = nodesObj.inactive;
               vm.dashboard.unprovisionedNodes = nodesObj.unprovisioned;

@@ -28,6 +28,7 @@
 
 package org.opennms.netmgt.dao.hibernate;
 
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -537,14 +538,21 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
         return queryInt("select count(*) from OnmsNode as n where n.active = true");
     }
 
-    public Integer[] getNodeStatusSummary() {
+    public Number[] getNodeStatusSummary() {
+        Number[] array = null;
         String query = "select activenodes, inactivenodes, unprovisioned from ";
         query += "(select count(*) activenodes from node where nodetype='A' and active=true) t1, ";
         query += "(select count(*) inactivenodes from node where nodetype='A' and active=false) t2, ";
         query += "(select count(*) unprovisioned from node where nodetype='A' and profileid is null) t3";
         final String finalQuery = query;
-        return (Integer[]) getHibernateTemplate().executeWithNativeSession(
-                session -> session.createSQLQuery(finalQuery).uniqueResult()
-        );
+        List<Object[]> result  = getHibernateTemplate().executeWithNativeSession(session -> session.createSQLQuery(finalQuery).list());
+        if (result != null) {
+            Object[] data = result.get(0);
+            array = new Number[data.length];
+            for (int i = 0; i < data.length; i++) {
+                array[i] = (Number) data[i];
+            }
+        }
+        return array;
     }
 }
