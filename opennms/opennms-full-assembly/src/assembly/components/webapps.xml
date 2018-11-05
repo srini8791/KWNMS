@@ -33,8 +33,9 @@
     <dependencySet>
       <unpack>true</unpack>
       <unpackOptions>
-        <excludes>
-          <exclude>index.html</exclude>
+	      <excludes>
+		      <!-- Commenting the exclude as index.html are not assembled in webapp directory -->
+		<!-- <exclude>index.html</exclude> -->
         </excludes>
       </unpackOptions>
       <useProjectArtifact>false</useProjectArtifact>
