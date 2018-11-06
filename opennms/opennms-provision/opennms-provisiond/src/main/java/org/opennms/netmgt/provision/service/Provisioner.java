@@ -816,6 +816,50 @@ public class Provisioner implements SpringServiceDaemon {
     }
 
     /**
+     * <p>handleAddNode</p>
+     *
+     * @param event a {@link org.opennms.netmgt.xml.event.Event} object.
+     */
+    @EventHandler(uei=EventConstants.NODE_DOWN_EVENT_UEI)
+    public void handleNodeDown(Event event) {
+        if (m_provisionService.isDiscoveryEnabled()) {
+            try {
+                doNodeStatus(event.getNodeid().intValue(),false);
+            } catch (Throwable e) {
+                LOG.error("Unexpected exception processing event: {}", event.getUei(), e);
+            }
+        }
+    }
+
+
+    /**
+     * <p>handleAddNode</p>
+     *
+     * @param event a {@link org.opennms.netmgt.xml.event.Event} object.
+     */
+    @EventHandler(uei=EventConstants.NODE_UP_EVENT_UEI)
+    public void handleNodeUp(Event event) {
+        if (m_provisionService.isDiscoveryEnabled()) {
+            try {
+                doNodeStatus(event.getNodeid().intValue(),true);
+            } catch (Throwable e) {
+                LOG.error("Unexpected exception processing event: {}", event.getUei(), e);
+            }
+        }
+    }
+
+    /**
+     * @param ipAddr
+     * @param nodeLabel
+     */
+    private void doNodeStatus(Integer nodeId,boolean status) {
+        OnmsNode node = m_provisionService.getNode(nodeId);
+        node.setActive(status);
+       m_provisionService.updateNodeStatus(node);
+
+    }
+
+    /**
      * @param ipAddr
      * @param nodeLabel
      */

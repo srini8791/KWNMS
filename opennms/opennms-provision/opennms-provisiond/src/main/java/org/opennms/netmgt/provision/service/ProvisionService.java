@@ -94,6 +94,9 @@ public interface ProvisionService {
      */
     @Transactional
     void updateNode(OnmsNode node, String rescanExisting);
+
+    @Transactional
+    void updateNodeStatus(OnmsNode node);
     
     @Transactional
     OnmsNode updateNodeAttributes(OnmsNode node);

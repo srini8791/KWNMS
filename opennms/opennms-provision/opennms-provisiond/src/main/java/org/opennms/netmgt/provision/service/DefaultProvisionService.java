@@ -197,6 +197,15 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
         node.visit(visitor);
     }
 
+    @Transactional
+    @Override
+    public void updateNodeStatus(OnmsNode node) {
+        final OnmsNode dbNode = m_nodeDao.getHierarchy(node.getId());
+        dbNode.setActive(node.getActive());
+        m_nodeDao.update(dbNode);
+        m_nodeDao.flush();
+    }
+
     /** {@inheritDoc} */
     @Transactional
     @Override
