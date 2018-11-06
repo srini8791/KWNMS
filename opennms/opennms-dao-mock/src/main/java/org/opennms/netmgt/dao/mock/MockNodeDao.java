@@ -498,4 +498,13 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
         return new Integer[] {0, 0, 0};
     }
 
+    public List<Object[]> getProductStatusSummary() {
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[] {"ptp", 0, 0, 0});
+        list.add(new Object[] {"ptmp", 0, 0, 0});
+        list.add(new Object[] {"outdoorap", 0, 0, 0});
+        list.add(new Object[] {"indoorap", 0, 0, 0});
+        return list;
+    }
+
 }

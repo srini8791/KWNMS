@@ -555,4 +555,18 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
         }
         return array;
     }
+
+
+    /**
+     * Order of status:
+     *      ptptotal, ptpup, ptpdown, ptmptotal, ptmptup, ptmpdown, wifitotal, wifiup, wifidown
+     * @return
+     */
+    public List<Object[]> getProductStatusSummary() {
+        String query = "select productcode, count(*) as total, count(active) filter (where active = true) as up, count(active) filter (where active = false) as down";
+        query += " from node where productcode is not null group by productcode order by productcode desc";
+        final String finalQuery = query;
+        return getHibernateTemplate().executeWithNativeSession(session -> session.createSQLQuery(finalQuery).list());
+    }
+
 }

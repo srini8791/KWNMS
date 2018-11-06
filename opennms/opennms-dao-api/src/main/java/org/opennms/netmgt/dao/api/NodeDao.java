@@ -294,4 +294,6 @@ public interface NodeDao extends LegacyOnmsDao<OnmsNode, Integer> {
     Integer getActiveNodeCount();
 
     Number[] getNodeStatusSummary();
+
+    List<Object[]> getProductStatusSummary();
 }

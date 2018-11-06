@@ -29,12 +29,7 @@
 package org.opennms.features.topology.plugins.ncs;
 
 import java.net.InetAddress;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.opennms.core.criteria.Criteria;
 import org.opennms.netmgt.dao.api.NodeDao;
@@ -361,5 +356,14 @@ public class MockNodeDao implements NodeDao {
 
     public Number[] getNodeStatusSummary() {
         return new Integer[] {0, 0, 0};
+    }
+
+    public List<Object[]> getProductStatusSummary() {
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[] {"ptp", 0, 0, 0});
+        list.add(new Object[] {"ptmp", 0, 0, 0});
+        list.add(new Object[] {"outdoorap", 0, 0, 0});
+        list.add(new Object[] {"indoorap", 0, 0, 0});
+        return list;
     }
 }

@@ -152,5 +152,43 @@ public class DashboardRestService {
         return Response.ok().entity(buffer.toString()).build();
     }
 
+    @GET
+    @Path("/nodes/productcodes_summary")
+    @Produces({"text/event-stream"})
+    public Response getProductStatusSummary(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
+        List<Object[]> productCounts = nodeDao.getProductStatusSummary();
+        StringBuilder buffer = new StringBuilder("data: {");
+        int wifitotal = 0;
+        int wifiup = 0;
+        int wifidown = 0;
+        int counter = 0;
+        for (Object[] array : productCounts) {
+            if ("outdoorap".equals(array[0]) || "indoorap".equals(array[0])) {
+                wifitotal += Integer.parseInt(array[1].toString());
+                wifiup += Integer.parseInt(array[2].toString());
+                wifidown += Integer.parseInt(array[3].toString());
+            } else {
+                if (counter != 0) {
+                    buffer.append(",");
+                }
+                buffer.append("\"").append(array[0]).append("\": [");
+                buffer.append("\"").append(array[1]).append("\", ");
+                buffer.append("\"").append(array[2]).append("\", ");
+                buffer.append("\"").append(array[3]).append("\"");
+                buffer.append("]");
+                counter = 1;
+            }
+        }
+        // add for wifi
+        buffer.append(",");
+        buffer.append("\"wifi\": [");
+        buffer.append("\"").append(wifitotal).append("\", ");
+        buffer.append("\"").append(wifiup).append("\", ");
+        buffer.append("\"").append(wifidown).append("\"");
+        buffer.append("]");
+
+        buffer.append("}\n\n");
+        return Response.ok().entity(buffer.toString()).build();
+    }
 
 }

@@ -63,28 +63,28 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
         }
     ];
 
-    vm.dashboard.mainData = [
+    vm.dashboard.productStatus = [
         {   
             icon: "mdi-access-point",
             title: "PTP",
-            total: "10",
-            down: "2",
-            up: "8"
+            total: "0",
+            down: "0",
+            up: "0"
             
         },
         {
             icon: "mdi-bluetooth-connect",
             title: "PTMP",
-            total: "10",
-            down: "2",
-            up: "8"
+            total: "0",
+            down: "0",
+            up: "0"
         },
         {
             icon: "mdi-wifi",
             title: "Wifi",
-            total: "10",
-            down: "2",
-            up: "8"
+            total: "0",
+            down: "0",
+            up: "0"
         }
     ];
 
@@ -142,6 +142,34 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
             });
         }
     };
+
+    // NODES
+    vm.dashboard.ptpStatus = [];
+    vm.dashboard.ptmpStatus = [];
+    vm.dashboard.wifiStatus = [];
+
+    var productsSource = new EventSource('api/v2/dashboard/nodes/productcodes_summary');
+    productsSource.onmessage = function(event) {
+        if (event.data) {
+            console.log(event.data);
+            var productsObj = JSON.parse(event.data);
+            console.log(productsObj);
+            $scope.$apply(function() {
+              vm.dashboard.productStatus[0].total = productsObj.ptp[0];
+              vm.dashboard.productStatus[0].up = productsObj.ptp[1];
+              vm.dashboard.productStatus[0].down = productsObj.ptp[2];
+
+              vm.dashboard.productStatus[1].total = productsObj.ptmp[0];
+              vm.dashboard.productStatus[1].up = productsObj.ptmp[1];
+              vm.dashboard.productStatus[1].down = productsObj.ptmp[2];
+
+              vm.dashboard.productStatus[2].total = productsObj.wifi[0];
+              vm.dashboard.productStatus[2].up = productsObj.wifi[1];
+              vm.dashboard.productStatus[2].down = productsObj.wifi[2];
+            });
+        }
+    };
+
 
 
 }]);
