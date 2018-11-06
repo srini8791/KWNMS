@@ -92,6 +92,7 @@
     </preConditions>
 
     <addColumn tableName="node">
+      <column name="productcode" type="varchar(15)" />
       <column name="ssid"       type="varchar(30)" />
       <column name="macaddress" type="varchar(20)">
         <constraints unique="true" />
@@ -99,7 +100,7 @@
       <column name="radiomode"  type="varchar(20)" />
       <column name="opmode"     type="varchar(10)" />
       <column name="bandwidth"  type="varchar(10)" />
-      <column name="channel"    type="varchar(5)" />
+      <column name="channel"    type="integer" />
       <column name="profileid"  type="integer" />
       <column name="active"     type="boolean" defaultValueBoolean="false">
         <constraints nullable="false" />
@@ -107,6 +108,7 @@
     </addColumn>
 
     <rollback>
+      <dropColumn tableName="node" columnName="productcode" />
       <dropColumn tableName="node" columnName="ssid" />
       <dropColumn tableName="node" columnName="macaddress" />
       <dropColumn tableName="node" columnName="radiomode" />
