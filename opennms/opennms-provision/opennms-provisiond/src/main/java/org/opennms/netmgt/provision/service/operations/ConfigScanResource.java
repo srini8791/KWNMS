@@ -91,8 +91,10 @@ public class ConfigScanResource {
                 System.out.println("**** ConfigScanResource.setAttribute -- assetRecord = " + m_node.getAssetRecord());
             } else if (KwpConfigurationGroup.WIRELESS_BANDWIDTH_ALIAS.equals(key)) {
                 m_node.setBandwidth((String)value);
-            } else if (KwpConfigurationGroup.WIRELESS_CHANNEL_ALIAS.equals(key)) {
-                m_node.setChannel((String)value);
+            } else if (KwpConfigurationGroup.WIRELESS_ACTIVE_CHANNEL_ALIAS.equals(key)) {
+                if (value instanceof Integer) {
+                    m_node.setChannel((Integer) value);
+                }
             } else if (KwpConfigurationGroup.WIRELESS_COUNTRY_ALIAS.equals(key)) {
                 //TODO : need to add country variable. currently it is getting stored in OnmsGeolocation.country
                 //m_node.getAssetRecord().getGeolocation().set

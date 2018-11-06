@@ -58,7 +58,7 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
 
     private String operationalMode;
 
-    private String channel = "auto";
+    private Integer channel = 0;
 
     private int countryCode = 0;
 
@@ -102,7 +102,11 @@ public class KwpConfiguration extends AbstractKwpProxiableTracker {
         }
         ltv = packet.getLTVPacketByType(CHANNEL_TYPE);
         if (ltv != null) {
-            this.channel = ltv.getStringValue();
+            try {
+                this.channel = Integer.parseInt(ltv.getStringValue());
+            } catch (NumberFormatException ne) {
+
+            }
         }
         ltv = packet.getLTVPacketByType(DEVICE_MODE);
         if (ltv != null) {

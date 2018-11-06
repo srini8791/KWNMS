@@ -81,8 +81,8 @@ public final class KwpConfigurationGroup extends AggregateTracker {
     private static final String WIRELESS_BANDWIDTH = ".1.3.6.1.4.1.52619.1.1.1.1.1.7.2";
 
     /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
-    public static final String WIRELESS_CHANNEL_ALIAS = "wirelessChannel";
-    private static final String WIRELESS_CHANNEL = " .1.3.6.1.4.1.52619.1.1.1.1.1.9.2";
+    public static final String WIRELESS_ACTIVE_CHANNEL_ALIAS = "wirelessActiveChannel";
+    private static final String WIRELESS_ACTIVE_CHANNEL = " .1.3.6.1.4.1.52619.1.1.1.1.1.27.2";
 
     /**
      * <P>
@@ -162,7 +162,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
          * site's implementation.
          * </P>
          */
-        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, WIRELESS_CHANNEL_ALIAS, WIRELESS_CHANNEL);
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_ACTIVE_CHANNEL_ALIAS, WIRELESS_ACTIVE_CHANNEL);
 
 
         /**
@@ -228,8 +228,8 @@ public final class KwpConfigurationGroup extends AggregateTracker {
         return m_store.getDisplayString(WIRELESS_BANDWIDTH);
     }
 
-    public String getWirelessChannel() {
-        return m_store.getDisplayString(WIRELESS_CHANNEL);
+    public Integer getWirelessChannel() {
+        return m_store.getInt32(WIRELESS_ACTIVE_CHANNEL);
     }
 
     public Integer getWirelessCountry() {
@@ -280,7 +280,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
             sr.setAttribute(RADIO_MODE_ALIAS, getRadioMode());
             sr.setAttribute(WIRELESS_SSID, getWirelessSsid());
             sr.setAttribute(WIRELESS_BANDWIDTH, getWirelessBandwidth());
-            sr.setAttribute(WIRELESS_CHANNEL, getWirelessChannel());
+            sr.setAttribute(WIRELESS_ACTIVE_CHANNEL, getWirelessChannel());
             sr.setAttribute(WIRELESS_COUNTRY, getWirelessCountry());
             sr.setAttribute(WIRELESS_OPMODE,getWirelessOpmode());
 
@@ -316,7 +316,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
             sr.setAttribute(RADIO_MODE_ALIAS, getRadioMode());
             sr.setAttribute(WIRELESS_SSID, getWirelessSsid());
             sr.setAttribute(WIRELESS_BANDWIDTH, getWirelessBandwidth());
-            sr.setAttribute(WIRELESS_CHANNEL, getWirelessChannel());
+            sr.setAttribute(WIRELESS_ACTIVE_CHANNEL, getWirelessChannel());
             sr.setAttribute(WIRELESS_COUNTRY, getWirelessCountry());
             sr.setAttribute(WIRELESS_OPMODE,getWirelessOpmode());
 

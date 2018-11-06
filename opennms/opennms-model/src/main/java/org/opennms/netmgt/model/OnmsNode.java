@@ -160,10 +160,13 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private String m_bandwidth;
 
     /** nullable persistent field */
-    private String m_channel;
+    private Integer m_channel;
 
     /** nullable persistent field */
     private boolean m_active;
+
+    /** nullable persistent field */
+    private String m_productCode;
 
 
     @Transient
@@ -651,9 +654,26 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         this.m_bandwidth = bandwidth;
     }
 
+    @XmlElement(name="productcode")
+    @Column(name="productcode")
+    //@Type(type="org.opennms.netmgt.model.BandwidthUserType")
+    public String getProductCode() {
+
+        return m_productCode;
+    }
+
+    /**
+     * <p>setBandwidth</p>
+     * @param bandwidth
+     */
+    public void setProductCode(String productCode) {
+        this.m_productCode = productCode;
+    }
+
+
     @XmlElement(name="channel")
     @Column(name="channel")
-    public String getChannel() {
+    public Integer getChannel() {
         return m_channel;
     }
 
@@ -661,7 +681,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
      * <p>setChannel</p>
      * @param channel
      */
-    public void setChannel(String channel) {
+    public void setChannel(Integer channel) {
         this.m_channel = channel;
     }
 

@@ -304,6 +304,9 @@ public final class SystemGroup extends AggregateTracker {
             sr.setAttribute("sysDescription", getSysDescr());
             sr.setAttribute("sysLocation", getSysLocation());
             sr.setAttribute("sysObjectId", getSysObjectID());
+            if (getSysObjectID() != null) {
+                sr.setAttribute("productCode", getSysObjectID());
+            }
         }
     }
 
