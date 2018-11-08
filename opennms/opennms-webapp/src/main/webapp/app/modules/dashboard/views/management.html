@@ -12,8 +12,45 @@
 <!-- End Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
 <!-- Main content -->
-<section class="content">
+<section class="content" data-ng-controller="ManagementController" data-ng-init="loadNodes()">
   <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card" style="margin:10px; padding: 20px;">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <div class="row">
+              <div class="col-sm-3"><h5 class="card-title m-b-0">Nodes</h5></div>
+              <div class="col-sm-3"></div>
+              <div class="col-sm-4"></div>
+              <div class="col-sm-2">
+                <button data-ng-click="loadNodes()" type="button" class="btn btn-primary"><i class="fa fa-sync"></i>&nbsp;Reload</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">Node Label</th>
+                <th scope="col">Facility</th>
+                <th scope="col">Primary IP</th>
+                <th scope="col">Asset Type</th>
+              </tr>
+              </thead>
+              <tbody class="customtable">
+              <tr data-ng-repeat="node in vm.nodes">
+                <td>{{ node.label }}</td>
+                <td>{{ node.location }}</td>
+                <td>{{ node.primaryIP }}</td>
+                <td>{{ node.productcode | showProductType }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
     <div class="row">
       <div class="col-md-12">
         <div class="card" style="margin:10px; padding: 20px;">
@@ -197,15 +234,15 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <div class="card-body" style="background:#663399; color:#fff;">
-                  <h5 class="card-title m-b-0" ">Typology</h5>
+                  <h5 class="card-title m-b-0" ">Topology</h5>
                 </div>
               </div>
               <div class="panel-body">
                 <!-- TREEVIEW CODE -->
                 <ul class="treeview">
-                  <li><a href="#">Tree</a>
+                  <li><a href="#">Global</a>
                     <ul>
-                      <li><a href="#">Branch</a></li>
+                      <li><a href="#">Region 1</a></li>
                       <li><a href="#">Branch</a>
                         <ul>
                           <li><a href="#">Stick</a></li>

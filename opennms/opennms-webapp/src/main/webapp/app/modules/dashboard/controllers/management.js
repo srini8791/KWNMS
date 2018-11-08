@@ -1,13 +1,41 @@
 ﻿
 
-dashboard.controller("AboutController", ['$rootScope', '$scope', '$state', '$location', 'dashboardService', 'Flash',
-function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
-        var vm = this;
+dashboard.controller("ManagementController", ['$rootScope', '$scope', '$http', '$state', '$location', 'dashboardService', 'Flash',
+  function ($rootScope, $scope, $http, $state, $location, dashboardService, Flash) {
+    var vm = this;
 
-        console.log("coming to About controller");
+    $scope.vm.nodes = [];
 
-    }]);
+    $scope.loadNodes = function() {
+      var config = {
+        params: {
+          'limit': '50'
+        }
+      };
 
+      $http.get('api/v2/nodes', config)
+        .then(function(response) {
+          if (response.data) {
+            $scope.vm.nodes = response.data.node;
+          }
+        }
+      );
+    }
+
+  }
+]);
+
+dashboard.filter('showProductType', function() {
+  return function(item) {
+    if (item == undefined) {
+      return 'Unknown';
+    } else if (item === 'indoorap' || item === 'outdoorap') {
+      return 'Access Point';
+    } else {
+      return item.toUpperCase();
+    }
+  }
+});
 
 $.fn.extend({
 	treeview:	function() {
