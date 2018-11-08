@@ -14,10 +14,39 @@
 
 
 <!-- Main content -->
-<section class="content">
+<section class="content" data-ng-controller="EventsController" data-ng-init="loadEvents()">
   <div class="container-fluid">
-
-
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card" style="margin:10px; padding: 20px;">
+          <div class="card-header" style="text-align:right; background:#663399;">
+            <button data-ng-click="loadEvents()" type="button" class="btn btn-primary"><i class="fa fa-sync"></i>&nbsp;Reload</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Severity</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Node</th>
+                  <th scope="col">Message</th>
+                </tr>
+              </thead>
+              <tbody class="customtable">
+                <tr data-ng-repeat="event in vm.events">
+                  <td>{{ event.id }}</td>
+                  <td>{{ event.severity }}</td>
+                  <td>{{ event.time | date: 'yyyy-MM-dd HH:mm:ss.sss' }}</td>
+                  <td>{{ event.nodeLabel }}</td>
+                  <td>{{ event.logMessage }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </section>

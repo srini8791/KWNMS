@@ -90,6 +90,7 @@ public class DashboardRestService {
         return Response.ok().entity(buffer.toString()).build();
     }
 
+
     @GET
     @Path("/events/{timeframe}")
     @Produces({"text/event-stream"})
@@ -102,36 +103,27 @@ public class DashboardRestService {
         Date date = calendar.getTime();
         List<OnmsEvent> latestEvents = eventDao.getEventsAfterDate(date);
         StringBuilder buffer = new StringBuilder("data: ");
-        buffer.append("[");
+        JSONArray eventsArray = new JSONArray();
         int counter = 0;
         for (OnmsEvent event : latestEvents) {
-            if (counter != 0) {
-                buffer.append(",");
-            }
-            buffer.append("{");
-            buffer.append("  \"id\": \"").append(event.getId()).append("\"");
+            JSONObject eventObj = new JSONObject();
+            eventObj.put("id", event.getId());
             if (event.getNodeLabel() == null) {
                 String ipAddress = event.getIpAddr() == null ? "" : InetAddressUtils.toIpAddrString(event.getIpAddr());
-                buffer.append(", \"ipaddress\": \"").append(ipAddress).append("\"");
+                eventObj.put("ipaddress", ipAddress);
             } else {
-                buffer.append(", \"ipaddress\": \"").append(event.getNodeLabel()).append("\"");
+                eventObj.put("ipaddress", event.getNodeLabel());
             }
             // remove milliseconds from time
             String time = event.getEventTime().toString();
             time = time.substring(0, time.length()-4);
-            buffer.append(", \"time\": \"").append(time).append("\"");
-            buffer.append(", \"severity\": \"").append(event.getEventSeverity()).append("\"");
-            String eventLogMessage = event.getEventLogMsg();
-            eventLogMessage = eventLogMessage.trim();
-            eventLogMessage = eventLogMessage.replaceAll("\\<p\\>", "");
-            eventLogMessage = eventLogMessage.replaceAll("\\</p\\>", "");
-            eventLogMessage = eventLogMessage.replaceAll("\n", "");
-            eventLogMessage = eventLogMessage.replaceAll("\"", "\\\\\"");
-            buffer.append(", \"message\": \"").append(eventLogMessage).append("\"");
-            buffer.append("}");
+            eventObj.put("time", time);
+            eventObj.put("severity", event.getEventSeverity());
+            eventObj.put("message", event.getEventLogMsg());
+            eventsArray.put(eventObj);
             counter = 1;
         }
-        buffer.append("]");
+        buffer.append(eventsArray.toString());
         buffer.append("\n\n");
         return Response.ok().entity(buffer.toString()).build();
     }

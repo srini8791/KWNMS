@@ -355,6 +355,11 @@
         <property name="entries">
             <list>
                 <bean class="org.opennms.web.navigate.LocationBasedNavBarEntry">
+                    <property name="name" value="New UI Dashboard"/>
+                    <property name="url" value="index.html"/>
+                    <property name="locationMatch" value="dashboard"/>
+                </bean>
+                <bean class="org.opennms.web.navigate.LocationBasedNavBarEntry">
                     <property name="name" value="Dashboard"/>
                     <property name="url" value="dashboard.jsp"/>
                     <property name="locationMatch" value="dashboard"/>
