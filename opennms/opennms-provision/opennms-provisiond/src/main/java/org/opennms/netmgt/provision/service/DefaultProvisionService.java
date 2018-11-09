@@ -1020,6 +1020,7 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
                 final boolean deviceModeUpdated = handleDeviceModeChanges(dbNode);
 
                 dbNode.mergeNodeAttributes(node, accumulator);
+                dbNode.mergeAssets(node);
                 updateNodeHostname(dbNode);
                 final OnmsNode ret = saveOrUpdate(dbNode);
 

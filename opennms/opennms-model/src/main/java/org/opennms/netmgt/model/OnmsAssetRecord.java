@@ -2031,5 +2031,27 @@ public class OnmsAssetRecord implements Serializable {
 
         toGeolocation.mergeGeolocation(fromGeolocation);
         setGeolocation(toGeolocation);
+
+        if (hasNewValue((String)newRecord.getSerialNumber(),(String)getSerialNumber())){
+            setSerialNumber(newRecord.getSerialNumber());
+        }
+        if (hasNewValue((String)newRecord.getModelNumber(),(String)getModelNumber())) {
+            setModelNumber(newRecord.getModelNumber());
+        }
+
+        if (hasNewValue((String)newRecord.getFirmware(),(String)getFirmware())) {
+            setFirmware(newRecord.getFirmware());
+        }
+    }
+
+    /**
+     * <p>hasNewValue</p>
+     *
+     * @param newVal a {@link java.lang.Object} object.
+     * @param existingVal a {@link java.lang.Object} object.
+     * @return a boolean.
+     */
+    protected boolean hasNewValue(Object newVal, Object existingVal) {
+        return newVal != null && !newVal.equals(existingVal);
     }
 }

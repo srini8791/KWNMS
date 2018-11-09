@@ -44,6 +44,7 @@ import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.provision.NodePolicy;
 import org.opennms.netmgt.provision.service.snmp.KWPSystemGroup;
 import org.opennms.netmgt.provision.service.snmp.KwpConfigurationGroup;
+import org.opennms.netmgt.provision.service.snmp.KwpInventoryGroup;
 import org.opennms.netmgt.provision.service.snmp.SystemGroup;
 import org.opennms.netmgt.snmp.SnmpAgentConfig;
 import org.opennms.netmgt.snmp.SnmpValue;
@@ -90,6 +91,12 @@ final class NodeInfoScan implements RunInBatch {
                     @Override
                     public void run(BatchTask batch) {
                         collectNodeConfigInfo();
+                    }
+                },new RunInBatch() {
+
+                    @Override
+                    public void run(BatchTask batch) {
+                        collectInventoryInfo();
                     }
                 },
                 new RunInBatch() {
@@ -145,6 +152,34 @@ final class NodeInfoScan implements RunInBatch {
         m_node = node;
     }
 
+
+    private void collectInventoryInfo() {
+        InetAddress primaryAddress = getAgentAddress();
+        SnmpAgentConfig agentConfig = getAgentConfig(primaryAddress);
+        KwpInventoryGroup inventoryGroup = new KwpInventoryGroup(primaryAddress);
+        try {
+
+            final CompletableFuture<List<SnmpValue>> future = m_provisionService.getLocationAwareSnmpClient().get(agentConfig,inventoryGroup.getGetList())
+                    .withDescription("inventoryGroup")
+                    .withLocation(getLocationName())
+                    .execute();
+            //.get();
+            List<SnmpValue> values = null;
+            try {
+                values = future.get();
+            } catch(ExecutionException ex) {
+
+            }
+
+            if (values != null && inventoryGroup.getGetList().size() == values.size()) {
+                inventoryGroup.updateSnmpDataForNode(getNode(),values);
+            }
+            //configGroup.updateSnmpDataForNode(getNode());,
+        } catch (final InterruptedException e) {
+            abort("Aborting node scan : Scan thread interrupted!");
+            Thread.currentThread().interrupt();
+        }
+    }
 
     private void collectNodeConfigInfo() {
         InetAddress primaryAddress = getAgentAddress();

@@ -1679,6 +1679,10 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
             setChannel(scannedNode.getChannel());
         }
 
+        if (hasNewValue(scannedNode.getProductCode(), getProductCode())) {
+            setProductCode(scannedNode.getProductCode());
+        }
+
         mergeAgentAttributes(scannedNode);
 
         mergeAdditionalCategories(scannedNode);

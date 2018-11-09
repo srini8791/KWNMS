@@ -30,6 +30,7 @@ package org.opennms.netmgt.provision.service.operations;
 
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.provision.service.snmp.KwpConfigurationGroup;
+import org.opennms.netmgt.provision.service.snmp.KwpInventoryGroup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,9 +103,22 @@ public class ConfigScanResource {
                 m_node.setSsid(value.toString());
             } else if (KwpConfigurationGroup.WIRELESS_OPMODE_ALIAS.equals(key)) {
                 m_node.setOpMode((String)value);
+            } else if (KwpInventoryGroup.INV_SERIAL_ALIAS.equals(key)) {
+                m_node.getAssetRecord().setSerialNumber((String)value);
+            } else if (KwpInventoryGroup.INV_MODEL_ALIAS.equals(key)) {
+                m_node.getAssetRecord().setModelNumber((String)value);
+            } else if (KwpInventoryGroup.DEVICE_RELEASE_VERSION.equals(key)) {
+                String sValue = (String) value;
+                if (sValue.toString().length() == 0) {
+                    sValue = m_attributes.get(KwpInventoryGroup.INV_RELEASE_NUM_ALIAS) + "." +
+                            m_attributes.get(KwpInventoryGroup.INV_RELEASE_MAJ_NUM_ALIAS) + "." +
+                            m_attributes.get(KwpInventoryGroup.INV_RELEASE_MIN_ALIAS) + "(" +
+                            m_attributes.get(KwpInventoryGroup.INV_BUILD_NUM_ALIAS) + ")";
+
+                }
+                m_node.getAssetRecord().setFirmware(sValue);
             }
         }
-
     }
 
     /**
