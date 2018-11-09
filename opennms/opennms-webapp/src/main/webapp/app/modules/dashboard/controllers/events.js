@@ -7,7 +7,6 @@ function ($rootScope, $scope, $state, $http, $location, dashboardService, Flash)
     $scope.vm.events = [];
 
     $scope.loadEvents = function() {
-      console.log($scope.vm.eventsFilter);
       var filterVal = 'eventDisplay==Y';
       if ($scope.vm.eventsFilter === 'syslogs') {
         filterVal = 'eventSource==syslogd';

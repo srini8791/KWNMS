@@ -31,11 +31,11 @@ package org.opennms.web.rest.v2;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.opennms.core.utils.InetAddressUtils;
-import org.opennms.core.utils.WebSecurityUtils;
-import org.opennms.netmgt.dao.api.*;
+import org.opennms.netmgt.dao.api.AlarmDao;
+import org.opennms.netmgt.dao.api.EventDao;
+import org.opennms.netmgt.dao.api.NodeDao;
+import org.opennms.netmgt.dao.api.OutageDao;
 import org.opennms.netmgt.model.OnmsEvent;
-import org.opennms.netmgt.model.OnmsRegion;
-import org.opennms.netmgt.model.OnmsSeverity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +45,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.*;
-import java.io.Serializable;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 import java.util.*;
 
 
@@ -149,37 +151,24 @@ public class DashboardRestService {
     @Produces({"text/event-stream"})
     public Response getProductStatusSummary(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
         List<Object[]> productCounts = nodeDao.getProductStatusSummary();
-        StringBuilder buffer = new StringBuilder("data: {");
-        int wifitotal = 0;
-        int wifiup = 0;
-        int wifidown = 0;
-        int counter = 0;
+        StringBuilder buffer = new StringBuilder("data: ");
+        Map<String, List<Integer>> map = new HashMap<>();
+        map.put("ptp", Arrays.asList(0, 0, 0));
+        map.put("ptmp", Arrays.asList(0, 0, 0));
+        map.put("wifi", Arrays.asList(0, 0, 0));
         for (Object[] array : productCounts) {
-            if ("outdoorap".equals(array[0]) || "indoorap".equals(array[0])) {
-                wifitotal += Integer.parseInt(array[1].toString());
-                wifiup += Integer.parseInt(array[2].toString());
-                wifidown += Integer.parseInt(array[3].toString());
-            } else {
-                if (counter != 0) {
-                    buffer.append(",");
-                }
-                buffer.append("\"").append(array[0]).append("\": [");
-                buffer.append("\"").append(array[1]).append("\", ");
-                buffer.append("\"").append(array[2]).append("\", ");
-                buffer.append("\"").append(array[3]).append("\"");
-                buffer.append("]");
-                counter = 1;
+            String keyStr = String.valueOf(array[0]);
+            String key = "outdoorap".equals(keyStr) || "indoorap".equals(keyStr) ? "wifi" : keyStr;
+            if (map.containsKey(key)) {
+                List<Integer> values = map.get(key);
+                values.set(0, values.get(0) + Integer.parseInt(String.valueOf(array[1])));
+                values.set(1, values.get(1) + Integer.parseInt(String.valueOf(array[2])));
+                values.set(2, values.get(2) + Integer.parseInt(String.valueOf(array[3])));
             }
         }
-        // add for wifi
-        buffer.append(",");
-        buffer.append("\"wifi\": [");
-        buffer.append("\"").append(wifitotal).append("\", ");
-        buffer.append("\"").append(wifiup).append("\", ");
-        buffer.append("\"").append(wifidown).append("\"");
-        buffer.append("]");
+        buffer.append(new JSONObject(map));
+        buffer.append("\n\n");
 
-        buffer.append("}\n\n");
         return Response.ok().entity(buffer.toString()).build();
     }
 

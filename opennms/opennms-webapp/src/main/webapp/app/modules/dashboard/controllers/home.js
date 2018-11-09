@@ -131,9 +131,7 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     var nodesSource = new EventSource('api/v2/dashboard/nodes/counts_summary');
     nodesSource.onmessage = function(event) {
         if (event.data) {
-            console.log(event.data);
             var nodesObj = JSON.parse(event.data);
-            console.log(nodesObj);
             $scope.$apply(function() {
               vm.dashboard.outagesCount = nodesObj.outages;
               vm.dashboard.activeNodes = nodesObj.active;
@@ -151,9 +149,7 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     var productsSource = new EventSource('api/v2/dashboard/nodes/productcodes_summary');
     productsSource.onmessage = function(event) {
         if (event.data) {
-            console.log(event.data);
             var productsObj = JSON.parse(event.data);
-            console.log(productsObj);
             $scope.$apply(function() {
               vm.dashboard.productStatus[0].total = productsObj.ptp[0];
               vm.dashboard.productStatus[0].up = productsObj.ptp[1];
