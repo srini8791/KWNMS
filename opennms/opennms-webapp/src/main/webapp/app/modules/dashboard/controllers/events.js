@@ -19,7 +19,9 @@ function ($rootScope, $scope, $state, $http, $location, dashboardService, Flash)
 
       $http.get('api/v2/events', config)
         .then(function(response) {
-          if (response.data) {
+          if (response.status == 204) {
+            $scope.vm.events = [];
+          } else if (response.status == 200 && response.data) {
             $scope.vm.events = response.data.event;
           }
         }

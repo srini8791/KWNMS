@@ -20,34 +20,36 @@
     <!-- Start Page Content -->
     <!-- ============================================================== -->
     <div class="row mainData">
-      <div class="col-md-9">
+      <div class="col-md-12">
         <div class="row">
-
           <div class="col-md-6">
             <div class="card text-center outage">
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3 col-sm-6 text-orange">
-                    <h4>Outage</h4>
+                    <h6>Outage</h6>
+                    <hr/>
                     <h4>{{ vm.dashboard.outagesCount }}</h4>
                   </div>
                   <div class="col-md-3 col-sm-6 text-red">
-                    <h4>Disconnected</h4>
+                    <h6>Disconnected</h6>
+                    <hr/>
                     <h4>{{ vm.dashboard.inactiveNodes }}</h4>
                   </div>
                   <div class="col-md-3 col-sm-6 text-green">
-                    <h4>Good</h4>
+                    <h6>Good</h6>
+                    <hr/>
                     <h4>{{ vm.dashboard.activeNodes }}</h4>
                   </div>
                   <div class="col-md-3 col-sm-6 text-default">
-                    <h4>Unassigned</h4>
+                    <h6>Unassigned</h6>
+                    <hr/>
                     <h4>{{ vm.dashboard.unprovisionedNodes }}</h4>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="col-md-6">
             <div class="card">
               <div class="card-body">
@@ -56,14 +58,16 @@
                     <h4>Last 24 Hrs Alarms:</h4>
                   </div>
                   <div class="col-md-4">
-                    <div class="peity_line_neutral text-center">
+                    <div class="peity_line_neutral text-center text-red">
                       <h6>Critical</h6>
+                      <hr/>
                       <h4>{{ vm.dashboard.alarms_s7 }}</h4>
                     </div>
                   </div>
                   <div class="col-md-4">
-                    <div class="peity_line_neutral text-center">
+                    <div class="peity_line_neutral text-center text-orange">
                       <h6>Major</h6>
+                      <hr/>
                       <h4>{{ vm.dashboard.alarms_s6 }}</h4>
                     </div>
                   </div>
@@ -71,67 +75,65 @@
               </div>
             </div>
           </div>
-
         </div>
         <div class="row">
-          <div class="col-md-4 col-lg-4" data-ng-repeat="data in vm.dashboard.productStatus">
-            <div class="card card-hover">
-              <div class="box">
-                <h1 class="font-light text-violet"><i class="mdi {{data.icon}}"></i> {{data.title}}</h1>
-                <div class="row">
-                  <div class="col-md-4 border-left text-center p-t-10">
-                    <h3 class="mb-0">{{data.total}}</h3>
-                    <span class="text-muted">Total</span>
-                  </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-4 col-lg-4" data-ng-repeat="data in vm.dashboard.productStatus">
+                  <div class="card card-hover">
+                    <div class="box">
+                      <h1 class="font-light text-violet"><i class="mdi {{data.icon}}"></i> {{data.title}}</h1>
+                      <hr/>
+                      <div class="row">
+                        <div class="col-md-4 border-left text-center p-t-10">
+                          <h3 class="mb-0">{{data.total}}</h3>
+                          <span class="text-muted">Total</span>
+                        </div>
 
-                  <div class="col-md-4 border-left text-center p-t-10">
-                    <h3 class="mb-0">{{data.down}} <i class="mdi mdi-arrow-down text-red"></i></h3>
-                    <span class="text-muted">Down</span>
-                  </div>
+                        <div class="col-md-4 border-left text-center p-t-10">
+                          <h3 class="mb-0">{{data.down}} <i class="mdi mdi-arrow-down text-red"></i></h3>
+                          <span class="text-muted">Down</span>
+                        </div>
 
-                  <div class="col-md-4 border-left text-center p-t-10">
-                    <h3 class="mb-0">{{data.up}} <i class="mdi mdi-arrow-up text-green"></i></h3>
-                    <span class="text-muted">Up</span>
+                        <div class="col-md-4 border-left text-center p-t-10">
+                          <h3 class="mb-0">{{data.up}} <i class="mdi mdi-arrow-up text-green"></i></h3>
+                          <span class="text-muted">Up</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 col-lg-4" data-ng-repeat="data in vm.dashboard.chart">
+                  <div class="card">
+                    <div class="card-body">
+                      <h1>{{data.chartnumber}}</h1>
+                      <div id="chartdiv"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4 col-lg-4" data-ng-repeat="data in vm.dashboard.chart">
-            <div class="card">
-              <div class="card-body">
-                <h1>{{data.chartnumber}}</h1>
-                <div id="chartdiv"></div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title m-b-0">Events</h4>
+                </div>
+                <ul class="list-style-none">
+                  <li class="" data-ng-repeat="event in vm.dashboard.events" style="padding:10px;">
+                    <div class="panel panel-default"
+                         style="background: #f4f4f4; border-radius: 5px; border:1px solid #f4f4f4;">
+                      <div class="panel-heading" style="background: #ebebeb; padding:10px;">
+                        <h6>{{event.ipaddress}} <span class="float-right">{{event.time}}</span></h6>
+                      </div>
+                      <div class="panel-body" style="padding:10px;">{{event.message}}</div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
-
-          </div>
-
         </div>
-
-      </div>
-      <div class="col-md-3">
-
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title m-b-0">Events</h4>
-          </div>
-          <ul class="list-style-none">
-            <li class="" data-ng-repeat="event in vm.dashboard.events" style="padding:10px;">
-              <div class="panel panel-default"
-                   style="background: #f4f4f4; border-radius: 5px; border:1px solid #f4f4f4;">
-                <div class="panel-heading" style="background: #ebebeb; padding:10px;">
-                  <h6>{{event.ipaddress}} <span class="float-right">{{event.time}}</span></h6>
-                </div>
-                <div class="panel-body" style="padding:10px;">{{event.message}}</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
       </div>
     </div>
 
