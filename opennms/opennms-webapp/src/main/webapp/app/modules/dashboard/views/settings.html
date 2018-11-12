@@ -13,9 +13,148 @@
 <!-- ============================================================== -->
 
 <!-- Main content -->
-<section class="content">
+<section class="content" data-ng-init="init()">
   <div class="container-fluid">
 
+    <div id="msgBox" style="display:none"></div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card" style="margin:10px; padding: 20px;">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <h5 class="card-title m-b-0">Create Profile</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" name="profileForm" novalidate>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_nodeIp" class="col-sm-4 control-label">Load Profile from Device</label>
+                  <div class="col-sm-5">
+                    <select class="form-control" id="input_nodeIp" ng-model="nodeId">
+                      <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-3">
+                    <button class="btn btn-default" ng-click="populateFormWithProfile(nodeId)">Populate Form</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_profileName" class="col-sm-4 control-label">Profile Name</label>
+                  <div class="col-sm-8">
+                    <input id="input_profileName" name="profileName" ng-model="newProfile.name" class="form-control" ng-required="true"/>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_ssid" class="col-sm-4 control-label">SSID</label>
+                  <div class="col-sm-8">
+                    <input id="input_ssid" name="ssid" ng-model="newProfile.ssid" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_opMode" class="col-sm-4 control-label">Operation Mode</label>
+                  <div class="col-sm-8">
+                    <input id="input_opMode" name="opMode" ng-model="newProfile.opMode" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_bandwidth" class="col-sm-4 control-label">Bandwidth</label>
+                  <div class="col-sm-8">
+                    <input id="input_bandwidth" name="bandwidth" ng-model="newProfile.bandwidth" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_channel" class="col-sm-4 control-label">Channel</label>
+                  <div class="col-sm-8">
+                    <input id="input_channel" name="channel" ng-model="newProfile.channel" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_minimumFirmware" class="col-sm-4 control-label">Minimum Firmware Version</label>
+                  <div class="col-sm-8">
+                    <input id="input_minimumFirmware" name="minimumFirmware" ng-model="newProfile.minimumFirmware" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div> <!-- card-body -->
+          <div class="card-footer">
+            <button type="button" class="btn btn-default" ng-click="save()" id="save-profile"
+                    ng-disabled="profileForm.$invalid">
+              Create Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"><span>
+            </button>
+          </div> <!-- card-footer -->
+        </div> <!-- card -->
+      </div>
+      <div class="col-md-6">
+        <div class="card" style="margin:10px; padding: 20px;">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <h5 class="card-title m-b-0">Retrieve Profile</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" name="downloadProfile">
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_nodeId" class="col-sm-4 control-label">Select Device</label>
+                  <div class="col-sm-8">
+                    <select id="input_nodeId" name="nodeId" ng-model="profileToRetrieve" class="form-control" required>
+                      <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div> <!-- card-body -->
+          <div class="card-footer">
+            <button type="button" class="btn btn-default" ng-click="retrieveProfile(profileToRetrieve)" id="download-profile">
+              Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
+            </button>
+          </div> <!-- card-footer -->
+        </div> <!-- card -->
+      </div>
+    </div>
 
   </div>
 </section>
+
+<script type="text/javascript" >
+
+  function addNodes() {
+    $("#availableNodes option:selected").each(function(idx, obj) {
+      $("#nodesToApply").append("<option value='" + obj.value + "'>" + obj.text + "</option>");
+      $(this).remove();
+    });
+    selectAllOptions();
+  }
+
+  function removeNodes() {
+    $("#nodesToApply option:selected").each(function(idx, obj) {
+      $("#availableNodes").append("<option value='" + obj.value + "'>" + obj.text + "</option>");
+      $(this).remove();
+    });
+    selectAllOptions();
+  }
+
+  function selectAllOptions() {
+    $("#nodesToApply option").each(function() {
+      $(this).prop("selected", true).trigger('change');
+    });
+  }
+
+  function applyProfile() {
+    angular.element($("#profCtrl")).scope().apply();
+    removeNodes();
+  }
+
+</script>
