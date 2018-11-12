@@ -314,3 +314,32 @@ div.treeview ul:first-child:before {
     padding:0px 0px 0px 0px;
     outline: 0;
 }
+
+.event-CRITICAL {
+  background-color: #e74b4b;
+}
+
+.event-MAJOR {
+  background-color: #eb7f2c;
+}
+
+.event-MINOR {
+  background-color: #f1aa00;
+}
+
+.event-WARNING {
+  background-color: #f8e443;
+}
+
+.event-INDETERMINATE {
+  background-color: #d9e893;
+}
+
+.event-NORMAL {
+  background-color: #8dce71;
+}
+
+.event-CLEARED {
+  background-color: #cbcbcb;
+}
+

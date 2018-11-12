@@ -14,20 +14,28 @@
 
 
 <!-- Main content -->
-<section class="content" data-ng-controller="EventsController" data-ng-init="loadEvents()">
+<section class="content" data-ng-init="loadEvents()">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
         <div class="card" style="margin:10px; padding: 20px;">
           <div class="card-header" style="text-align:right; background:#663399;">
             <div class="row">
-              <div class="col-sm-3"></div>
-              <div class="col-sm-3"></div>
-              <div class="col-sm-4">
+              <div class="col-sm-5"></div>
+              <div class="col-sm-3">
                 <select class="form-control" data-ng-model="vm.eventsFilter">
                   <option value="">Filter By</option>
                   <option value="events">Events</option>
                   <option value="syslogs">Syslogs</option>
+                </select>
+              </div>
+              <div class="col-sm-2" style="text-align: right">
+                <select data-ng-model="vm.pageSize" style="border:1px solid #c0c0c0; width:100px; height:35px">
+                  <option value="10">Page Size</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
                 </select>
               </div>
               <div class="col-sm-2">
@@ -39,6 +47,7 @@
             <table class="table table-striped">
               <thead class="thead-dark">
                 <tr>
+                  <th width="1%">&nbsp;</th>
                   <th scope="col">ID</th>
                   <th scope="col">Severity</th>
                   <th scope="col">Time</th>
@@ -48,6 +57,7 @@
               </thead>
               <tbody class="customtable">
                 <tr data-ng-repeat="event in vm.events">
+                  <td width="1%" class="event-{{ event.severity }}"></td>
                   <td>{{ event.id }}</td>
                   <td>{{ event.severity }}</td>
                   <td>{{ event.time | date: 'yyyy-MM-dd HH:mm:ss.sss' }}</td>

@@ -4,16 +4,18 @@ function ($rootScope, $scope, $state, $http, $location, dashboardService, Flash)
     var vm = this;
 
     $scope.vm.eventsFilter = 'events';
+    $scope.vm.pageSize = 10;
     $scope.vm.events = [];
 
     $scope.loadEvents = function() {
       var filterVal = 'eventDisplay==Y';
       if ($scope.vm.eventsFilter === 'syslogs') {
-        filterVal = 'eventSource==syslogd';
+        filterVal = 'eventDisplay==Y;eventSource==syslogd';
       }
       var config = {
         params: {
-          '_s': filterVal
+          '_s': filterVal,
+          'limit': $scope.vm.pageSize
         }
       };
 
