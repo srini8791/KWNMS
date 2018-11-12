@@ -1,6 +1,6 @@
 ﻿
-dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$state', '$location', 'dashboardService', 'Flash',
-  function ($rootScope, $scope, $http, $state, $location, dashboardService, Flash) {
+dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog', '$http', '$state', '$location', 'dashboardService', 'Flash',
+  function ($rootScope, $scope, $mdDialog, $http, $state, $location, dashboardService, Flash) {
     var vm = this;
 
     $scope.profiles = [];
@@ -29,7 +29,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$s
           $scope.profiles = result.profile;
         })
         .error(function(msg) {
-          $scope.showMessage('error', msg);
+          $scope.showAlert('error', msg);
         });
     };
 
@@ -43,14 +43,14 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$s
       $http.get('api/v2/profiles/retrieveProfile', configObj)
         .then(function(response) {
           if (response.status === 200) {
-            $scope.showMessage('success', 'Successfully retrieved profile to server.');
+            $scope.showAlert('success', 'Successfully retrieved profile to server.');
           }
         })
         .catch(function(response) {
           if (response.data['errorMessage']) {
-            $scope.showMessage('error', response.data['errorMessage']);
+            $scope.showAlert('error', response.data['errorMessage']);
           } else {
-            $scope.showMessage('error', 'Error retrieving profile.');
+            $scope.showAlert('error', 'Error retrieving profile.');
           }
 
         });
@@ -74,9 +74,9 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$s
         })
         .catch(function(response) {
           if (response.data['errorMessage']) {
-            $scope.showMessage('error', response.data['errorMessage']);
+            $scope.showAlert('error', response.data['errorMessage']);
           } else {
-            $scope.showMessage('error', 'Error retrieving profile.');
+            $scope.showAlert('error', 'Error retrieving profile.');
           }
         });
     };
@@ -88,11 +88,11 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$s
         headers: {'Content-Type': 'application/json'},
         data: $scope.newProfile
       }).success(function() {
-        $scope.showMessage('success', 'The profile has been created successfully.');
+        $scope.showAlert('success', 'The profile has been created successfully.');
         $scope.newProfile = {};
         $scope.loadProfiles();
       }).error(function(msg) {
-        $scope.showMessage('error', 'Cannot create the profile: ' + msg);
+        $scope.showAlert('error', 'Cannot create the profile: ' + msg);
       });
     };
 
@@ -102,13 +102,13 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$s
           $scope.nodes = result.node;
         })
         .error(function(msg) {
-          $scope.showMessage('error', msg);
+          $scope.showAlert('error', msg);
         });
     };
 
     $scope.apply = function() {
       if ($scope.profileToApply === '' || $scope.nodesToApply.length === 0) {
-        $scope.showMessage('error', 'Select a profile and nodes to apply');
+        $scope.showAlert('error', 'Select a profile and nodes to apply');
         return;
       }
 
@@ -118,21 +118,29 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$http', '$s
         headers: {'Content-Type': 'application/json'},
         data: $scope.nodesToApply
       }).success(function() {
-        $scope.showMessage('success', 'The profile has been initiated to apply for the selected nodes.');
+        $scope.showAlert('success', 'The profile has been initiated to apply for the selected nodes.');
         $scope.profileToApply = '';
         $scope.nodesToApply = [];
       }).error(function(msg) {
-        $scope.showMessage('error', 'Cannot apply the profile: ' + msg);
+        $scope.showAlert('error', 'Cannot apply the profile: ' + msg);
       });
     };
 
 
-    $scope.showMessage = function(msgType, msg) {
-      var bgColor = msgType === 'error' ? 'red' : 'blue';
-      $('#msgBox').html('');
-      $('#msgBox').html(msg).css('background-color', bgColor);
-      $("#msgBox").show().delay(2000).fadeOut();
+    $scope.showAlert = function(msgType, msg, ev) {
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.querySelector('#popupContainer')))
+          .clickOutsideToClose(true)
+          .title(msgType)
+          .textContent(msg)
+          .ariaLabel('Alert')
+          .ok('OK')
+          .targetEvent(ev)
+      );
     };
+
+
 
   }
 ]);

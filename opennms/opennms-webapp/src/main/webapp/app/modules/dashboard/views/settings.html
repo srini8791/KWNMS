@@ -13,10 +13,8 @@
 <!-- ============================================================== -->
 
 <!-- Main content -->
-<section class="content" data-ng-init="init()">
+<section class="content" id="popupContainer" data-ng-init="init()">
   <div class="container-fluid">
-
-    <div id="msgBox" style="display:none"></div>
 
     <div class="row">
       <div class="col-md-6">
@@ -98,30 +96,116 @@
         </div> <!-- card -->
       </div>
       <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card" style="margin:10px; padding: 20px;">
+              <div class="card-header" style="background:#663399; color:#fff;">
+                <h5 class="card-title m-b-0">Retrieve Profile</h5>
+              </div>
+              <div class="card-body">
+                <form method="post" name="downloadProfile">
+                  <div class="form-group">
+                    <div class="row">
+                      <label for="input_nodeId" class="col-sm-4 control-label">Select Device</label>
+                      <div class="col-sm-8">
+                        <select id="input_nodeId" name="nodeId" ng-model="profileToRetrieve" class="form-control" required>
+                          <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div> <!-- card-body -->
+              <div class="card-footer">
+                <button type="button" class="btn btn-default" ng-click="retrieveProfile(profileToRetrieve)" id="download-profile">
+                  Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
+                </button>
+              </div> <!-- card-footer -->
+            </div> <!-- card -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card" style="margin:10px; padding: 20px;">
+              <div class="card-header" style="background:#663399; color:#fff;">
+                <h5 class="card-title m-b-0">Apply Profile to Devices</h5>
+              </div>
+              <div class="card-body">
+                <form method="post" name="applyProfileForm">
+                  <div class="form-group">
+                    <div class="row">
+                      <label for="input_profileName" class="col-sm-4 control-label">Select Profile</label>
+                      <div class="col-sm-8">
+                        <select id="input_profileName" name="profileName" ng-model="profileToApply" class="form-control" required>
+                          <option ng-repeat="profile in profiles" value="{{profile.id}}">{{profile.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label class="col-sm-12 control-label">Select Devices:</label>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <label class="control-label">Available Devices</label>
+                        <select class="form-control" id="availableNodes" multiple="multiple" size="6">
+                          <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                        </select>
+                        <button type="button" class="btn btn-default" id="nodes.doAdd" onClick="javascript:addNodes()">&nbsp;&#155;&#155;&nbsp; Add</button>
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="control-label">Selected Devices</label>
+                        <select class="form-control" id="nodesToApply" multiple="multiple" ng-model="nodesToApply" size="6">
+                        </select>
+                        <button type="button" class="btn btn-default" id="nodes.doRemove" onClick="javascript:removeNodes()">&nbsp;&#139;&#139;&nbsp; Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div> <!-- card-body -->
+              <div class="card-footer">
+                <button type="button" class="btn btn-default" onClick="javascript:applyProfile()" id="apply-profile">
+                  Apply Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-paste"><span>
+                </button>
+              </div> <!-- card-footer -->
+            </div> <!-- card -->
+          </div>
+        </div> <!-- row ends -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
         <div class="card" style="margin:10px; padding: 20px;">
           <div class="card-header" style="background:#663399; color:#fff;">
-            <h5 class="card-title m-b-0">Retrieve Profile</h5>
+            <h5 class="card-title m-b-0">Profiles</h5>
           </div>
-          <div class="card-body">
-            <form method="post" name="downloadProfile">
-              <div class="form-group">
-                <div class="row">
-                  <label for="input_nodeId" class="col-sm-4 control-label">Select Device</label>
-                  <div class="col-sm-8">
-                    <select id="input_nodeId" name="nodeId" ng-model="profileToRetrieve" class="form-control" required>
-                      <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div> <!-- card-body -->
-          <div class="card-footer">
-            <button type="button" class="btn btn-default" ng-click="retrieveProfile(profileToRetrieve)" id="download-profile">
-              Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
-            </button>
-          </div> <!-- card-footer -->
-        </div> <!-- card -->
+          <div class="card-body" style="padding:0px">
+            <table class="profiles-table table table-striped">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">&nbsp;</th>
+                <th scope="col">Name</th>
+                <th scope="col">SSID</th>
+                <th scope="col">Op. Mode</th>
+                <th scope="col">Bandwidth</th>
+                <th scope="col">Channel</th>
+              </tr>
+              </thead>
+              <tbody class="customtable">
+              <tr ng-repeat="profile in profiles">
+                <td><input type="checkbox" value="{{profile.id}}"/></td>
+                <td>{{profile.name}}</td>
+                <td>{{profile.ssid}}</td>
+                <td>{{profile.opMode.label}}</td>
+                <td>{{profile.bandwidth.label}}</td>
+                <td>{{profile.channel}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -153,7 +237,7 @@
   }
 
   function applyProfile() {
-    angular.element($("#profCtrl")).scope().apply();
+    angular.element('#input_profileName').scope().apply();
     removeNodes();
   }
 

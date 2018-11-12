@@ -320,54 +320,6 @@ angular.module('onms-assets', [
       });
   };
 
-}])
-
-.controller('TreeViewCtrl', ['$scope', '$http', 'growl', function($scope, $http, growl) {
-
-  $scope.regions = [];
-
-  $scope.loadRegions = function() {
-    $http.get('api/v2/treeview/regions')
-    .then(function(response) {
-      $scope.regions = [];
-      $scope.regions = response.data;
-    });
-  }
-
-  $scope.init = function() {
-    $scope.loadRegions();
-
-    $('#nodetree')
-    .on('open_node.jstree', function (e, data) {
-      var nodeType = data.node.data ? data.node.data.type : 'global';
-      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
-      $('#nodeinfo').text(info);
-    })
-    .on('changed.jstree', function (e, data) {
-      var nodeType = data.node.data ? data.node.data.type : 'global';
-      var info = 'id: ' + data.node.id + ', type: ' + nodeType;
-      $('#nodeinfo').text(info);
-    })
-    .jstree({
-      'core': {
-        'multiple': false,
-        'data': function(node, callback) {
-          console.log('inside data: ' + node);
-          if (node.id === '#') {
-            console.log('inside #: ' + node);
-            callback([{'text': 'Global', 'id': '0', 'children': true, 'data': {'type': 'global'}}]);
-          } else {
-            console.log('inside else: ' + node.data);
-            callback(function() {
-              var dataToReturn = [{'text': 'test', 'children': false}];
-              return dataToReturn;
-            });
-          }
-        }
-      }
-    });
-  }
-
-
 }]);
+
 
