@@ -1,8 +1,8 @@
 ﻿#navbarSupportedContent {
-    background: #663399 !important;
+    background: #00a0df !important;
 }
 #main-wrapper .topbar .top-navbar .navbar-header[data-logobg="skin5"] {
-    background: #663399 !important;
+    background: #00a0df !important;
 }
 
 .sidebar-menu > li a{
@@ -11,9 +11,8 @@
 }
 
 .sidebar-menu > li:hover > a, .sidebar-menu > li.active > a {
-    color: #ffffff;
-    background: #822360;
-    border-left-color: #605ca8;
+    color: #00a0df;
+    background: #1F262D;
     opacity: 1;
 }
 .sidebar-menu > li > a {
