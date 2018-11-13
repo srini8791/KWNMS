@@ -13,9 +13,67 @@
 <!-- ============================================================== -->
 
 <!-- Main content -->
-<section class="content">
+<section class="content" data-ng-init="init()">
   <div class="container-fluid">
 
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card" style="margin:10px; padding: 20px;">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <div class="row">
+              <div class="col-sm-3"><h5 class="card-title m-b-0">Inventory</h5></div>
+              <div class="col-sm-3"><h5 class="card-title m-b-0">Total: {{vm.totalNodesCount}}</h5></div>
+              <div class="col-sm-2"><h5 class="card-title m-b-0">Active: {{vm.activeNodesCount}}</h5></div>
+              <div class="col-sm-2"><h5 class="card-title m-b-0">In-active: {{vm.totalNodesCount - vm.activeNodesCount}}</h5></div>
+              <div class="col-sm-2" style="text-align: right">
+                <select data-ng-model="limit" data-ng-change="loadNodes()">
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                  <option>100</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">System Name</th>
+                <th scope="col">IP Address</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">MAC Address</th>
+                <th scope="col">Model</th>
+                <th scope="col">Firmware</th>
+                <th scope="col">Channel</th>
+                <th scope="col">Bandwidth</th>
+                <th scope="col">Ethernet Speed</th>
+                <th scope="col">I/O Bandwidth Limit</th>
+                <th scope="col">Modulation</th>
+                <th scope="col">Operation Mode</th>
+              </tr>
+              </thead>
+              <tbody class="customtable">
+              <tr data-ng-repeat="node in vm.nodes">
+                <td>{{node.sysName}}</td>
+                <td>{{node.primaryIP}}</td>
+                <td>{{node.assetRecord.serialNumber}}</td>
+                <td>{{node.macAddress}}</td>
+                <td>{{node.assetRecord.modelNumber}}</td>
+                <td>{{node.assetRecord.firmware}}</td>
+                <td>{{node.channel}}</td>
+                <td>{{node.bandwidth}}</td>
+                <td>{{node.assetRecord.ethernetSpeed}}</td>
+                <td>{{node.assetRecord.ioBandwidthLimit}}</td>
+                <td>{{node.assetRecord.modulation}}</td>
+                <td>{{node.opMode}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
