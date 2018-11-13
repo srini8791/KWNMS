@@ -120,7 +120,7 @@ public class DashboardRestService {
             String time = event.getEventTime().toString();
             time = time.substring(0, time.length()-4);
             eventObj.put("time", time);
-            eventObj.put("severity", event.getEventSeverity());
+            eventObj.put("severity", event.getSeverityLabel());
             eventObj.put("message", event.getEventLogMsg());
             eventsArray.put(eventObj);
             counter = 1;

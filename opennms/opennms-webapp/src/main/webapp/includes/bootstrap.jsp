@@ -111,8 +111,6 @@
     <c:out value="${link}" escapeXml="false" />
   </c:forEach>
 
-  <link rel="stylesheet" href="treeview/dist/themes/default/style.css" />
-
   <jsp:include page="/assets/load-assets.jsp" flush="false">
     <jsp:param name="asset" value="vendor" />
   </jsp:include>

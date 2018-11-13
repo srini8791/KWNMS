@@ -124,7 +124,7 @@
                   <li class="" data-ng-repeat="event in vm.dashboard.events" style="padding:10px;">
                     <div class="panel panel-default"
                          style="background: #f4f4f4; border-radius: 5px; border:1px solid #f4f4f4;">
-                      <div class="panel-heading" style="background: #ebebeb; padding:10px;">
+                      <div class="panel-heading event-{{ event.severity }}" style="padding:10px;">
                         <h6>{{event.ipaddress}} <span class="float-right">{{event.time}}</span></h6>
                       </div>
                       <div class="panel-body" style="padding:10px;">{{event.message}}</div>
