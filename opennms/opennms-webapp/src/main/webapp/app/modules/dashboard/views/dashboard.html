@@ -107,9 +107,9 @@
               <div class="row">
                 <div class="col-md-4 col-lg-4" data-ng-repeat="data in vm.dashboard.chart">
                   <div class="card">
-                    <div class="card-body">
-                      <h1>{{data.chartnumber}}</h1>
-                      <div id="chartdiv"></div>
+                    <div class="box">
+                      <!--<h1 class="font-light text-violet"><i class="mdi {{data.icon}}"></i> {{data.title}}</h1>-->
+                      <div id="chartdiv{{data.chartnumber}}" class="chartdiv"></div>
                     </div>
                   </div>
                 </div>
@@ -122,9 +122,9 @@
                 </div>
                 <ul class="list-style-none">
                   <li class="" data-ng-repeat="event in vm.dashboard.events" style="padding:10px;">
-                    <div class="panel panel-default"
-                         style="background: #f4f4f4; border-radius: 5px; border:1px solid #f4f4f4;">
-                      <div class="panel-heading event-{{ event.severity }}" style="padding:10px;">
+                    <div class="panel panel-default event-panel-{{event.severity}}"
+                         style="background: #f4f4f4; border-radius: 5px;" title="{{event.severity}}">
+                      <div class="panel-heading" style="padding:10px;">
                         <h6>{{event.ipaddress}} <span class="float-right">{{event.time}}</span></h6>
                       </div>
                       <div class="panel-body" style="padding:10px;">{{event.message}}</div>
@@ -149,314 +149,242 @@
 
 <!-- Chart code -->
 <script>
-var gaugeChart = AmCharts.makeChart("chartdiv", {
-  "type": "gauge",
-  "theme": "light",
-  "axes": [{
-    "axisAlpha": 0,
-    "tickAlpha": 0,
-    "labelsEnabled": false,
-    "startValue": 0,
-    "endValue": 100,
-    "startAngle": 0,
-    "endAngle": 270,
-    "bands": [{
-      "color": "#eee",
+$(document).ready(function() {
+  var gaugeChart1 = AmCharts.makeChart("chartdiv1", {
+    "type": "gauge",
+    "theme": "light",
+    "axes": [{
+      "axisAlpha": 0,
+      "tickAlpha": 0,
+      "labelsEnabled": false,
       "startValue": 0,
       "endValue": 100,
-      "radius": "100%",
-      "innerRadius": "85%"
-    }, {
-      "color": "#84b761",
-      "startValue": 0,
-      "endValue": 80,
-      "radius": "100%",
-      "innerRadius": "85%",
-      "balloonText": "90%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "80%",
-      "innerRadius": "65%"
-    }, {
-      "color": "#fdd400",
-      "startValue": 0,
-      "endValue": 35,
-      "radius": "80%",
-      "innerRadius": "65%",
-      "balloonText": "35%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "60%",
-      "innerRadius": "45%"
-    }, {
-      "color": "#cc4748",
-      "startValue": 0,
-      "endValue": 92,
-      "radius": "60%",
-      "innerRadius": "45%",
-      "balloonText": "92%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "40%",
-      "innerRadius": "25%"
-    }, {
-      "color": "#67b7dc",
-      "startValue": 0,
-      "endValue": 68,
-      "radius": "40%",
-      "innerRadius": "25%",
-      "balloonText": "68%"
-    }]
-  }],
-  "allLabels": [{
-    "text": "First ",
-    "x": "49%",
-    "y": "5%",
-    "size": 15,
-    "bold": true,
-    "color": "#84b761",
-    "align": "right"
-  }, {
-    "text": "Second ",
-    "x": "49%",
-    "y": "15%",
-    "size": 15,
-    "bold": true,
-    "color": "#fdd400",
-    "align": "right"
-  }, {
-    "text": "Third ",
-    "x": "49%",
-    "y": "24%",
-    "size": 15,
-    "bold": true,
-    "color": "#cc4748",
-    "align": "right"
-  }, {
-    "text": "Fourth ",
-    "x": "49%",
-    "y": "33%",
-    "size": 15,
-    "bold": true,
-    "color": "#67b7dc",
-    "align": "right"
-  }],
-  "export": {
-    "enabled": true
-  }
-});
+      "startAngle": 0,
+      "endAngle": 270,
+      "bands": [{
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "100%",
+        "innerRadius": "85%"
+      }, {
+        "color": "#84b761",
+        "startValue": 0,
+        "endValue": 80,
+        "radius": "100%",
+        "innerRadius": "85%",
+        "balloonText": "90%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "80%",
+        "innerRadius": "65%"
+      }, {
+        "color": "#fdd400",
+        "startValue": 0,
+        "endValue": 35,
+        "radius": "80%",
+        "innerRadius": "65%",
+        "balloonText": "35%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "60%",
+        "innerRadius": "45%"
+      }, {
+        "color": "#cc4748",
+        "startValue": 0,
+        "endValue": 92,
+        "radius": "60%",
+        "innerRadius": "45%",
+        "balloonText": "92%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "40%",
+        "innerRadius": "25%"
+      }, {
+        "color": "#67b7dc",
+        "startValue": 0,
+        "endValue": 68,
+        "radius": "40%",
+        "innerRadius": "25%",
+        "balloonText": "68%"
+      }]
+    }],
+    "legend": {
+      "data": [
+        {title: "30 - 70", color: "#84b761"},
+        {title: "70 - 120", color: "#fdd400"},
+        {title: "120 - 160", color: "#cc4748"},
+        {title: "160 - 200", color: "#67b7dc"},
+      ]
+    },
+    "export": {
+      "enabled": true
+    }
+  });
 
 
-var gaugeChart2 = AmCharts.makeChart("chartdiv2", {
-  "type": "gauge",
-  "theme": "light",
-  "axes": [{
-    "axisAlpha": 0,
-    "tickAlpha": 0,
-    "labelsEnabled": false,
-    "startValue": 0,
-    "endValue": 100,
-    "startAngle": 0,
-    "endAngle": 270,
-    "bands": [{
-      "color": "#eee",
+  var gaugeChart2 = AmCharts.makeChart("chartdiv2", {
+    "type": "gauge",
+    "theme": "light",
+    "axes": [{
+      "axisAlpha": 0,
+      "tickAlpha": 0,
+      "labelsEnabled": false,
       "startValue": 0,
       "endValue": 100,
-      "radius": "100%",
-      "innerRadius": "85%"
-    }, {
-      "color": "#84b761",
-      "startValue": 0,
-      "endValue": 80,
-      "radius": "100%",
-      "innerRadius": "85%",
-      "balloonText": "90%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "80%",
-      "innerRadius": "65%"
-    }, {
-      "color": "#fdd400",
-      "startValue": 0,
-      "endValue": 35,
-      "radius": "80%",
-      "innerRadius": "65%",
-      "balloonText": "35%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "60%",
-      "innerRadius": "45%"
-    }, {
-      "color": "#cc4748",
-      "startValue": 0,
-      "endValue": 92,
-      "radius": "60%",
-      "innerRadius": "45%",
-      "balloonText": "92%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "40%",
-      "innerRadius": "25%"
-    }, {
-      "color": "#67b7dc",
-      "startValue": 0,
-      "endValue": 68,
-      "radius": "40%",
-      "innerRadius": "25%",
-      "balloonText": "68%"
-    }]
-  }],
-  "allLabels": [{
-    "text": "First ",
-    "x": "49%",
-    "y": "5%",
-    "size": 15,
-    "bold": true,
-    "color": "#84b761",
-    "align": "right"
-  }, {
-    "text": "Second ",
-    "x": "49%",
-    "y": "15%",
-    "size": 15,
-    "bold": true,
-    "color": "#fdd400",
-    "align": "right"
-  }, {
-    "text": "Third ",
-    "x": "49%",
-    "y": "24%",
-    "size": 15,
-    "bold": true,
-    "color": "#cc4748",
-    "align": "right"
-  }, {
-    "text": "Fourth ",
-    "x": "49%",
-    "y": "33%",
-    "size": 15,
-    "bold": true,
-    "color": "#67b7dc",
-    "align": "right"
-  }],
-  "export": {
-    "enabled": true
-  }
-});
+      "startAngle": 0,
+      "endAngle": 270,
+      "bands": [{
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "100%",
+        "innerRadius": "85%"
+      }, {
+        "color": "#84b761",
+        "startValue": 0,
+        "endValue": 80,
+        "radius": "100%",
+        "innerRadius": "85%",
+        "balloonText": "90%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "80%",
+        "innerRadius": "65%"
+      }, {
+        "color": "#fdd400",
+        "startValue": 0,
+        "endValue": 35,
+        "radius": "80%",
+        "innerRadius": "65%",
+        "balloonText": "35%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "60%",
+        "innerRadius": "45%"
+      }, {
+        "color": "#cc4748",
+        "startValue": 0,
+        "endValue": 92,
+        "radius": "60%",
+        "innerRadius": "45%",
+        "balloonText": "92%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "40%",
+        "innerRadius": "25%"
+      }, {
+        "color": "#67b7dc",
+        "startValue": 0,
+        "endValue": 68,
+        "radius": "40%",
+        "innerRadius": "25%",
+        "balloonText": "68%"
+      }]
+    }],
+    "legend": {
+      "data": [
+        {title: "30 - 70", color: "#84b761"},
+        {title: "70 - 120", color: "#fdd400"},
+        {title: "120 - 160", color: "#cc4748"},
+        {title: "160 - 200", color: "#67b7dc"},
+      ]
+    },
+    "export": {
+      "enabled": true
+    }
+  });
 
-var gaugeChart3 = AmCharts.makeChart("chartdiv3", {
-  "type": "gauge",
-  "theme": "light",
-  "axes": [{
-    "axisAlpha": 0,
-    "tickAlpha": 0,
-    "labelsEnabled": false,
-    "startValue": 0,
-    "endValue": 100,
-    "startAngle": 0,
-    "endAngle": 270,
-    "bands": [{
-      "color": "#eee",
+  var gaugeChart3 = AmCharts.makeChart("chartdiv3", {
+    "type": "gauge",
+    "theme": "light",
+    "axes": [{
+      "axisAlpha": 0,
+      "tickAlpha": 0,
+      "labelsEnabled": false,
       "startValue": 0,
       "endValue": 100,
-      "radius": "100%",
-      "innerRadius": "85%"
-    }, {
-      "color": "#84b761",
-      "startValue": 0,
-      "endValue": 80,
-      "radius": "100%",
-      "innerRadius": "85%",
-      "balloonText": "90%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "80%",
-      "innerRadius": "65%"
-    }, {
-      "color": "#fdd400",
-      "startValue": 0,
-      "endValue": 35,
-      "radius": "80%",
-      "innerRadius": "65%",
-      "balloonText": "35%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "60%",
-      "innerRadius": "45%"
-    }, {
-      "color": "#cc4748",
-      "startValue": 0,
-      "endValue": 92,
-      "radius": "60%",
-      "innerRadius": "45%",
-      "balloonText": "92%"
-    }, {
-      "color": "#eee",
-      "startValue": 0,
-      "endValue": 100,
-      "radius": "40%",
-      "innerRadius": "25%"
-    }, {
-      "color": "#67b7dc",
-      "startValue": 0,
-      "endValue": 68,
-      "radius": "40%",
-      "innerRadius": "25%",
-      "balloonText": "68%"
-    }]
-  }],
-  "allLabels": [{
-    "text": "First ",
-    "x": "49%",
-    "y": "5%",
-    "size": 15,
-    "bold": true,
-    "color": "#84b761",
-    "align": "right"
-  }, {
-    "text": "Second ",
-    "x": "49%",
-    "y": "15%",
-    "size": 15,
-    "bold": true,
-    "color": "#fdd400",
-    "align": "right"
-  }, {
-    "text": "Third ",
-    "x": "49%",
-    "y": "24%",
-    "size": 15,
-    "bold": true,
-    "color": "#cc4748",
-    "align": "right"
-  }, {
-    "text": "Fourth ",
-    "x": "49%",
-    "y": "33%",
-    "size": 15,
-    "bold": true,
-    "color": "#67b7dc",
-    "align": "right"
-  }],
-  "export": {
-    "enabled": true
-  }
+      "startAngle": 0,
+      "endAngle": 270,
+      "bands": [{
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "100%",
+        "innerRadius": "85%"
+      }, {
+        "color": "#84b761",
+        "startValue": 0,
+        "endValue": 80,
+        "radius": "100%",
+        "innerRadius": "85%",
+        "balloonText": "90%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "80%",
+        "innerRadius": "65%"
+      }, {
+        "color": "#fdd400",
+        "startValue": 0,
+        "endValue": 35,
+        "radius": "80%",
+        "innerRadius": "65%",
+        "balloonText": "35%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "60%",
+        "innerRadius": "45%"
+      }, {
+        "color": "#cc4748",
+        "startValue": 0,
+        "endValue": 92,
+        "radius": "60%",
+        "innerRadius": "45%",
+        "balloonText": "92%"
+      }, {
+        "color": "#eee",
+        "startValue": 0,
+        "endValue": 100,
+        "radius": "40%",
+        "innerRadius": "25%"
+      }, {
+        "color": "#67b7dc",
+        "startValue": 0,
+        "endValue": 68,
+        "radius": "40%",
+        "innerRadius": "25%",
+        "balloonText": "68%"
+      }]
+    }],
+    "legend": {
+      "data": [
+        {title: "30 - 70", color: "#84b761"},
+        {title: "70 - 120", color: "#fdd400"},
+        {title: "120 - 160", color: "#cc4748"},
+        {title: "160 - 200", color: "#67b7dc"},
+      ]
+    },
+    "export": {
+      "enabled": true
+    }
+  });
+
 });
 
 

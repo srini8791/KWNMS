@@ -224,9 +224,9 @@ footer{background: #1F262D !important; border:0px !important; color:#fff; paddin
 }
 
 
-#chartdiv {
+.chartdiv {
   width: 100%;
-  height: 500px;
+  height: 300px;
   margin: auto;
 }
 
@@ -340,5 +340,33 @@ div.treeview ul:first-child:before {
 
 .event-CLEARED {
   background-color: #cbcbcb;
+}
+
+.event-panel-CRITICAL {
+  border-left:20px solid #e74b4b;
+}
+
+.event-panel-MAJOR {
+  border-left:20px solid #eb7f2c;
+}
+
+.event-panel-MINOR {
+  border-left:20px solid #f1aa00;
+}
+
+.event-panel-WARNING {
+  border-left:20px solid #f8e443;
+}
+
+.event-panel-INDETERMINATE {
+  border-left:20px solid #d9e893;
+}
+
+.event-panel-NORMAL {
+  border-left:20px solid #8dce71;
+}
+
+.event-panel-CLEARED {
+  border-left:20px solid #cbcbcb;
 }
 

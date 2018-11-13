@@ -8,13 +8,19 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
     
     vm.dashboard.chart = [
         {
-          chartnumber: "1"
+          "icon": "mdi-access-point",
+          "title": "PTP",
+          "chartnumber": "1"
         },
         {
-          chartnumber: "2"
+          "icon": "mdi-bluetooth-connect",
+          "title": "PTMP",
+          "chartnumber": "2"
         },
         {
-          chartnumber: "3"
+          "icon": "mdi-wifi",
+          "title": "WiFi",
+          "chartnumber": "3"
         }
     ];
 
