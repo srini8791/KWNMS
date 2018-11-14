@@ -101,16 +101,19 @@
       <div class="col-md-8">
         <div class="form-group">
           <button class="btn btn-default" onclick="javascript:showReport()" id="reportButton">Show Report</button>
-          <button class="btn btn-default" onclick="javascript:showMap()" id="mapButton" style="display:none">Show Map</button>
+          <button class="btn btn-default" onclick="javascript:showMap()" id="mapButton">Show Map</button>
         </div>
         <!-- mapCard -->
         <div class="card" id="mapCard">
           <div class="card-header" style="background:#663399; color:#fff;">
-            <h5 class="card-title m-b-0">Topology</h5>
+            <h5 class="card-title m-b-0">Map</h5>
+          </div>
+          <div class="card-body">
+            <div id="map" style="height:400px"></div>
           </div>
         </div>
         <!-- dataCard -->
-        <div class="card" id="dataCard" style="display:none">
+        <div class="card" id="dataCard">
           <div class="card-header" style="background:#663399; color:#fff;">
             <div class="row">
               <div class="col-sm-3"><h5 class="card-title m-b-0">Inventory</h5></div>
@@ -183,4 +186,17 @@
     $('#reportButton').show();
     $('#mapCard').show();
   }
+
+$(document).ready(function() {
+  $('#dataCard').hide();
+  $('#mapButton').hide();
+
+  var mapOptions = {
+    zoom : 14,
+    center : new google.maps.LatLng('23.300329','83.832497'),
+    mapTypeId : google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+});
+
 </script>
