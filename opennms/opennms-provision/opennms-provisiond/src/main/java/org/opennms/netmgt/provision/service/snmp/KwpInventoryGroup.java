@@ -94,6 +94,10 @@ public final class KwpInventoryGroup extends AggregateTracker {
     public static final String INV_BUILD_NUM_ALIAS = " sysInventorybuildno";
     private static final String INV_BUILD_NUM = ".1.3.6.1.4.1.52619.1.2.3.7.0";
 
+    /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
+    public static final String INV_PRODUCT_CODE_ALIAS = "sysInventoryproductid";
+    private static final String INV_PRODUCT_CODE = ".1.3.6.1.4.1.52619.1.2.3.6.0";
+
     /**
      * <P>
      * The keys that will be supported by default from the TreeMap base class.
@@ -116,7 +120,7 @@ public final class KwpInventoryGroup extends AggregateTracker {
         // the entire SystemGroup collection to fail on at least one version
         // of Linux where it does not exist in the SNMP agent.
         //
-        ms_elemList = new NamedSnmpVar[6];
+        ms_elemList = new NamedSnmpVar[7];
         int ndx = 0;
 
         /**
@@ -173,6 +177,8 @@ public final class KwpInventoryGroup extends AggregateTracker {
          * </P>
          */
         ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, INV_BUILD_NUM_ALIAS, INV_BUILD_NUM);
+
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, INV_PRODUCT_CODE_ALIAS, INV_PRODUCT_CODE);
 
 
         /**
@@ -254,6 +260,10 @@ public final class KwpInventoryGroup extends AggregateTracker {
         return m_store.getDisplayString(INV_BUILD_NUM);
     }
 
+    public Integer getProductCode() {
+        return m_store.getInt32(INV_PRODUCT_CODE);
+    }
+
 
     /** {@inheritDoc} */
     @Override
@@ -292,6 +302,7 @@ public final class KwpInventoryGroup extends AggregateTracker {
             sr.setAttribute(INV_MODEL_ALIAS, getModel());
             String release = getReleaseNumber() + "." + getReleaseMajor() + "." + getReleaseMinor() + "(" + getBuild() +")";
             sr.setAttribute(DEVICE_RELEASE_VERSION, release);
+            sr.setAttribute(INV_PRODUCT_CODE_ALIAS,getProductCode());
             /*sr.setAttribute(WIRELESS_ACTIVE_CHANNEL, getWirelessChannel());
             sr.setAttribute(WIRELESS_COUNTRY, getWirelessCountry());
             sr.setAttribute(WIRELESS_OPMODE,getWirelessOpmode());*/

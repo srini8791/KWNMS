@@ -96,6 +96,10 @@ public class ConfigScanResource {
                 if (value instanceof Integer) {
                     m_node.setChannel((Integer) value);
                 }
+            }else if (key.equals(KwpConfigurationGroup.ETHERNET_MAC_ALIAS)) {
+                m_node.setMacAddress((String)value);
+            } else if (key.equals(KwpConfigurationGroup.ETHERNET_SPEED_ALIAS)) {
+                m_node.getAssetRecord().setEthernetSpeed((String)value);
             } else if (KwpConfigurationGroup.WIRELESS_COUNTRY_ALIAS.equals(key)) {
                 //TODO : need to add country variable. currently it is getting stored in OnmsGeolocation.country
                 //m_node.getAssetRecord().getGeolocation().set
@@ -107,6 +111,32 @@ public class ConfigScanResource {
                 m_node.getAssetRecord().setSerialNumber((String)value);
             } else if (KwpInventoryGroup.INV_MODEL_ALIAS.equals(key)) {
                 m_node.getAssetRecord().setModelNumber((String)value);
+            }else if (key.equals(KwpInventoryGroup.INV_PRODUCT_CODE_ALIAS)) {
+                if (value instanceof Integer) {
+                    int v = ((Integer) value).intValue();
+                    if (v == 1) {
+                        m_node.setProductCode("ptp");
+                    } else if (v == 2) {
+                        m_node.setProductCode("ptmp");
+                    } else if (v == 3) {
+                        m_node.setProductCode("indoorap");
+                    } else if (v == 4) {
+                        m_node.setProductCode("outdoorap");
+                    }
+                }
+                /*if(value.endsWith(".2.1")) {
+                    m_node.setProductCode("ptp");
+                } else if(value.endsWith(".2.2")) {
+                    m_node.setProductCode("ptmp");
+                } else if(value.endsWith(".2.3")) {
+                    m_node.setProductCode("indoorap");
+                } else if(value.endsWith(".2.4")) {
+                    m_node.setProductCode("outdoorap");
+                }*/
+            } else if (KwpConfigurationGroup.WIRELESS_BANDWIDTH_LIMIT_IO_ALIAS.equals(key)) {
+                Integer iobw = ((Integer)m_attributes.get(KwpConfigurationGroup.WIRELESS_BANDWIDTH_LIMIT_INPUT_ALIAS) +
+                        (Integer)m_attributes.get(KwpConfigurationGroup.WIRELESS_BANDWIDTH_LIMIT_OUTPUT_ALIAS));
+                m_node.getAssetRecord().setIoBandwidthLimit(String.valueOf(iobw));
             } else if (KwpInventoryGroup.DEVICE_RELEASE_VERSION.equals(key)) {
                 String sValue = (String) value;
                 if (sValue.toString().length() == 0) {

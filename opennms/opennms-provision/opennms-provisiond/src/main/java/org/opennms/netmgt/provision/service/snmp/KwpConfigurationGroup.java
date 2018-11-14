@@ -82,7 +82,28 @@ public final class KwpConfigurationGroup extends AggregateTracker {
 
     /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
     public static final String WIRELESS_ACTIVE_CHANNEL_ALIAS = "wirelessActiveChannel";
-    private static final String WIRELESS_ACTIVE_CHANNEL = " .1.3.6.1.4.1.52619.1.1.1.1.1.27.2";
+    private static final String WIRELESS_ACTIVE_CHANNEL = ".1.3.6.1.4.1.52619.1.1.1.1.1.23.2";
+
+    /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
+    public static final String WIRELESS_BANDWIDTH_LIMIT_INPUT_ALIAS = "wirelessUplinkLimit";
+    private static final String WIRELESS_BANDWIDTH_LIMIT_INPUT = ".1.3.6.1.4.1.52619.1.1.1.1.1.11.2";
+
+    /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
+    public static final String WIRELESS_BANDWIDTH_LIMIT_OUTPUT_ALIAS = "wirelessUplinkLimit";
+    private static final String WIRELESS_BANDWIDTH_LIMIT_OUTPUT = ".1.3.6.1.4.1.52619.1.1.1.1.1.12.2";
+
+
+    public static final String WIRELESS_BANDWIDTH_LIMIT_IO_ALIAS = "wirelessBandwidhIO";
+
+
+    /** Constant <code>SYS_CONTACT_ALIAS="sysContact"</code> */
+    public static final String ETHERNET_MAC_ALIAS = "ethernetMACAddress";
+    private static final String ETHERNET_MAC = ".1.3.6.1.4.1.52619.1.3.2.1.3.1";
+
+    /** Constant <code>SYS_CONTACT_ALIAS="sysContact"</code> */
+    public static final String ETHERNET_SPEED_ALIAS = "ethernetSpeed";
+    private static final String ETHERNET_SPEED = ".1.3.6.1.4.1.52619.1.3.2.1.4.1";
+
 
     /**
      * <P>
@@ -101,12 +122,8 @@ public final class KwpConfigurationGroup extends AggregateTracker {
      * </P>
      */
     static {
-        // Changed array size from 7 to 6 because we are no longer going after
-        // sysServices...sysServices is not currently being used and it causes
-        // the entire SystemGroup collection to fail on at least one version
-        // of Linux where it does not exist in the SNMP agent.
-        //
-        ms_elemList = new NamedSnmpVar[6];
+
+        ms_elemList = new NamedSnmpVar[10];
         int ndx = 0;
 
         /**
@@ -163,6 +180,14 @@ public final class KwpConfigurationGroup extends AggregateTracker {
          * </P>
          */
         ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_ACTIVE_CHANNEL_ALIAS, WIRELESS_ACTIVE_CHANNEL);
+
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_BANDWIDTH_LIMIT_INPUT_ALIAS, WIRELESS_BANDWIDTH_LIMIT_INPUT);
+
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_BANDWIDTH_LIMIT_OUTPUT_ALIAS, WIRELESS_BANDWIDTH_LIMIT_OUTPUT);
+
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, ETHERNET_MAC_ALIAS, ETHERNET_MAC);
+
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, ETHERNET_SPEED_ALIAS, ETHERNET_SPEED);
 
 
         /**
@@ -244,6 +269,16 @@ public final class KwpConfigurationGroup extends AggregateTracker {
         return m_store.getDisplayString(WIRELESS_SSID);
     }
 
+    public String getEthernetMac() {
+        return m_store.getDisplayString(ETHERNET_MAC);
+    }
+
+    public String getEthernetSpeed() {
+        return m_store.getDisplayString(ETHERNET_SPEED);
+    }
+
+    public Integer getIOBandwidth() { return  m_store.getInt32(WIRELESS_BANDWIDTH_LIMIT_INPUT) + m_store.getInt32(WIRELESS_BANDWIDTH_LIMIT_OUTPUT);}
+
     /** {@inheritDoc} */
     @Override
     protected void storeResult(SnmpResult res) {
@@ -283,6 +318,9 @@ public final class KwpConfigurationGroup extends AggregateTracker {
             sr.setAttribute(WIRELESS_ACTIVE_CHANNEL, getWirelessChannel());
             sr.setAttribute(WIRELESS_COUNTRY, getWirelessCountry());
             sr.setAttribute(WIRELESS_OPMODE,getWirelessOpmode());
+            sr.setAttribute(WIRELESS_BANDWIDTH_LIMIT_INPUT,getIOBandwidth());
+            sr.setAttribute(ETHERNET_MAC_ALIAS, getEthernetMac());
+            sr.setAttribute(ETHERNET_SPEED_ALIAS, getEthernetMac());
 
             /*node.setSysObjectId(sysId);
             node.setSysName(sysName);
@@ -310,6 +348,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
                     resource.setAttribute(var.getAlias(),value.toDisplayString());
                 }
             }
+            resource.setAttribute(WIRELESS_BANDWIDTH_LIMIT_IO_ALIAS,"");
         }
 
         /*if (!failed()) {

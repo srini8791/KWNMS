@@ -82,7 +82,7 @@ public final class SystemGroup extends AggregateTracker {
     /** Constant <code>SYS_CONTACT_ALIAS="sysContact"</code> */
     public static final String SYS_CONTACT_ALIAS = "sysContact";
     private static final String SYS_CONTACT = ".1.3.6.1.2.1.1.4";
-    
+
     /**
      * <P>
      * The keys that will be supported by default from the TreeMap base class.
@@ -304,9 +304,6 @@ public final class SystemGroup extends AggregateTracker {
             sr.setAttribute("sysDescription", getSysDescr());
             sr.setAttribute("sysLocation", getSysLocation());
             sr.setAttribute("sysObjectId", getSysObjectID());
-            if (getSysObjectID() != null) {
-                sr.setAttribute("productCode", getSysObjectID());
-            }
         }
     }
 

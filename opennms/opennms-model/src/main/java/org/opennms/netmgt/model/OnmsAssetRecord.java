@@ -2042,6 +2042,10 @@ public class OnmsAssetRecord implements Serializable {
         if (hasNewValue((String)newRecord.getFirmware(),(String)getFirmware())) {
             setFirmware(newRecord.getFirmware());
         }
+
+        if (hasNewValue((String)newRecord.getEthernetSpeed(),(String)getEthernetSpeed())) {
+            setEthernetSpeed(getEthernetSpeed());
+        }
     }
 
     /**

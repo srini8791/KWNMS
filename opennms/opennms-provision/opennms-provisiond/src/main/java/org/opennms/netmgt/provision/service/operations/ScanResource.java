@@ -93,16 +93,6 @@ public class ScanResource {
         if (m_node != null) {
             if (key.equals("sysContact")) {
                 m_node.setSysContact(value);
-            } else if (key.equals("productCode")) {
-                if(value.endsWith(".2.1")) {
-                    m_node.setProductCode("ptp");
-                } else if(value.endsWith(".2.2")) {
-                    m_node.setProductCode("ptmp");
-                } else if(value.endsWith(".2.3")) {
-                    m_node.setProductCode("indoorap");
-                } else if(value.endsWith(".2.4")) {
-                    m_node.setProductCode("outdoorap");
-                }
             }
             else if (key.equals("sysDescription")) {
                 m_node.setSysDescription(value);

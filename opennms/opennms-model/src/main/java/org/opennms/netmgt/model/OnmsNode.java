@@ -1682,6 +1682,9 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
         if (hasNewValue(scannedNode.getProductCode(), getProductCode())) {
             setProductCode(scannedNode.getProductCode());
         }
+        if (hasNewValue(scannedNode.getMacAddress(), getMacAddress())) {
+            setMacAddress(scannedNode.getMacAddress());
+        }
 
         mergeAgentAttributes(scannedNode);
 

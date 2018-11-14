@@ -1282,14 +1282,18 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
                 final OnmsNode node = new OnmsNode(location);
 
                 final String hostname = getHostnameResolver().getHostname(addr(ipAddress), locationString);
-                if (hostname == null || ipAddress.equals(hostname)) {
+                node.setLabel(ipAddress);
+                node.setLabelSource(NodeLabelSource.ADDRESS);
+                //node.setLabel(hostname);
+                // Modified by Srinivas for displaying ipaddress instead of host name
+                /*if (hostname == null || ipAddress.equals(hostname)) {
                     node.setLabel(ipAddress);
                     node.setLabelSource(NodeLabelSource.ADDRESS);
                 } else {
                     node.setLabel(hostname);
                     node.setLabelSource(NodeLabelSource.HOSTNAME);
-                }
-
+                }*/
+                node.setActive(true);
                 node.setForeignSource(effectiveForeignSource);
                 node.setType(NodeType.ACTIVE);
                 node.setLastCapsdPoll(now);
