@@ -14,14 +14,31 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
     };
     $scope.nodeProfile = {};
 
+    $scope.regions = [];
+    $scope.newRegion = {
+      'name': ''
+    };
+
     $scope.nodes = [];
     $scope.profileToApply = '';
     $scope.nodesToApply = [];
 
     $scope.init = function() {
+      $scope.loadRegions();
       $scope.loadProfiles();
       $scope.loadNodes();
     };
+
+    $scope.loadRegions = function() {
+      $http.get('api/v2/regions')
+        .then(function(response) {
+          if (response.data) {
+            $scope.regions = response.data.region;
+            console.log('regions = ' + $scope.regions);
+          }
+        }
+      );
+    }
 
     $scope.loadProfiles = function() {
       $http.get('api/v2/profiles')
@@ -81,7 +98,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
         });
     };
 
-    $scope.save = function() {
+    $scope.saveProfile = function() {
       $http({
         method: 'POST',
         url: 'api/v2/profiles',
@@ -92,7 +109,22 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
         $scope.newProfile = {};
         $scope.loadProfiles();
       }).error(function(msg) {
-        $scope.showAlert('error', 'Cannot create the profile: ' + msg);
+        $scope.showAlert('error', 'Error creating the profile: ' + msg);
+      });
+    };
+
+    $scope.saveRegion = function() {
+      $http({
+        method: 'POST',
+        url: 'api/v2/regions',
+        headers: {'Content-Type': 'application/json'},
+        data: $scope.newRegion
+      }).success(function() {
+        $scope.showAlert('success', 'The region has been created successfully.');
+        $scope.newRegion = {};
+        $scope.loadRegions();
+      }).error(function(msg) {
+        $scope.showAlert('error', 'Error creating the region: ' + msg);
       });
     };
 

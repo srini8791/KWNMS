@@ -28,48 +28,24 @@
 
 package org.opennms.web.rest.v2;
 
-import org.apache.cxf.jaxrs.ext.search.SearchBean;
-import org.opennms.core.config.api.JaxbListWrapper;
-import org.opennms.core.criteria.CriteriaBuilder;
-import org.opennms.core.resource.Vault;
-import org.opennms.core.utils.InetAddressUtils;
-import org.opennms.netmgt.config.SnmpConfigAccessService;
+import org.opennms.netmgt.dao.api.MonitoringLocationDao;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.dao.api.ProfileDao;
 import org.opennms.netmgt.dao.api.RegionDao;
-import org.opennms.netmgt.events.api.EventConstants;
-import org.opennms.netmgt.events.api.EventProxy;
-import org.opennms.netmgt.model.*;
-import org.opennms.netmgt.model.events.EventBuilder;
-import org.opennms.netmgt.model.events.EventUtils;
-import org.opennms.netmgt.snmp.SnmpAgentConfig;
-import org.opennms.netmgt.snmp.SnmpObjId;
-import org.opennms.netmgt.snmp.SnmpValue;
-import org.opennms.netmgt.snmp.proxy.LocationAwareSnmpClient;
-import org.opennms.netmgt.snmp.snmp4j.Snmp4JValueFactory;
-import org.opennms.netmgt.xml.event.Event;
-import org.opennms.web.rest.support.Aliases;
-import org.opennms.web.rest.support.RedirectHelper;
+import org.opennms.netmgt.model.OnmsNode;
+import org.opennms.netmgt.model.OnmsRegion;
+import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -87,6 +63,9 @@ public class TreeViewRestService {
     @Autowired
     private RegionDao regionDao;
 
+    @Autowired
+    private MonitoringLocationDao locationDao;
+
     @GET
     @Path("/regions")
     @Produces({MediaType.APPLICATION_JSON})
@@ -102,6 +81,49 @@ public class TreeViewRestService {
             }
         }
         return Response.ok().entity(regionNodes).build();
+    }
+
+    @GET
+    @Path("/regions/{regionId}/locations")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRegionLocations(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                               @PathParam("regionId") final Integer regionId) {
+        List<TreeNodeDTO> regionLocations = new ArrayList<>();
+        OnmsRegion region = regionDao.get(regionId);
+        if (region != null) {
+            Set<OnmsMonitoringLocation> locations = region.getMonitoringLocations();
+            if (locations != null && !locations.isEmpty()) {
+                for (OnmsMonitoringLocation location : locations) {
+                    TreeNodeDTO locationNode = new TreeNodeDTO(location.getLocationName(), true);
+                    locationNode.addData("id", location.getLocationName());
+                    locationNode.addData("type", "location");
+                    locationNode.addData("lat", location.getLatitude());
+                    locationNode.addData("long", location.getLongitude());
+                    regionLocations.add(locationNode);
+                }
+            }
+        }
+        return Response.ok().entity(regionLocations).build();
+    }
+
+    @GET
+    @Path("/location/{location}/nodes")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getLocationNodes(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                               @PathParam("location") final String location) {
+        List<TreeNodeDTO> locationNodes = new ArrayList<>();
+        List<OnmsNode> nodes = nodeDao.findByLocation(location);
+        if (nodes != null && !nodes.isEmpty()) {
+            for (OnmsNode node : nodes) {
+                TreeNodeDTO locationNode = new TreeNodeDTO(node.getPrimaryIP(), true);
+                locationNode.addData("id", node.getId());
+                locationNode.addData("type", "node");
+                locationNode.addData("lat", node.getAssetRecord().getLatitude());
+                locationNode.addData("long", node.getAssetRecord().getLongitude());
+                locationNodes.add(locationNode);
+            }
+        }
+        return Response.ok().entity(locationNodes).build();
     }
 
     private Map<String, String> prepareErrorObject(String errorMessage) {

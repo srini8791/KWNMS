@@ -71,7 +71,7 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <div class="card-body" style="background:#663399; color:#fff;">
-                  <h5 class="card-title m-b-0" ">Topology</h5>
+                  <h5 class="card-title m-b-0">Topology</h5>
                 </div>
               </div>
               <div class="panel-body">
@@ -79,38 +79,15 @@
                 <ul class="treeview">
                   <li><a href="#">Global</a>
                     <ul>
-                      <li><a href="#">Region 1</a></li>
-                      <li><a href="#">Branch</a>
+                      <li data-ng-repeat="tregion in vm.tregions"><a data-ng-click="loadTreeLocations(tregion.data.id)">{{ tregion.text }}</a>
                         <ul>
-                          <li><a href="#">Stick</a></li>
-                          <li><a href="#">Stick</a></li>
-                          <li><a href="#">Stick</a>
+                          <li data-ng-repeat="tlocation in vm.tlocations"><a data-ng-click="loadTreeNodes(tlocation.data.id)">{{ tlocation.text }}</a>
                             <ul>
-                              <li><a href="#">Twig</a></li>
-                              <li><a href="#">Twig</a></li>
-                              <li><a href="#">Twig</a></li>
-                              <li><a href="#">Twig</a>
-                                <ul>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                  <li><a href="#">Leaf</a></li>
-                                </ul>
-                              </li>
-                              <li><a href="#">Twig</a></li>
-                              <li><a href="#">Twig</a></li>
+                              <li data-ng-repeat="tnode in vm.tnodes"><a href="#">{{ tnode.text }}</a></li>
                             </ul>
                           </li>
-                          <li><a href="#">Stick</a></li>
                         </ul>
                       </li>
-                      <li><a href="#">Branch</a></li>
-                      <li><a href="#">Branch</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -122,7 +99,18 @@
       </div>
 
       <div class="col-md-8">
-        <div class="card">
+        <div class="form-group">
+          <button class="btn btn-default" onclick="javascript:showReport()" id="reportButton">Show Report</button>
+          <button class="btn btn-default" onclick="javascript:showMap()" id="mapButton" style="display:none">Show Map</button>
+        </div>
+        <!-- mapCard -->
+        <div class="card" id="mapCard">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <h5 class="card-title m-b-0">Topology</h5>
+          </div>
+        </div>
+        <!-- dataCard -->
+        <div class="card" id="dataCard" style="display:none">
           <div class="card-header" style="background:#663399; color:#fff;">
             <div class="row">
               <div class="col-sm-3"><h5 class="card-title m-b-0">Inventory</h5></div>
@@ -181,3 +169,18 @@
   </div>
 </section>
 
+<script>
+  function showReport() {
+    $('#mapCard').hide();
+    $('#reportButton').hide();
+    $('#mapButton').show();
+    $('#reportCard').show();
+  }
+
+  function showMap() {
+    $('#reportCard').hide();
+    $('#mapButton').hide();
+    $('#reportButton').show();
+    $('#mapCard').show();
+  }
+</script>

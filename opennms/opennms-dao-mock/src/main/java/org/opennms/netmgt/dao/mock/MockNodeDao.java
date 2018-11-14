@@ -174,6 +174,17 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
     }
 
     @Override
+    public List<OnmsNode> findByLocation(final String location) {
+        final List<OnmsNode> nodes = new ArrayList<OnmsNode>();
+        for (final OnmsNode node : findAll()) {
+            if (location.equals(node.getLocation().getLocationName())) {
+                nodes.add(node);
+            }
+        }
+        return nodes;
+    }
+
+    @Override
     public List<OnmsNode> findByLabel(final String label) {
         final List<OnmsNode> nodes = new ArrayList<OnmsNode>();
         for (final OnmsNode node : findAll()) {

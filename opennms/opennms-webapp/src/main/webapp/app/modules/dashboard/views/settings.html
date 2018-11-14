@@ -88,7 +88,7 @@
             </form>
           </div> <!-- card-body -->
           <div class="card-footer">
-            <button type="button" class="btn btn-default" ng-click="save()" id="save-profile"
+            <button type="button" class="btn btn-default" ng-click="saveProfile()" id="save-profile"
                     ng-disabled="profileForm.$invalid">
               Create Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"><span>
             </button>
@@ -209,6 +209,55 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <h5 class="card-title m-b-0">Create Region</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" name="regionForm" novalidate>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_regionName" class="col-sm-4 control-label">Region Name</label>
+                  <div class="col-sm-8">
+                    <input id="input_regionName" name="regionName" ng-model="newRegion.name" class="form-control" ng-required="true" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div> <!-- card body -->
+          <div class="card-footer">
+            <button type="button" class="btn btn-default" ng-click="saveRegion()" id="save-region" ng-disabled="regionForm.$invalid">
+              Create Region<span class="glyphicon glyphicon-plus"><span>
+            </button>
+          </div> <!-- card-footer -->
+        </div> <!-- card -->
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header" style="background:#663399; color:#fff;">
+            <h5 class="card-title m-b-0">Regions</h5>
+          </div>
+          <div class="card-body">
+            <table class="profiles-table table table-striped">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">&nbsp;</th>
+                <th scope="col">Name</th>
+              </tr>
+              </thead>
+              <tbody class="customtable">
+              <tr ng-repeat="region in regions">
+                <td><input type="checkbox" value="{{region.id}}"/></td>
+                <td>{{region.name}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
