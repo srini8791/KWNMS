@@ -113,7 +113,7 @@
           </div>
         </div>
         <!-- dataCard -->
-        <div class="card" id="dataCard">
+        <div class="card" id="reportCard">
           <div class="card-header" style="background:#663399; color:#fff;">
             <div class="row">
               <div class="col-sm-3"><h5 class="card-title m-b-0">Inventory</h5></div>
@@ -188,11 +188,11 @@
   }
 
 $(document).ready(function() {
-  $('#dataCard').hide();
+  $('#reportCard').hide();
   $('#mapButton').hide();
 
   var mapOptions = {
-    zoom : 14,
+    zoom : 9,
     center : new google.maps.LatLng('23.300329','83.832497'),
     mapTypeId : google.maps.MapTypeId.ROADMAP
   }
