@@ -29,7 +29,7 @@
                   <label for="input_nodeIp" class="col-sm-4 control-label">Load Profile from Device</label>
                   <div class="col-sm-5">
                     <select class="form-control" id="input_nodeIp" ng-model="nodeId">
-                      <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                      <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}} ({{node.primaryIP}})</option>
                     </select>
                   </div>
                   <div class="col-sm-3">
@@ -109,7 +109,7 @@
                       <label for="input_nodeId" class="col-sm-4 control-label">Select Device</label>
                       <div class="col-sm-8">
                         <select id="input_nodeId" name="nodeId" ng-model="profileToRetrieve" class="form-control" required>
-                          <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                          <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}} ({{node.primaryIP}})</option>
                         </select>
                       </div>
                     </div>
@@ -150,7 +150,7 @@
                       <div class="col-sm-6">
                         <label class="control-label">Available Devices</label>
                         <select class="form-control" id="availableNodes" multiple="multiple" size="6">
-                          <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}}</option>
+                          <option ng-repeat="node in nodes" value="{{node.id}}">{{node.label}} ({{node.primaryIP}})</option>
                         </select>
                         <button type="button" class="btn btn-default" id="nodes.doAdd" onClick="javascript:addNodes()">&nbsp;&#155;&#155;&nbsp; Add</button>
                       </div>
