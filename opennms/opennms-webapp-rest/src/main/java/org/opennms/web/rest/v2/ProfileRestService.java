@@ -425,8 +425,19 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         if (profile == null) {
             throw getException(Status.BAD_REQUEST, "Profile object cannot be null");
         }
+        profile.setBandwidth(convertBandwidthToDeviceFormat(profile.getBandwidth()));
         final Integer id = getDao().save(profile);
         return Response.created(RedirectHelper.getRedirectUri(uriInfo, id)).build();
+    }
+
+    private String convertBandwidthToDeviceFormat(String bandwidth) {
+        if (!"unknown".equals(bandwidth)) {
+            int index = bandwidth.toLowerCase().indexOf("mhz");
+            if (index != -1) {
+                bandwidth = "HT" + bandwidth.substring(0,index);
+            }
+        }
+        return bandwidth;
     }
 
     @Override
@@ -504,21 +515,21 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         if (key.equals("wireless.wifi1.hwmode")) {
             if (value != null && value.length() > 1) {
                 OpMode mode = OpMode.get(value);
-                convertedValue = String.valueOf(mode.getId());
+                convertedValue = mode.getLabel();
 
             } else {
                 OpMode mode = OpMode.get(Integer.parseInt(value));
-                convertedValue = String.valueOf(mode.getId());
+                convertedValue = mode.getLabel();
             }
 
         } else if (key.equals("wireless.wifi1.htmode")) {
             if (value != null && value.length() > 1) {
                 String numericalValue = value.substring(2);
                 Bandwidth bandwidth = Bandwidth.get(numericalValue + "MHz");
-                convertedValue = String.valueOf(bandwidth.getId());
+                convertedValue = bandwidth.toString();
             } else {
                 Bandwidth bw = Bandwidth.get(Integer.parseInt(value));
-                convertedValue = String.valueOf(bw.getId());
+                convertedValue = bw.toString();
             }
         } else if (key.equals("wireless.wifi1.channel")) {
             if (value.equals("auto")) {
