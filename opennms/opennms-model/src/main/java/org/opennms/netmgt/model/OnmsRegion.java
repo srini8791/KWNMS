@@ -29,6 +29,7 @@
 package org.opennms.netmgt.model;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.springframework.core.style.ToStringCreator;
 
@@ -61,7 +62,7 @@ public class OnmsRegion implements Serializable {
     @XmlElementWrapper(name = "monitoringLocations")
     @XmlElement(name = "monitoringLocation")
     @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonManagedReference
     private Set<OnmsMonitoringLocation> m_monitoringLocations = new LinkedHashSet<>();
 
     public OnmsRegion() {}

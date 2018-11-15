@@ -162,6 +162,12 @@ public class MockNodeDao implements NodeDao {
     }
 
     @Override
+    public List<OnmsNode> findByLocation(String location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public OnmsNode getHierarchy(Integer id) {
         // TODO Auto-generated method stub
         return null;

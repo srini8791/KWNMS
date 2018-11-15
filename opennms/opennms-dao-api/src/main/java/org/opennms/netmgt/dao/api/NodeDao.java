@@ -89,6 +89,14 @@ public interface NodeDao extends LegacyOnmsDao<OnmsNode, Integer> {
     List<OnmsNode> findByLabel(String label);
     
     /**
+     * <p>findByLocation</p>
+     *
+     * @param location a {@link java.lang.String} object.
+     * @return a {@link java.util.Collection} object.
+     */
+    List<OnmsNode> findByLocation(String location);
+    
+    /**
      * <p>findByLabel</p>
      *
      * @param label a {@link java.lang.String} object.
@@ -96,7 +104,7 @@ public interface NodeDao extends LegacyOnmsDao<OnmsNode, Integer> {
      * @return a {@link java.util.Collection} object.
      */
     List<OnmsNode> findByLabelForLocation(String label, String location);
-    
+
     /**
      * <p>getHierarchy</p>
      *

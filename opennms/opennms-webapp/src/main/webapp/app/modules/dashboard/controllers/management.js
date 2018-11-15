@@ -9,10 +9,46 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$http', '
     $scope.vm.totalNodesCount = 0;
     $scope.vm.activeNodesCount = 0;
 
+    $scope.vm.tregions = [];
+    $scope.vm.tlocations = [];
+    $scope.vm.tnodes = [];
+
     $scope.init = function() {
+      $scope.loadTreeRegions();
       $scope.loadNodes();
       $scope.loadActiveNodesCount();
     }
+
+    $scope.loadTreeRegions = function() {
+      $http.get('api/v2/treeview/regions')
+        .then(function(response) {
+          if (response.data) {
+            $scope.vm.tregions = response.data;
+          }
+        }
+      );
+    }
+
+    $scope.loadTreeLocations = function(regionId) {
+      $http.get('api/v2/treeview/regions/' + regionId + '/locations')
+        .then(function(response) {
+          if (response.data) {
+            $scope.vm.tlocations = response.data;
+          }
+        }
+      );
+    }
+
+    $scope.loadTreeNodes = function(location) {
+      $http.get('api/v2/treeview/location/' + location + '/nodes')
+        .then(function(response) {
+          if (response.data) {
+            $scope.vm.tnodes = response.data;
+          }
+        }
+      );
+    }
+
 
     $scope.loadNodes = function() {
       var config = {
