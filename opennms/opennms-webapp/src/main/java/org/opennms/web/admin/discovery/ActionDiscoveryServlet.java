@@ -321,7 +321,10 @@ public class ActionDiscoveryServlet extends HttpServlet {
         }
 
         sess.setAttribute(ATTRIBUTE_DISCOVERY_CONFIGURATION, config);
+/* Original modified for new Dashboard
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/discovery/edit-config.jsp");
+*/
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/discovery/edit-config2.jsp");
         dispatcher.forward(request, response);
     }
 

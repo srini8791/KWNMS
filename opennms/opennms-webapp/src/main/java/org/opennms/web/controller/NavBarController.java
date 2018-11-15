@@ -82,7 +82,10 @@ public class NavBarController extends AbstractController implements Initializing
         cfg.setDefaultEncoding(StandardCharsets.UTF_8.name());
         cfg.setClassForTemplateLoading(NavBarController.class, "");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+/* Original modified for new UI
         Template template = cfg.getTemplate("navbar.ftl");
+*/
+        Template template = cfg.getTemplate("navbar2.ftl");
 
         m_view = new FreemarkerView(template);
     }
