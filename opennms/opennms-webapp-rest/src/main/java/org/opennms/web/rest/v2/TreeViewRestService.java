@@ -74,7 +74,7 @@ public class TreeViewRestService {
         List<OnmsRegion> regions = regionDao.findAll();
         if (regions != null && !regions.isEmpty()) {
             for (OnmsRegion region : regions) {
-                TreeNodeDTO regionNode = new TreeNodeDTO(region.getName(), true);
+                TreeNodeDTO regionNode = new TreeNodeDTO(region.getName());
                 regionNode.addData("id", region.getId());
                 regionNode.addData("type", "region");
                 regionNodes.add(regionNode);
@@ -94,7 +94,7 @@ public class TreeViewRestService {
             Set<OnmsMonitoringLocation> locations = region.getMonitoringLocations();
             if (locations != null && !locations.isEmpty()) {
                 for (OnmsMonitoringLocation location : locations) {
-                    TreeNodeDTO locationNode = new TreeNodeDTO(location.getLocationName(), true);
+                    TreeNodeDTO locationNode = new TreeNodeDTO(location.getLocationName());
                     locationNode.addData("id", location.getLocationName());
                     locationNode.addData("type", "location");
                     locationNode.addData("lat", location.getLatitude());
@@ -115,7 +115,7 @@ public class TreeViewRestService {
         List<OnmsNode> nodes = nodeDao.findByLocation(location);
         if (nodes != null && !nodes.isEmpty()) {
             for (OnmsNode node : nodes) {
-                TreeNodeDTO locationNode = new TreeNodeDTO(node.getPrimaryIP(), true);
+                TreeNodeDTO locationNode = new TreeNodeDTO(node.getPrimaryIP());
                 locationNode.addData("id", node.getId());
                 locationNode.addData("type", "node");
                 locationNode.addData("lat", node.getAssetRecord().getLatitude());
@@ -126,6 +126,15 @@ public class TreeViewRestService {
         return Response.ok().entity(locationNodes).build();
     }
 
+    @GET
+    @Path("/{location}/nodes")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getNodes(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                               @PathParam("location") final String location) {
+        List<OnmsNode> nodes = nodeDao.findByLocation(location);
+        return Response.ok().entity(nodes).build();
+    }
+
     private Map<String, String> prepareErrorObject(String errorMessage) {
         Map<String, String> object = new HashMap<>();
         object.put("errorMessage", errorMessage);
@@ -134,20 +143,15 @@ public class TreeViewRestService {
 
 
     /**
-     * {'text': 'South', 'children': true, 'data': {'type': 'region'}}
+     * {'text': 'South', 'data': {'id': '1', 'type': 'region', 'lat': '0', 'long': '0'}, 'children': []}
      */
     class TreeNodeDTO implements Serializable {
         private String text;
-        private boolean children = false;
+        private List children = new ArrayList();
         private Map<String, Object> data = new HashMap<>();
 
         public TreeNodeDTO(String text) {
             this.text = text;
-        }
-
-        public TreeNodeDTO(String text, boolean children) {
-            this.text = text;
-            this.children = children;
         }
 
         public void addData(String key, Object value) {
@@ -158,8 +162,12 @@ public class TreeViewRestService {
             return text;
         }
 
-        public boolean isChildren() {
+        public List getChildren() {
             return children;
+        }
+
+        public void addChild(Object child) {
+            children.add(child);
         }
 
         public Map<String, Object> getData() {

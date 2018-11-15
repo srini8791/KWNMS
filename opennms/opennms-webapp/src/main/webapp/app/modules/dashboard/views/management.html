@@ -76,21 +76,15 @@
               </div>
               <div class="panel-body">
                 <!-- TREEVIEW CODE -->
-                <ul class="treeview">
-                  <li><a href="#">Global</a>
-                    <ul>
-                      <li data-ng-repeat="tregion in vm.tregions"><a data-ng-click="loadTreeLocations(tregion.data.id)">{{ tregion.text }}</a>
-                        <ul>
-                          <li data-ng-repeat="tlocation in vm.tlocations"><a data-ng-click="loadTreeNodes(tlocation.data.id)">{{ tlocation.text }}</a>
-                            <ul>
-                              <li data-ng-repeat="tnode in vm.tnodes"><a href="#">{{ tnode.text }}</a></li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
+                <div
+                    data-angular-treeview="true"
+                    data-tree-id="mytree"
+                    data-tree-model="treedata"
+                    data-node-id="data.id"
+                    data-node-label="text"
+                    data-node-children="children" >
+                </div>
+                <!--<div>Selected: {{ mytree.currentNode.data.id }}, {{ mytree.currentNode.text }}</div>-->
                 <!-- TREEVIEW CODE -->
               </div>
             </div>

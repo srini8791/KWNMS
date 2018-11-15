@@ -9,7 +9,7 @@
 
  ===========================================================*/
 
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'flash',
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'flash', 'angularTreeview',
     //main modules
     'login', 'dashboard']);
 
@@ -28,9 +28,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', functio
            }
        });
 
-    $urlRouterProvider.otherwise('login');
+    //$urlRouterProvider.otherwise('login');
 
-    //$urlRouterProvider.otherwise('app/dashboard');
+    $urlRouterProvider.otherwise('app/dashboard');
     //$urlRouterProvider.otherwise('/app/dashboard');
 }]);
 
