@@ -58,6 +58,7 @@
 <jsp:include page="/includes/bootstrap2.jsp" flush="false" >
   <jsp:param name="title" value="Modify Discovery Configuration" />
   <jsp:param name="headTitle" value="Discovery" />
+	<jsp:param name="quiet" value="true" />
 </jsp:include>
 
 <script type="text/javascript">

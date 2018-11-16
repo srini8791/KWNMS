@@ -137,7 +137,10 @@ public class SnmpConfigServlet extends HttpServlet {
 		}
 		request.setAttribute("snmpConfig", Files.toString(SnmpPeerFactory.getFile(), StandardCharsets.UTF_8));
 
+/* Original modified for dashboard UI
 		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/snmpConfig.jsp");
+*/
+		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/snmpConfig2.jsp");
 		dispatcher.forward(request, response);
 	}
 	

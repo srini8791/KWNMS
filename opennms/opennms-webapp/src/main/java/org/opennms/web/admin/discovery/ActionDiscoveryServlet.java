@@ -324,7 +324,7 @@ public class ActionDiscoveryServlet extends HttpServlet {
 /* Original modified for new Dashboard
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/discovery/edit-config.jsp");
 */
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/discovery/edit-config2.jsp");
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/admin/discovery/edit-config-2.jsp");
         dispatcher.forward(request, response);
     }
 
