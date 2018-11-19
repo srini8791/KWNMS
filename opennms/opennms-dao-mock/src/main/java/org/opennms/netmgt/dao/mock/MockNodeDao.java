@@ -518,4 +518,8 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
         return list;
     }
 
+    public Number[] getCountsByChannel() {
+        return new Integer[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    }
+
 }

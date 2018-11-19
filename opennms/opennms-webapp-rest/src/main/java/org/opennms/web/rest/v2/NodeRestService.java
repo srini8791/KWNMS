@@ -268,6 +268,26 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
     }
 
     @GET
+    @Path("counts/bychannel")
+    @Produces({"text/event-stream"})
+    public Response getCountsByChannel() {
+        StringBuilder buffer = new StringBuilder("data: ");
+        buffer.append("[");
+        Number[] countsArray = getDao().getCountsByChannel();
+        int counter = 0;
+        for (Number number : countsArray) {
+            if (counter > 0) {
+                buffer.append(", ");
+            }
+            buffer.append(number);
+            counter = 1;
+        }
+        buffer.append("]\n\n");
+
+        return Response.ok(buffer.toString()).build();
+    }
+
+    @GET
     @Path("/export_to_csv")
     @Produces({"text/csv"})
     public Response getInventoryAsCSV() {

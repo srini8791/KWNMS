@@ -21,10 +21,15 @@
         <div class="card" style="margin:5px; padding: 5px;">
           <div class="card-header" style="background:#00a0df; color:#fff;">
             <div class="row">
-              <div class="col-sm-2"><h5 class="card-title m-b-0">Inventory</h5></div>
-              <div class="col-sm-2"><h5 class="card-title m-b-0">Total: {{vm.totalNodesCount}}</h5></div>
-              <div class="col-sm-2"><h5 class="card-title m-b-0">Active: {{vm.activeNodesCount}}</h5></div>
-              <div class="col-sm-2"><h5 class="card-title m-b-0">In-active: {{vm.totalNodesCount - vm.activeNodesCount}}</h5></div>
+              <div class="col-sm-1"><h5 class="card-title m-b-0">Inventory</h5></div>
+              <div class="col-sm-1" style="text-align:center"><h5 class="card-title m-b-0">Total<br/>{{vm.totalNodesCount}}</h5></div>
+              <div class="col-sm-1" style="text-align:center"><h5 class="card-title m-b-0">Active<br/>{{vm.activeNodesCount}}</h5></div>
+              <div class="col-sm-1" style="text-align:center"><h5 class="card-title m-b-0">In-active<br/>{{vm.totalNodesCount - vm.activeNodesCount}}</h5></div>
+              <div class="col-sm-4" style="text-align:right">
+                <select>
+                  <option data-ng-repeat="column in removedColumnNames">{{ column }}</option>
+                </select>
+              </div>
               <div class="col-sm-2" style="text-align: right">
                 <select data-ng-model="limit" data-ng-change="loadNodes()">
                   <option>10</option>
@@ -33,41 +38,55 @@
                   <option>100</option>
                 </select>
               </div>
-              <div class="col-sm-2" style="text-align:right"><a class="btn btn-primary" href="api/v2/nodes/export_to_csv">CSV <i class="fa fa-download" aria-hidden="true" /></a></div>
+              <div class="col-sm-2" style="text-align:right">
+                <a class="btn btn-primary" href="api/v2/nodes/export_to_csv">CSV <i class="fa fa-download" aria-hidden="true" /></a>
+              </div>
             </div>
           </div>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead class="thead-dark">
               <tr>
-                <th scope="col">System Name</th>
-                <th scope="col">IP Address</th>
-                <th scope="col">Serial Number</th>
-                <th scope="col">MAC Address</th>
-                <th scope="col">Model</th>
-                <th scope="col">Firmware</th>
-                <th scope="col">Channel</th>
-                <th scope="col">Bandwidth</th>
-                <th scope="col">Ethernet Speed</th>
-                <th scope="col">I/O Bandwidth Limit</th>
-                <th scope="col">Modulation</th>
-                <th scope="col">Operation Mode</th>
+                <th scope="col" data-ng-show="showColumn(0)">System Name<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(0)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(1)">IP Address<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(1)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(2)">Serial Number<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(2)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(3)">MAC Address<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(3)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(4)">Model<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(4)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(5)">Firmware<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(5)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(6)">Channel<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(6)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(7)">Bandwidth<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(7)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(8)">Ethernet Speed<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(8)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(9)">I/O Bandwidth Limit<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(9)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(10)">Modulation<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(10)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
+                <th scope="col" data-ng-show="showColumn(11)">Operation Mode<br/>
+                  <a class="btn btn-primary" title="remove" data-ng-click="removeColumn(11)"><i class="fa fa-minus" aria-hidden="true"></i></a></th>
               </tr>
               </thead>
               <tbody class="customtable">
               <tr data-ng-repeat="node in vm.nodes">
-                <td>{{node.sysName}}</td>
-                <td>{{node.primaryIP}}</td>
-                <td>{{node.assetRecord.serialNumber}}</td>
-                <td>{{node.macAddress}}</td>
-                <td>{{node.assetRecord.modelNumber}}</td>
-                <td>{{node.assetRecord.firmware}}</td>
-                <td>{{node.channel}}</td>
-                <td>{{node.bandwidth}}</td>
-                <td>{{node.assetRecord.ethernetSpeed}}</td>
-                <td>{{node.assetRecord.ioBandwidthLimit}}</td>
-                <td>{{node.assetRecord.modulation}}</td>
-                <td>{{node.opMode}}</td>
+                <td data-ng-show="showColumn(0)">{{node.sysName}}</td>
+                <td data-ng-show="showColumn(1)">{{node.primaryIP}}</td>
+                <td data-ng-show="showColumn(2)">{{node.assetRecord.serialNumber}}</td>
+                <td data-ng-show="showColumn(3)">{{node.macAddress}}</td>
+                <td data-ng-show="showColumn(4)">{{node.assetRecord.modelNumber}}</td>
+                <td data-ng-show="showColumn(5)">{{node.assetRecord.firmware}}</td>
+                <td data-ng-show="showColumn(6)">{{node.channel}}</td>
+                <td data-ng-show="showColumn(7)">{{node.bandwidth}}</td>
+                <td data-ng-show="showColumn(8)">{{node.assetRecord.ethernetSpeed}}</td>
+                <td data-ng-show="showColumn(9)">{{node.assetRecord.ioBandwidthLimit}}</td>
+                <td data-ng-show="showColumn(10)">{{node.assetRecord.modulation}}</td>
+                <td data-ng-show="showColumn(11)">{{node.opMode}}</td>
               </tr>
               </tbody>
             </table>

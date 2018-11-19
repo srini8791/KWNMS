@@ -172,6 +172,50 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
         }
     };
 
+    // CHARTS
+
+    // {1, 3, 5, 2, 3, 5, 1, 2, 5, 2, 1, 3} // dummy data
+    vm.chart_ptp = {};
+    vm.chart_ptmp = {};
+    vm.chart_wifi = {};
+    vm.channelCounts = [1, 3, 5, 2, 3, 5, 1, 2, 5, 2, 1, 3];
+
+    var chartsSource = new EventSource('api/v2/nodes/counts/bychannel');
+    chartsSource.onmessage = function(event) {
+        if (event.data) {
+            var countsArray = JSON.parse(event.data);
+            $scope.$apply(function() {
+              // ptp
+              vm.chart_ptp.axes[0].bands[1].endValue = countsArray[0];
+              vm.chart_ptp.axes[0].bands[1].balloonText = countsArray[0];
+              vm.chart_ptp.axes[0].bands[3].endValue = countsArray[1];
+              vm.chart_ptp.axes[0].bands[3].balloonText = countsArray[1];
+              vm.chart_ptp.axes[0].bands[5].endValue = countsArray[2];
+              vm.chart_ptp.axes[0].bands[5].balloonText = countsArray[2];
+              vm.chart_ptp.axes[0].bands[7].endValue = countsArray[3];
+              vm.chart_ptp.axes[0].bands[7].balloonText = countsArray[3];
+              // ptmp
+              vm.chart_ptmp.axes[0].bands[1].endValue = countsArray[4];
+              vm.chart_ptmp.axes[0].bands[1].balloonText = countsArray[4];
+              vm.chart_ptmp.axes[0].bands[3].endValue = countsArray[5];
+              vm.chart_ptmp.axes[0].bands[3].balloonText = countsArray[5];
+              vm.chart_ptmp.axes[0].bands[5].endValue = countsArray[6];
+              vm.chart_ptmp.axes[0].bands[5].balloonText = countsArray[6];
+              vm.chart_ptmp.axes[0].bands[7].endValue = countsArray[7];
+              vm.chart_ptmp.axes[0].bands[7].balloonText = countsArray[7];
+              // wifi
+              vm.chart_wifi.axes[0].bands[1].endValue = countsArray[8];
+              vm.chart_wifi.axes[0].bands[1].balloonText = countsArray[8];
+              vm.chart_wifi.axes[0].bands[3].endValue = countsArray[9];
+              vm.chart_wifi.axes[0].bands[3].balloonText = countsArray[9];
+              vm.chart_wifi.axes[0].bands[5].endValue = countsArray[10];
+              vm.chart_wifi.axes[0].bands[5].balloonText = countsArray[10];
+              vm.chart_wifi.axes[0].bands[7].endValue = countsArray[11];
+              vm.chart_wifi.axes[0].bands[7].balloonText = countsArray[11];
+            });
+        }
+    };
+
 
 
 }]);

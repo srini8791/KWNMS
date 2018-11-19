@@ -575,4 +575,15 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
         return getHibernateTemplate().executeWithNativeSession(session -> session.createSQLQuery(finalQuery).list());
     }
 
+    /**
+     * Order of Counts:
+     *      ptp 30-70, ptp 70-120, ptp 120-160, ptp 160-200,
+     *      ptmp 30-70, ptmp 70-120, ptmp 120-160, ptmp 160-200,
+     *      wifi 30-70, wifi 70-120, wifi 120-160, wifi 160-200
+     * @return
+     */
+    public Number[] getCountsByChannel() {
+        return new Integer[] {1, 3, 5, 2, 3, 5, 1, 2, 5, 2, 1, 3};
+    }
+
 }

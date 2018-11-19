@@ -3,6 +3,10 @@
   background-color: #00a0df !important;
 }
 
+.table .thead-dark th {
+  vertical-align: top !important;
+}
+
 #navbarSupportedContent {
     background: #00a0df !important;
 }

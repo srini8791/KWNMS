@@ -12,7 +12,7 @@
 <!-- End Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
 <hr>
-<section class="content">
+<section class="content" id="dashboardContent">
   <!-- Container fluid  -->
   <!-- ============================================================== -->
   <div class="container-fluid">
@@ -149,8 +149,10 @@
 
 <!-- Chart code -->
 <script>
-$(document).ready(function() {
-  var gaugeChart1 = AmCharts.makeChart("chartdiv1", {
+angular.element(document).ready(function() {
+  //console.log('doc ready called');
+
+  var ptpChart = AmCharts.makeChart("chartdiv1", {
     "type": "gauge",
     "theme": "light",
     "axes": [{
@@ -227,9 +229,9 @@ $(document).ready(function() {
       "enabled": true
     }
   });
+  angular.element('#dashboardContent').scope().vm.chart_ptp = ptpChart;
 
-
-  var gaugeChart2 = AmCharts.makeChart("chartdiv2", {
+  var ptmpChart = AmCharts.makeChart("chartdiv2", {
     "type": "gauge",
     "theme": "light",
     "axes": [{
@@ -306,8 +308,10 @@ $(document).ready(function() {
       "enabled": true
     }
   });
+  angular.element('#dashboardContent').scope().vm.chart_ptmp = ptmpChart;
 
-  var gaugeChart3 = AmCharts.makeChart("chartdiv3", {
+
+  var wifiChart = AmCharts.makeChart("chartdiv3", {
     "type": "gauge",
     "theme": "light",
     "axes": [{
@@ -384,6 +388,8 @@ $(document).ready(function() {
       "enabled": true
     }
   });
+  angular.element('#dashboardContent').scope().vm.chart_wifi = wifiChart;
+
 
 });
 

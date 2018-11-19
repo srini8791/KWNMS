@@ -372,4 +372,8 @@ public class MockNodeDao implements NodeDao {
         list.add(new Object[] {"indoorap", 0, 0, 0});
         return list;
     }
+
+    public Number[] getCountsByChannel() {
+        return new Integer[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    }
 }
