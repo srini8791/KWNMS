@@ -84,8 +84,8 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
         .then(function(response) {
           if (response.data) {
             $scope.newProfile.ssid = response.data['ssid'];
-            $scope.newProfile.opMode.id = response.data['opModeId'];
-            $scope.newProfile.bandwidth.id = response.data['bandwidthId'];
+            $scope.newProfile.opMode = response.data['opModeId'];
+            $scope.newProfile.bandwidth = response.data['bandwidthId'];
             $scope.newProfile.channel = response.data['channel'];
           }
         })
