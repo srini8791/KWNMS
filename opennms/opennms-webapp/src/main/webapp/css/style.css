@@ -1,4 +1,9 @@
-﻿#navbarSupportedContent {
+﻿.card-header {
+  padding: 4px !important;
+  background-color: #00a0df !important;
+}
+
+#navbarSupportedContent {
     background: #00a0df !important;
 }
 #main-wrapper .topbar .top-navbar .navbar-header[data-logobg="skin5"] {

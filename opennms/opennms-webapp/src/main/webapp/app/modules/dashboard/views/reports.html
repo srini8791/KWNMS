@@ -18,11 +18,11 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div class="card" style="margin:10px; padding: 20px;">
-          <div class="card-header" style="background:#663399; color:#fff;">
+        <div class="card" style="margin:5px; padding: 5px;">
+          <div class="card-header" style="background:#00a0df; color:#fff;">
             <div class="row">
-              <div class="col-sm-3"><h5 class="card-title m-b-0">Inventory</h5></div>
-              <div class="col-sm-3"><h5 class="card-title m-b-0">Total: {{vm.totalNodesCount}}</h5></div>
+              <div class="col-sm-2"><h5 class="card-title m-b-0">Inventory</h5></div>
+              <div class="col-sm-2"><h5 class="card-title m-b-0">Total: {{vm.totalNodesCount}}</h5></div>
               <div class="col-sm-2"><h5 class="card-title m-b-0">Active: {{vm.activeNodesCount}}</h5></div>
               <div class="col-sm-2"><h5 class="card-title m-b-0">In-active: {{vm.totalNodesCount - vm.activeNodesCount}}</h5></div>
               <div class="col-sm-2" style="text-align: right">
@@ -33,6 +33,7 @@
                   <option>100</option>
                 </select>
               </div>
+              <div class="col-sm-2" style="text-align:right"><a class="btn btn-primary" href="api/v2/nodes/export_to_csv">CSV <i class="fa fa-download" aria-hidden="true" /></a></div>
             </div>
           </div>
           <div class="table-responsive">

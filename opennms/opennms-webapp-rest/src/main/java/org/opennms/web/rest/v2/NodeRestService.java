@@ -28,14 +28,15 @@
 
 package org.opennms.web.rest.v2;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.*;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
@@ -266,4 +267,47 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
         return Response.ok(String.valueOf(getDao().getActiveNodeCount())).build();
     }
 
+    @GET
+    @Path("/export_to_csv")
+    @Produces({"text/csv"})
+    public Response getInventoryAsCSV() {
+        StreamingOutput output = new StreamingOutput() {
+            @Override
+            public void write(OutputStream out) throws IOException, WebApplicationException {
+                PrintWriter writer = new PrintWriter(out);
+                writer.println("System Name, IP Address, Serial Number, MAC Address, Model, Firmware, Channel, Bandwidth, Ethernet Speed, I/O Bandwidth Limit, Modulation, Operation Mode");
+                getDao().findAll().stream().forEach(node -> {
+                    // System Name
+                    writer.print(node.getSysName() != null ? node.getSysName() + "," : ",");
+                    // IP Address
+                    writer.print(node.getPrimaryIP() != null ? node.getPrimaryIP() + "," : ",");
+                    // Serial Number
+                    writer.print(node.getAssetRecord().getSerialNumber() != null ? node.getAssetRecord().getSerialNumber() + "," : ",");
+                    // MAC Address
+                    writer.print(node.getMacAddress() != null ? node.getMacAddress() + "," : ",");
+                    // Model
+                    writer.print(node.getAssetRecord().getModelNumber() != null ? node.getAssetRecord().getModelNumber() + "," : ",");
+                    // Firmware
+                    writer.print(node.getAssetRecord().getFirmware() != null ? node.getAssetRecord().getFirmware() + "," : ",");
+                    // Channel
+                    writer.print(node.getChannel() != null ? node.getChannel() + "," : ",");
+                    // Bandwidth
+                    writer.print(node.getBandwidth() != null ? node.getBandwidth() + "," : ",");
+                    // Ethernet Speed
+                    writer.print(node.getAssetRecord().getEthernetSpeed() != null ? node.getAssetRecord().getEthernetSpeed() + "," : ",");
+                    // I/O Bandwidth Limit
+                    writer.print(node.getAssetRecord().getIoBandwidthLimit() != null ? node.getAssetRecord().getIoBandwidthLimit() + "," : ",");
+                    // Modulation
+                    writer.print(node.getAssetRecord().getModulation() != null ? node.getAssetRecord().getModulation() + "," : ",");
+                    // Operation Mode
+                    writer.print(node.getOpMode() != null ? node.getOpMode() : "");
+                    // new line
+                    writer.println();
+                });
+                writer.close();
+            }
+        };
+        return Response.ok(output).header(
+                "Content-Disposition", "attachment, filename=\"nodes.csv\"").build();
+    }
 }
