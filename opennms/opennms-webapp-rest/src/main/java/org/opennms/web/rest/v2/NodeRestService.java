@@ -272,60 +272,112 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
     @Produces({"text/event-stream"})
     public Response getCountsByChannel() {
         StringBuilder buffer = new StringBuilder("data: ");
-        buffer.append("[");
-        Number[] countsArray = getDao().getCountsByChannel();
-        int counter = 0;
-        for (Number number : countsArray) {
-            if (counter > 0) {
-                buffer.append(", ");
+        List<String[]> countsList = getDao().getCountsByChannel();
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("ptp", Arrays.asList("0", "0", "0", "0"));
+        map.put("ptmp", Arrays.asList("0", "0", "0", "0"));
+        map.put("wifi", Arrays.asList("0", "0", "0", "0"));
+        for (String[] array : countsList) {
+            String key = array[0];
+            if (key == null || key.trim().length() == 0) {
+                continue;
             }
-            buffer.append(number);
-            counter = 1;
+            List<String> list = new ArrayList<>();
+            list.add(array[1]);
+            list.add(array[2]);
+            list.add(array[3]);
+            list.add(array[4]);
+            map.put(key, list);
         }
-        buffer.append("]\n\n");
+        // add ptp, ptmp and wifi in the order
+        List<String> fullList = new ArrayList<>();
+        fullList.addAll(map.get("ptp"));
+        fullList.addAll(map.get("ptmp"));
+        fullList.addAll(map.get("wifi"));
+
+        buffer.append(fullList.toString());
+        buffer.append("\n\n");
 
         return Response.ok(buffer.toString()).build();
     }
 
+
+    private final String[] reportColumns = new String[] {
+            "System Name",
+            "IP Address",
+            "Serial Number",
+            "MAC Address",
+            "Model",
+            "Firmware",
+            "Channel",
+            "Bandwidth",
+            "Ethernet Speed",
+            "I/O Bandwidth Limit",
+            "Modulation",
+            "Operation Mode"
+    };
+
     @GET
     @Path("/export_to_csv")
     @Produces({"text/csv"})
-    public Response getInventoryAsCSV() {
+    public Response getInventoryAsCSV(@Context SecurityContext securityContext, @Context UriInfo uriInfo) {
+        String[] columnsArray = new String[]{};
+        String columnIndexes = uriInfo.getQueryParameters().getFirst("columns");
+        if (columnIndexes != null && columnIndexes.startsWith("[") && columnIndexes.endsWith("]")) {
+            columnIndexes = columnIndexes.substring(1, columnIndexes.length()-1);
+            columnsArray = columnIndexes.split(",");
+        }
+        //System.out.println("columnIndexes: " + columnIndexes);
+
+        final List<String> columnsList = Arrays.asList(columnsArray);
         StreamingOutput output = new StreamingOutput() {
             @Override
             public void write(OutputStream out) throws IOException, WebApplicationException {
                 PrintWriter writer = new PrintWriter(out);
-                writer.println("System Name, IP Address, Serial Number, MAC Address, Model, Firmware, Channel, Bandwidth, Ethernet Speed, I/O Bandwidth Limit, Modulation, Operation Mode");
+                printHeadings(writer, columnsList);
                 getDao().findAll().stream().forEach(node -> {
-                    // System Name
-                    writer.print(node.getSysName() != null ? node.getSysName() + "," : ",");
-                    // IP Address
-                    writer.print(node.getPrimaryIP() != null ? node.getPrimaryIP() + "," : ",");
-                    // Serial Number
-                    writer.print(node.getAssetRecord().getSerialNumber() != null ? node.getAssetRecord().getSerialNumber() + "," : ",");
-                    // MAC Address
-                    writer.print(node.getMacAddress() != null ? node.getMacAddress() + "," : ",");
-                    // Model
-                    writer.print(node.getAssetRecord().getModelNumber() != null ? node.getAssetRecord().getModelNumber() + "," : ",");
-                    // Firmware
-                    writer.print(node.getAssetRecord().getFirmware() != null ? node.getAssetRecord().getFirmware() + "," : ",");
-                    // Channel
-                    writer.print(node.getChannel() != null ? node.getChannel() + "," : ",");
-                    // Bandwidth
-                    writer.print(node.getBandwidth() != null ? node.getBandwidth() + "," : ",");
-                    // Ethernet Speed
-                    writer.print(node.getAssetRecord().getEthernetSpeed() != null ? node.getAssetRecord().getEthernetSpeed() + "," : ",");
-                    // I/O Bandwidth Limit
-                    writer.print(node.getAssetRecord().getIoBandwidthLimit() != null ? node.getAssetRecord().getIoBandwidthLimit() + "," : ",");
-                    // Modulation
-                    writer.print(node.getAssetRecord().getModulation() != null ? node.getAssetRecord().getModulation() + "," : ",");
-                    // Operation Mode
-                    writer.print(node.getOpMode() != null ? node.getOpMode() : "");
-                    // new line
-                    writer.println();
+                    StringBuilder buf = new StringBuilder();
+                    addColumnToReport(buf, "0", node.getSysName());
+                    addColumnToReport(buf, "1", node.getPrimaryIP());
+                    addColumnToReport(buf, "2", node.getAssetRecord().getSerialNumber());
+                    addColumnToReport(buf, "3", node.getMacAddress());
+                    addColumnToReport(buf, "4", node.getAssetRecord().getModelNumber());
+                    addColumnToReport(buf, "5", node.getAssetRecord().getFirmware());
+                    addColumnToReport(buf, "6", node.getChannel());
+                    addColumnToReport(buf, "7", node.getBandwidth());
+                    addColumnToReport(buf, "8", node.getAssetRecord().getEthernetSpeed());
+                    addColumnToReport(buf, "9", node.getAssetRecord().getIoBandwidthLimit());
+                    addColumnToReport(buf, "10", node.getAssetRecord().getModulation());
+                    addColumnToReport(buf, "11", node.getOpMode());
+                    writer.println(buf.toString());
                 });
                 writer.close();
             }
+
+            private void printHeadings(PrintWriter writer, List<String> columnsList) {
+                StringBuilder buffer = new StringBuilder();
+                for (int columnIndex = 0; columnIndex < reportColumns.length; columnIndex++) {
+                    if (columnsList.contains(String.valueOf(columnIndex))) {
+                        if (buffer.length() > 0) {
+                            buffer.append(",");
+                        }
+                        buffer.append(reportColumns[columnIndex]);
+                    }
+                }
+                writer.println(buffer.toString());
+            }
+
+            private void addColumnToReport(StringBuilder buffer, String key, Object object) {
+                if (columnsList.isEmpty() || columnsList.contains(key)) {
+                    if (buffer.length() > 0) {
+                        buffer.append(",");
+                    }
+                    if (object != null) {
+                        buffer.append(object.toString());
+                    }
+                }
+            }
+
         };
         return Response.ok(output).header(
                 "Content-Disposition", "attachment, filename=\"nodes.csv\"").build();

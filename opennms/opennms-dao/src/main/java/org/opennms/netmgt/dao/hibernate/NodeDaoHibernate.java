@@ -577,13 +577,36 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
 
     /**
      * Order of Counts:
-     *      ptp 30-70, ptp 70-120, ptp 120-160, ptp 160-200,
-     *      ptmp 30-70, ptmp 70-120, ptmp 120-160, ptmp 160-200,
-     *      wifi 30-70, wifi 70-120, wifi 120-160, wifi 160-200
+     *     ptp 30-70, ptp 70-120, ptp 120-160, ptp 160-200,
+     *     ptmp 30-70, ptmp 70-120, ptmp 120-160, ptmp 160-200,
+     *     wifi 30-70, wifi 70-120, wifi 120-160, wifi 160-200
      * @return
      */
-    public Number[] getCountsByChannel() {
-        return new Integer[] {1, 3, 5, 2, 3, 5, 1, 2, 5, 2, 1, 3};
+    public List<String[]> getCountsByChannel() {
+        //return new Integer[] {1, 3, 5, 2, 3, 5, 1, 2, 5, 2, 1, 3};
+        String query = "";
+        query += "select "
+            + "productcode, "
+            + "sum(case when channel >=  30 and channel <  70 then 1 else 0 end) g1, "
+            + "sum(case when channel >=  70 and channel < 120 then 1 else 0 end) g2, "
+            + "sum(case when channel >= 120 and channel < 160 then 1 else 0 end) g3, "
+            + "sum(case when channel >= 160 and channel < 200 then 1 else 0 end) g4 "
+            + "from node "
+            + "group by productcode";
+        final String finalQuery = query;
+        List<Object[]> objectArrays = getHibernateTemplate().executeWithNativeSession(session -> session.createSQLQuery(finalQuery).list());
+        List<String[]> stringArrays = new ArrayList<>();
+        for (Object[] objects : objectArrays) {
+            if (objects[0] == null) {
+                continue;
+            }
+            List<String> list = new ArrayList<>();
+            for (Object obj : objects) {
+                list.add(obj.toString());
+            }
+            stringArrays.add(list.toArray(new String[0]));
+        }
+        return stringArrays;
     }
 
 }

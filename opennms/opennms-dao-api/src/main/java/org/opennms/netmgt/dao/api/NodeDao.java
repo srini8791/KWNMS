@@ -305,5 +305,5 @@ public interface NodeDao extends LegacyOnmsDao<OnmsNode, Integer> {
 
     List<Object[]> getProductStatusSummary();
 
-    Number[] getCountsByChannel();
+    List<String[]> getCountsByChannel();
 }

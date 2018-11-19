@@ -373,7 +373,11 @@ public class MockNodeDao implements NodeDao {
         return list;
     }
 
-    public Number[] getCountsByChannel() {
-        return new Integer[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public List<String[]> getCountsByChannel() {
+        List<String[]> list = new ArrayList<>();
+        list.add(new String[] {"ptp", "0", "0", "0", "0"});
+        list.add(new String[] {"ptmp", "0", "0", "0", "0"});
+        list.add(new String[] {"wifi", "0", "0", "0", "0"});
+        return list;
     }
 }

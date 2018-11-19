@@ -26,12 +26,13 @@
               <div class="col-sm-1" style="text-align:center"><h5 class="card-title m-b-0">Active<br/>{{vm.activeNodesCount}}</h5></div>
               <div class="col-sm-1" style="text-align:center"><h5 class="card-title m-b-0">In-active<br/>{{vm.totalNodesCount - vm.activeNodesCount}}</h5></div>
               <div class="col-sm-4" style="text-align:right">
-                <select>
+                <select class="form-control" data-ng-model="itemToAddBack">
                   <option data-ng-repeat="column in removedColumnNames">{{ column }}</option>
                 </select>
+                <a class="btn btn-primary" data-ng-click="addColumn()">Add</a>
               </div>
               <div class="col-sm-2" style="text-align: right">
-                <select data-ng-model="limit" data-ng-change="loadNodes()">
+                <select class="form-control" data-ng-model="limit" data-ng-change="loadNodes()">
                   <option>10</option>
                   <option>20</option>
                   <option>50</option>
@@ -39,7 +40,7 @@
                 </select>
               </div>
               <div class="col-sm-2" style="text-align:right">
-                <a class="btn btn-primary" href="api/v2/nodes/export_to_csv">CSV <i class="fa fa-download" aria-hidden="true" /></a>
+                <a class="btn btn-primary" href="api/v2/nodes/export_to_csv?columns={{reportColumns}}">CSV <i class="fa fa-download" aria-hidden="true" /></a>
               </div>
             </div>
           </div>
