@@ -191,7 +191,7 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             } else if (key.equals("wireless.wifi1.hwmode") && profileOpMode != null/* && profileOpMode != OpMode.MODE_UNKNOWN*/) {
                 propValue = "'" + profileOpMode + "'";
             } else if (key.equals("wireless.wifi1.htmode") && profileBandwidth != null/* && profileBandwidth != Bandwidth.BANDWIDTH_UNKNOWN*/) {
-                propValue = "'HT" + profileBandwidth + "'";
+                propValue = "'" + profileBandwidth + "'";
             } else if (key.equals("wireless.wifi1.channel") && profile.getChannel() != null) {
                 propValue = "'" + profileChannel + "'";
             }
@@ -241,6 +241,10 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
     }
 
 
+    /*
+    * called when populateform service is called
+    *
+    * */
 
     @GET
     @Path("/extractProfile")
