@@ -319,7 +319,6 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
 
     @GET
     @Path("/export_to_csv")
-    @Produces({"text/csv"})
     public Response getInventoryAsCSV(@Context SecurityContext securityContext, @Context UriInfo uriInfo) {
         String[] columnsArray = new String[]{};
         String columnIndexes = uriInfo.getQueryParameters().getFirst("columns");
@@ -349,7 +348,11 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
                     addColumnToReport(buf, "9", node.getAssetRecord().getIoBandwidthLimit());
                     addColumnToReport(buf, "10", node.getAssetRecord().getModulation());
                     addColumnToReport(buf, "11", node.getOpMode());
-                    writer.println(buf.toString());
+                    String bufStr = buf.toString();
+                    if (bufStr.length() > 0) { // to remove the last comma
+                        bufStr = bufStr.substring(0, bufStr.length()-1);
+                    }
+                    writer.println(bufStr);
                 });
                 writer.close();
             }
@@ -369,17 +372,16 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
 
             private void addColumnToReport(StringBuilder buffer, String key, Object object) {
                 if (columnsList.isEmpty() || columnsList.contains(key)) {
-                    if (buffer.length() > 0) {
-                        buffer.append(",");
-                    }
                     if (object != null) {
-                        buffer.append(object.toString());
+                        buffer.append(object.toString()).append(",");
+                    } else {
+                        buffer.append(",");
                     }
                 }
             }
 
         };
         return Response.ok(output).header(
-                "Content-Disposition", "attachment, filename=\"nodes.csv\"").build();
+                "Content-Disposition", "attachment; filename=\"nodes.csv\"").build();
     }
 }
