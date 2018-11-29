@@ -3,6 +3,18 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
   function ($rootScope, $scope, $mdDialog, $http, $state, $location, dashboardService, Flash) {
     var vm = this;
 
+    vm.tab= function () {
+      this.tab = 1;
+
+      this.setTab = function (tabId) {
+        this.tab = tabId;
+      };
+
+      this.isSet = function (tabId) {
+        return this.tab === tabId;
+      };
+    };
+
     $scope.profiles = [];
     $scope.newProfile = {
       'name': '',

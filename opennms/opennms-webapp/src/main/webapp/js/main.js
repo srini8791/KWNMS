@@ -1,48 +1,40 @@
+(function($) {
+  "use strict"; // Start of use strict
 
-/**
- * Main AngularJS Web Application
- */
-var app = angular.module('keywestWebApp', [
-  'ngRoute'
-]);
-
-/**
- * Configure the Routes
- */
-app.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider
-    // Home
-    .when("/", {templateUrl: "partials/login.html", controller: "PageCtrl"})
-    // Pages
-    .when("/dashboard", {templateUrl: "partials/dashboard.html", controller: "PageCtrl"})
-    .when("/management", {templateUrl: "partials/management.html", controller: "PageCtrl"})
-    .when("/settings", {templateUrl: "partials/settings.html", controller: "PageCtrl"})
-    .when("/reports", {templateUrl: "partials/reports.html", controller: "PageCtrl"})
-    .when("/events", {templateUrl: "partials/events.html", controller: "PageCtrl"})    
-    // else 404
-    .otherwise("/404", {templateUrl: "partials/404.html", controller: "PageCtrl"});
-}]);
-
-/**
- * Controls the Blog
- */
-app.controller('BlogCtrl', function (/* $scope, $location, $http */) {
-  console.log("Blog Controller reporting for duty.");
-});
-
-/**
- * Controls all other Pages
- */
-app.controller('PageCtrl', function (/* $scope, $location, $http */) {
-  console.log("Page Controller reporting for duty.");
-
-  // Activates the Carousel
-  $('.carousel').carousel({
-    interval: 5000
+  // Toggle the side navigation
+  $("#sidebarToggle").on('click',function(e) {
+    e.preventDefault();
+    $("body").toggleClass("sidebar-toggled");
+    $(".sidebar").toggleClass("toggled");
   });
 
-  // Activates Tooltips for Social Links
-  $('.tooltip-social').tooltip({
-    selector: "a[data-toggle=tooltip]"
-  })
-});
+  // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
+  $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
+    if ($(window).width() > 768) {
+      var e0 = e.originalEvent,
+        delta = e0.wheelDelta || -e0.detail;
+      this.scrollTop += (delta < 0 ? 1 : -1) * 30;
+      e.preventDefault();
+    }
+  });
+
+  // Scroll to top button appear
+  $(document).on('scroll',function() {
+    var scrollDistance = $(this).scrollTop();
+    if (scrollDistance > 100) {
+      $('.scroll-to-top').fadeIn();
+    } else {
+      $('.scroll-to-top').fadeOut();
+    }
+  });
+
+  // Smooth scrolling using jQuery easing
+  $(document).on('click', 'a.scroll-to-top', function(event) {
+    var $anchor = $(this);
+    $('html, body').stop().animate({
+      scrollTop: ($($anchor.attr('href')).offset().top)
+    }, 1000, 'easeInOutExpo');
+    event.preventDefault();
+  });
+
+})(jQuery); // End of use strict

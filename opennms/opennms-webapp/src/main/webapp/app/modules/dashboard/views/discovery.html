@@ -1,0 +1,139 @@
+﻿<!-- Main content -->
+<section class="content" data-ng-init="init()">
+   <div class="page-heading mb-2">
+      <div class="row no-gutter">
+         <div class="col-md-6">
+               <p>Discovery Management</p>
+         </div>
+         <div class="col-md-6 text-right">
+               <a class="badge badge-info"  href="/opennms/admin/discovery/edit-config-2.jsp">Open Discovery Configuration</a>
+               <a class="badge badge-info" href="/opennms/admin/snmpConfig?action=default">Open SNMP Configuration</a>
+         </div>
+      </div>
+     
+   </div>
+
+
+   <div>
+
+     
+
+   </div>
+
+    <!-- dataCard -->
+    <div class="card" id="reportCard">
+         <div class="card-header bg-info text-white">
+            Sysytem Information
+            <div class="actions">
+               <span class="badge badge-dark">   Total: {{vm.totalNodesCount}} </span>
+               <span class="badge badge-success"> Active: {{vm.activeNodesCount}}  </span>            
+               <span class="badge badge-secondary">In-active: {{vm.totalNodesCount - vm.activeNodesCount}} </span>
+            </div>
+         </div>
+         <div class="card-body">
+            <div class="table-responsive">
+              <div class="col-md-12 text-right mb-1">
+               Show <select class="hselect" data-ng-model="limit" data-ng-change="loadNodes()">
+                     <option>10</option>
+                     <option>20</option>
+                     <option>50</option>
+                     <option>100</option>
+                   </select> Entries 
+              </div>
+              <div class="clearfix"></div>
+               <table class="table table-bordered">
+                  <thead class="thead-light">
+                     <tr>
+                        <th scope="col">System Name</th>
+                        <th scope="col">IP Address</th>
+                        <th scope="col">Serial Number</th>
+                        <th scope="col">MAC Address</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Firmware</th>
+                        <th scope="col">Channel</th>
+                        <th scope="col">Bandwidth</th>
+                        <th scope="col">Ethernet Speed</th>
+                        <th scope="col">I/O Bandwidth Limit</th>
+                        <th scope="col">Modulation</th>
+                        <th scope="col">Operation Mode</th>
+                     </tr>
+                  </thead>
+                  <tbody class="customtable">
+                     <tr data-ng-repeat="node in vm.nodes">
+                        <td>{{node.sysName}}</td>
+                        <td>{{node.primaryIP}}</td>
+                        <td>{{node.assetRecord.serialNumber}}</td>
+                        <td>{{node.macAddress}}</td>
+                        <td>{{node.assetRecord.modelNumber}}</td>
+                        <td>{{node.assetRecord.firmware}}</td>
+                        <td>{{node.channel}}</td>
+                        <td>{{node.bandwidth}}</td>
+                        <td>{{node.assetRecord.ethernetSpeed}}</td>
+                        <td>{{node.assetRecord.ioBandwidthLimit}}</td>
+                        <td>{{node.assetRecord.modulation}}</td>
+                        <td>{{node.opMode}}</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+    <!--  
+       <div class="row">
+          <div class="col-md-12">
+             <div class="text-center">
+                <button class="btn btn-info" onclick="javascript:showReport()" id="reportButton">Show Report</button>
+                <button class="btn btn-info" onclick="javascript:showMap()" id="mapButton">Show Map</button>
+             </div>
+             <div class="card" id="mapCard" >
+                <div class="card-header bg-info text-white"> Map </div>
+                <div class="card-body">
+                   <div id="map" style="height:400px"></div>
+                </div>
+             </div>            
+          </div>
+       </div>
+       -->
+    
+ </section>
+ 
+ 
+<!-- 
+
+<script>
+    function showReport() {
+      $('#mapCard').hide();
+      $('#reportButton').hide();
+      $('#mapButton').show();
+      $('#reportCard').show();
+    }
+    
+    function showMap() {
+      $('#reportCard').hide();
+      $('#mapButton').hide();
+      $('#reportButton').show();
+      $('#mapCard').show();
+    }
+    
+    $(document).ready(function() {
+    $('#reportCard').hide();
+    $('#mapButton').hide();
+    });
+    
+ </script>
+
+-->
+ 
+
+ 
+ 

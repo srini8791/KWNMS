@@ -1,0 +1,33 @@
+﻿<!-- Main content -->
+<section class="content" data-ng-init="init()">   
+       <div class="row no-gutter">
+          <div class="col-md-3">
+             <div class="card">
+                <div class="card-header bg-info text-white"> Topology </div>
+                <div class="card-body">
+                    <div
+                    data-angular-treeview="true"
+                    data-tree-id="mytree"
+                    data-tree-model="treedata"
+                    data-node-id="data.id"
+                    data-node-label="text"
+                    data-node-children="children" >
+                </div>
+                <!--<div>Selected: {{ mytree.currentNode.data.id }}, {{ mytree.currentNode.text }}</div>-->
+                <!-- TREEVIEW CODE -->
+                </div>
+             </div>
+          </div>
+          <div class="col-md-9">
+             <div class="card" id="mapCard">
+                <div class="card-header bg-info text-white">Map </div>
+                <div class="card-body">
+                    <div id="map" style="height:500px"></div>
+                </div>
+             </div>
+          </div>
+       </div>   
+ </section>
+ 
+ 
+ 

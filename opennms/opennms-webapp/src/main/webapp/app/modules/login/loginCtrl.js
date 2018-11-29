@@ -1,13 +1,4 @@
-﻿/*==========================================================
-    Author      : Ranjithprabhu K
-    Date Created: 24 Dec 2015
-    Description : Controller to handle Login module
-    Change Log
-    s.no      date    author     description     
-
-
- ===========================================================*/
-
+﻿
 login.controller("loginCtrl", ['$rootScope', '$scope', '$state', '$location', 'loginService', 'Flash','apiService',
 function ($rootScope, $scope, $state, $location, loginService, Flash, apiService) {
         var vm = this;

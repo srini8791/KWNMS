@@ -1,212 +1,104 @@
-﻿<div id="main-wrapper">
-  <!-- ============================================================== -->
-  <!-- Topbar header - style you can find in pages.scss -->
-  <!-- ============================================================== -->
-  <header class="topbar" data-navbarbg="skin5">
-    <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-      <div class="navbar-header" data-logobg="skin5">
-        <!-- This is for the sidebar toggle which is visible on mobile only -->
-        <a class="nav-toggler waves-effect waves-light d-block d-md-none" data-ng-click="vm.sideBar(1);" href=""><i
-            class="ti-menu ti-close"></i></a>
-        <!-- ============================================================== -->
-        <!-- Logo -->
-        <!-- ============================================================== -->
-        <a class="navbar-brand" href="index.html">
-          <!-- Logo text -->
-          <span class="logo-text">
-                             <!-- dark Logo text -->
-                             <img src="images/logo-text.png" alt="homepage" class="light-logo"/>
-                            
-                        </span>
+﻿<nav class="navbar navbar-expand fixed-top">
+  <a class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" >
+    <i class="fas fa-2x fa-bars"></i>
+  </a>
+
+  <a class="navbar-brand mr-1" href="/" ><b>KeyWestNMS</b></a>
+  <!-- Navbar Search -->
+
+  <!-- Navbar -->
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item dropdown no-arrow mx-2 mt-2">
+      <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bell fa-fw"></i>
+        <span class="badge badge-danger">9+</span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </li>
+
+    <li class="nav-item mt-1 no-arrow">
+
+      <a href="#"> Username </a> <br>
+      <a href="#" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-sign-out-alt"></i> Logout</a>
+
+    </li>
+
+  </ul>
+
+</nav>
+
+<div id="wrapper">
+
+  <!-- Sidebar -->
+
+  <ul class="sidebar navbar-nav" id="sidebarnav">
+    <li class="nav-item dropdown" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems">
+      <a ui-sref="app.{{menu.state}}" class="nav-link {{menu.sub && 'dropdown-toggle' || ''}}" data-toggle="{{menu.sub && 'dropdown' || ''}}">
+        <i class="fa fa-{{menu.icon}}"></i> <span>{{menu.title}}</span>
+      </a>
+      <div class="dropdown-menu" ng-show="menu.sub">
+        <a ng-repeat="subItem in menu.sub" class="dropdown-item" ui-sref="app.{{subItem.state}}" >{{subItem.title}}</a>
+
         </a>
-        <!-- ============================================================== -->
-        <!-- End Logo -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Toggle which is visible on mobile only -->
-        <!-- ============================================================== -->
-        <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
-           data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-           aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
-
-
       </div>
-      <!-- ============================================================== -->
-      <!-- End Logo -->
-      <!-- ============================================================== -->
-      <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-        <!-- ============================================================== -->
-        <!-- toggle and nav items -->
-        <!-- ============================================================== -->
-        <ul class="navbar-nav float-left mr-auto">
-          <li class="nav-item d-none d-md-block"><a class="nav-link sidebartoggler waves-effect waves-light"
-                                                    data-ng-click="vm.sideBar(1);" data-sidebartype="mini-sidebar"><i
-              class="mdi mdi-menu font-24"></i></a></li>
+    </li>
+  </ul>
 
 
-        </ul>
-        <!-- ============================================================== -->
-        <!-- Right side toggle and nav items -->
-        <!-- ============================================================== -->
-        <ul class="navbar-nav float-right">
-          <!-- Search -->
-          <!-- ============================================================== -->
-          <li class="nav-item search-box">
-            <form action="#" method="get" class="sidebar-form" style="margin-top:15px;">
-              <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
-                <span class="input-group-btn">
-                                        <button type="button" name="search" id="search-btn" class="btn btn-flat"
-                                                data-ng-click="vm.search();"><i class=" fa fa-search"></i></button>
-                                    </span>
-              </div>
-            </form>
-
-          </li>
-
-          <!-- search form -->
-
-          <!-- /.search form -->
 
 
-          <!-- ============================================================== -->
-          <!-- Comment -->
-          <!-- ============================================================== -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-bell font-24"></i>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-          <!-- ============================================================== -->
-          <!-- End Comment -->
-          <!-- ============================================================== -->
-          <!-- ============================================================== -->
-          <!-- Messages -->
-          <!-- ============================================================== -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false"> <i class="font-24 mdi mdi-comment-processing"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown" aria-labelledby="2">
-              <ul class="list-style-none">
-                <li>
-                  <div class="">
-                    <!-- Message -->
-                    <a href="javascript:void(0)" class="link border-top">
-                      <div class="d-flex no-block align-items-center p-10">
-                        <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                        <div class="m-l-10">
-                          <h5 class="m-b-0">Event today</h5>
-                          <span class="mail-desc">Just a reminder that event</span>
-                        </div>
-                      </div>
-                    </a>
-                    <!-- Message -->
-                    <a href="javascript:void(0)" class="link border-top">
-                      <div class="d-flex no-block align-items-center p-10">
-                        <span class="btn btn-info btn-circle"><i class="ti-settings"></i></span>
-                        <div class="m-l-10">
-                          <h5 class="m-b-0">Settings</h5>
-                          <span class="mail-desc">You can customize this template</span>
-                        </div>
-                      </div>
-                    </a>
-                    <!-- Message -->
-                    <a href="javascript:void(0)" class="link border-top">
-                      <div class="d-flex no-block align-items-center p-10">
-                        <span class="btn btn-primary btn-circle"><i class="ti-user"></i></span>
-                        <div class="m-l-10">
-                          <h5 class="m-b-0">Pavan kumar</h5>
-                          <span class="mail-desc">Just see the my admin!</span>
-                        </div>
-                      </div>
-                    </a>
-                    <!-- Message -->
-                    <a href="javascript:void(0)" class="link border-top">
-                      <div class="d-flex no-block align-items-center p-10">
-                        <span class="btn btn-danger btn-circle"><i class="fa fa-link"></i></span>
-                        <div class="m-l-10">
-                          <h5 class="m-b-0">Luanch Admin</h5>
-                          <span class="mail-desc">Just see the my new admin!</span>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <!-- ============================================================== -->
-          <!-- End Messages -->
-          <!-- ============================================================== -->
+  <div id="content-wrapper">
 
-          <!-- ============================================================== -->
-          <!-- User profile and search -->
-          <!-- ============================================================== -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href=""
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="images/users/1.jpg"
-                                                                                      alt="user" class="rounded-circle"
-                                                                                      width="31"></a>
-            <div class="dropdown-menu dropdown-menu-right user-dd animated">
-              <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-              <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-              <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
-              <div class="dropdown-divider"></div>
-              <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View
-                Profile</a></div>
-            </div>
-          </li>
-          <!-- ============================================================== -->
-          <!-- User profile and search -->
-          <!-- ============================================================== -->
-        </ul>
-      </div>
-    </nav>
-  </header>
+    <div class="container-fluid">
 
 
-  <aside class="left-sidebar main-sidebar" data-sidebarbg="skin5">
-    <!-- Sidebar scroll-->
-    <div class="scroll-sidebar">
-      <!-- Sidebar navigation-->
-      <nav class="sidebar-nav">
-        <ul class="sidebar-menu" id="sidebarnav">
-          <li class="sidebar-item" ui-sref-active="active" ng-click="vm.sideBar();"
-              data-ng-repeat="menu in vm.menuItems">
-            <a ui-sref="app.{{menu.state}}">
-              <i class="fa fa-{{menu.icon}}"></i> <span>{{menu.title}}</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- End Sidebar navigation -->
+      <ui-view></ui-view>
+
+
     </div>
-    <!-- End Sidebar scroll-->
-  </aside>
-  <!-- ============================================================== -->
-  <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-  <!-- ============================================================== -->
+    <!-- /.container-fluid -->
 
-  <div class="page-wrapper content-wrapper">
-    <!-- Content Wrapper. Contains page content -->
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>All Rights Reserved by KeyWestNMS. Designed and Developed by Hitsquad. </span>
+        </div>
+      </div>
+    </footer>
 
-    <ui-view></ui-view>
   </div>
-
+  <!-- /.content-wrapper -->
 
 </div>
+<!-- /#wrapper -->
 
-<footer class="text-center">
-  All Rights Reserved by KeyWest Inc.. Designed and Developed by Hitsquad Technologies.
-</footer>
+
+
+
+
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="/login.html">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+

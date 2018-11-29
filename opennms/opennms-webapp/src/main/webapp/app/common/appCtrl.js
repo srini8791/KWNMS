@@ -2,7 +2,6 @@
 app.controller("appCtrl", ['$rootScope', '$scope', '$state', '$location', 'Flash','appSettings',
 function ($rootScope, $scope, $state, $location, Flash,appSettings) {
   
-
     var vm = this;
 
     //Main menu items of the dashboard
@@ -15,12 +14,15 @@ function ($rootScope, $scope, $state, $location, Flash,appSettings) {
         {
             title: "Management",
             icon: "users",
-            state: "management"
-        },
-        {
-            title: "Settings",
-            icon: "cog",
-            state: "settings"
+            state: "management",
+            sub: [{
+                title: "Discovery",
+                state: "discovery"
+            },
+            {
+                title: "Topology",
+                state: "topology"
+            }]
         },
         {
             title: "Reports",
@@ -29,13 +31,45 @@ function ($rootScope, $scope, $state, $location, Flash,appSettings) {
         },
         {
             title: "Events",
-            icon: "wifi",
+            icon: "folder",
             state: "events"
+        },
+        {
+            title: "Settings",
+            icon: "cog",
+            state: "settings",
+            sub: [{
+                title: "Profiles",
+                state: "profiles"
+
+            },
+            {
+                title: "Regions",
+                state: "regions"
+
+            },
+            {
+                title: "Users",
+                state: "users"
+
+            }]
         }
     ];
 
-   
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
     //controll sidebar open & close in mobile and normal view
+
+    // Toggle the side navigation
+
+  $("#sidebarToggle").on('click',function(e) {
+    e.preventDefault();
+    $("body").toggleClass("sidebar-toggled");
+    $(".sidebar").toggleClass("toggled");
+  });
+
+
     vm.sideBar = function (value) {
         if($(window).width()<=767){
         if ($("body").hasClass('sidebar-open'))
@@ -52,6 +86,7 @@ function ($rootScope, $scope, $state, $location, Flash,appSettings) {
             }
         }
     };
+
 
     //navigate to search page
     vm.search = function () {

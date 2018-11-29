@@ -1,15 +1,5 @@
-/*==========================================================
-    Author      : Ranjithprabhu K
-    Date Created: 24 Dec 2015
-    Description : main application base
-    
-    Change Log
-    s.no      date    author     description     
-    
 
- ===========================================================*/
-
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'flash', 'angularTreeview',
+var app = angular.module('app', ['ui.router', 'flash', 'angularTreeview',
     //main modules
     'login', 'dashboard']);
 

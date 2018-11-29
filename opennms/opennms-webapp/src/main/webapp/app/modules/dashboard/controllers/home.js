@@ -71,22 +71,22 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
 
     vm.dashboard.productStatus = [
         {   
-            icon: "mdi-access-point",
+            icon: "fa-random",
             title: "PTP",
             total: "0",
             down: "0",
             up: "0"
-            
+
         },
         {
-            icon: "mdi-bluetooth-connect",
+            icon: "fa-tachometer-alt",
             title: "PTMP",
             total: "0",
             down: "0",
             up: "0"
         },
         {
-            icon: "mdi-wifi",
+            icon: "fa-wifi",
             title: "Wifi",
             total: "0",
             down: "0",

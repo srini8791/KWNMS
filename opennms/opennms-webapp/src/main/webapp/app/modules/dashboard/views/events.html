@@ -1,75 +1,69 @@
-﻿<!-- ============================================================== -->
-<!-- Bread crumb and right sidebar toggle -->
-<!-- ============================================================== -->
-<div class="page-breadcrumb">
-  <div class="row">
-    <div class="col-12 d-flex no-block align-items-center">
-      <h4 class="page-title">Events </h4>
-    </div>
-  </div>
-</div>
-<!-- ============================================================== -->
-<!-- End Bread crumb and right sidebar toggle -->
-<!-- ============================================================== -->
-
-
-<!-- Main content -->
+﻿<!-- Main content -->
 <section class="content" data-ng-init="loadEvents()">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card" style="margin:10px; padding: 20px;">
-          <div class="card-header" style="text-align:right; background:#663399;">
-            <div class="row">
-              <div class="col-sm-5"></div>
-              <div class="col-sm-3">
-                <select class="form-control" data-ng-model="vm.eventsFilter">
-                  <option value="">Filter By</option>
-                  <option value="events">Events</option>
-                  <option value="syslogs">Syslogs</option>
-                </select>
-              </div>
-              <div class="col-sm-2" style="text-align: right">
-                <select data-ng-model="vm.pageSize" style="border:1px solid #c0c0c0; width:100px; height:35px">
-                  <option value="10">Page Size</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-              </div>
-              <div class="col-sm-2">
-                <button data-ng-click="loadEvents()" type="button" class="btn btn-primary"><i class="fa fa-sync"></i>&nbsp;Reload</button>
-              </div>
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead class="thead-dark">
-                <tr>
-                  <th width="1%">&nbsp;</th>
-                  <th scope="col">ID</th>
-                  <th scope="col">Severity</th>
-                  <th scope="col">Time</th>
-                  <th scope="col">Node</th>
-                  <th scope="col">Message</th>
-                </tr>
-              </thead>
-              <tbody class="customtable">
-                <tr data-ng-repeat="event in vm.events">
-                  <td width="1%" class="event-{{ event.severity }}"></td>
-                  <td>{{ event.id }}</td>
-                  <td>{{ event.severity }}</td>
-                  <td>{{ event.time | date: 'yyyy-MM-dd HH:mm:ss.sss' }}</td>
-                  <td>{{ event.nodeLabel && event.nodeLabel || event.ipAddress }}</td>
-                  <td>{{ event.logMessage }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  
+       <div class="row">
+          <div class="col-md-12">
+             <div class="card">
+                <div class="card-header bg-info text-white"> Events 
+                    <div class="actions">                       
+                        <button data-ng-click="loadEvents()" type="button" class="btn btn-secondary btn-sm" ><i class="fa fa-sync"></i>&nbsp;Reload</button>
+                     </div>
 
-</section>
+                </div>
+                <div class="card-body">
+                  <div class="row mb-1">
+                    <div class="col-md-6">
+                       Filter By: <select class="hselect" data-ng-model="vm.eventsFilter">  
+                            <option value="events">Events</option>
+                            <option value="syslogs">Syslogs</option>
+                          </select>
+                    </div>
+                    <div class="col-md-6 text-right">
+                       Show <select class="hselect" data-ng-model="vm.pageSize">                         
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>  Entries
+                    </div>
+                   
+                  </div>
+
+                  <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead class="thead-light">
+                          <tr>
+                            <th width="1%">&nbsp;</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Severity</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Node</th>
+                            <th scope="col">Message</th>
+                          </tr>
+                        </thead>
+                        <tbody class="customtable">
+                          <tr data-ng-repeat="event in vm.events">
+                            <td width="1%" class="event-{{ event.severity }}"></td>
+                            <td>{{ event.id }}</td>
+                            <td>{{ event.severity }}</td>
+                            <td>{{ event.time | date: 'yyyy-MM-dd HH:mm:ss.sss' }}</td>
+                            <td>{{ event.nodeLabel && event.nodeLabel || event.ipAddress }}</td>
+                            <td>{{ event.logMessage }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                   
+
+                     
+
+                    
+                </div>
+             </div>
+          </div>         
+       </div>
+       
+      
+   
+ </section>
+ 

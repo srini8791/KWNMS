@@ -1,0 +1,76 @@
+﻿<!-- Main content -->
+<section class="content" id="popupContainer" data-ng-init="init()">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+          <div class="card-header bg-info text-white"> Regions </div>
+          <div class="card-body">
+              <div ng-repeat="region in regions" class="form-group form-check">
+                  <input type="checkbox" value="{{region.id}}"/> {{region.name}}                                
+              </div>
+              <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" value="{{region.id}}">
+                  <label class="form-check-label" for="{{region.id}}"> {{region.name}}  Region1</label>
+              </div>
+              <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" value="{{region.id}}">
+                  <label class="form-check-label" for="{{region.id}}"> {{region.name}}  Region1</label>
+              </div>
+              <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" value="{{region.id}}">
+                  <label class="form-check-label" for="{{region.id}}"> {{region.name}}  Region1</label>
+              </div>
+
+            
+          </div>
+      </div>
+
+      <form method="post" name="regionForm" novalidate>
+        <div class="input-group mb-3">
+            <input type="text" id="input_regionName" name="regionName" ng-model="newRegion.name" placeholder="Enter Region Name" class="form-control" ng-required="true" />     
+            <div class="input-group-append">
+                <button type="button" class="btn btn-default" ng-click="saveRegion()" id="save-region" ng-disabled="regionForm.$invalid">
+                    Create Region <i class="fa fa-plus-circle"></i>
+                  </button>
+            
+            </div>
+          </div>
+        </form>  
+    </div>
+  </div>
+
+ 
+  
+  </div>
+</section>
+
+<script type="text/javascript" >
+
+  function addNodes() {
+    $("#availableNodes option:selected").each(function(idx, obj) {
+      $("#nodesToApply").append("<option value='" + obj.value + "'>" + obj.text + "</option>");
+      $(this).remove();
+    });
+    selectAllOptions();
+  }
+
+  function removeNodes() {
+    $("#nodesToApply option:selected").each(function(idx, obj) {
+      $("#availableNodes").append("<option value='" + obj.value + "'>" + obj.text + "</option>");
+      $(this).remove();
+    });
+    selectAllOptions();
+  }
+
+  function selectAllOptions() {
+    $("#nodesToApply option").each(function() {
+      $(this).prop("selected", true).trigger('change');
+    });
+  }
+
+  function applyProfile() {
+    angular.element('#input_profileName').scope().apply();
+    removeNodes();
+  }
+
+</script>

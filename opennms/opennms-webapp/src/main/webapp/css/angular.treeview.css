@@ -25,7 +25,7 @@ div[data-tree-model] li {
   position: relative;
   padding: 0 0 0 20px;
   line-height: 26px;
-  font-size:18px;
+  font-size:14px;
 }
 
 div[data-tree-model] li .expanded {

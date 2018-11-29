@@ -1,5 +1,5 @@
 ﻿
-var dashboard = angular.module('dashboard', ['ui.router', 'ngAnimate','ngMaterial', 'angularTreeview']);
+var dashboard = angular.module('dashboard', ['ui.router', 'angularTreeview']);
 
 
 dashboard.config(["$stateProvider", function ($stateProvider) {
@@ -16,24 +16,56 @@ dashboard.config(["$stateProvider", function ($stateProvider) {
     });
 
     //Management page state
-    $stateProvider.state('app.management', {
-        url: '/management',
-        templateUrl: 'app/modules/dashboard/views/management.html',
+    $stateProvider.state('app.topology', {
+        url: '/topology',
+        templateUrl: 'app/modules/dashboard/views/topology.html',
         controller: 'ManagementController',
         controllerAs: 'vm',
         data: {
-            pageTitle: 'Management'
+            pageTitle: 'Topology'
+        }
+    });
+
+     //Management page state
+     $stateProvider.state('app.discovery', {
+        url: '/discovery',
+        templateUrl: 'app/modules/dashboard/views/discovery.html',
+        controller: 'ManagementController',
+        controllerAs: 'vm',
+        data: {
+            pageTitle: 'Discovery'
         }
     });
 
     //Settings page state
-    $stateProvider.state('app.settings', {
-        url: '/settings',
-        templateUrl: 'app/modules/dashboard/views/settings.html',
+    $stateProvider.state('app.profiles', {
+        url: '/profiles',
+        templateUrl: 'app/modules/dashboard/views/profiles.html',
+        controller: 'ProfileController',
+        controllerAs: 'vm',
+        data: {
+            pageTitle: 'Profile'
+        }
+    });
+
+     //Settings page state
+     $stateProvider.state('app.regions', {
+        url: '/regions',
+        templateUrl: 'app/modules/dashboard/views/regions.html',
         controller: 'SettingsController',
         controllerAs: 'vm',
         data: {
-            pageTitle: 'Settings'
+            pageTitle: 'Region'
+        }
+    });
+    //Settings page state
+    $stateProvider.state('app.users', {
+        url: '/users',
+        templateUrl: 'app/modules/dashboard/views/users.html',
+        controller: 'UserController',
+        controllerAs: 'vm',
+        data: {
+            pageTitle: 'Users'
         }
     });
 
