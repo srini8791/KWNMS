@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand fixed-top">
+﻿<nav class="navbar navbar-expand fixed-top" data-ng-init="loadCurrentUser()">
   <a class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" >
     <i class="fas fa-2x fa-bars"></i>
   </a>
@@ -13,16 +13,18 @@
         <i class="fas fa-bell fa-fw"></i>
         <span class="badge badge-danger">9+</span>
       </a>
+<!--
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
         <a class="dropdown-item" href="#">Action</a>
         <a class="dropdown-item" href="#">Another action</a>
         <a class="dropdown-item" href="#">Something else here</a>
       </div>
+-->
     </li>
 
     <li class="nav-item mt-1 no-arrow">
 
-      <a href="#"> Username </a> <br>
+      <a href="#"> {{ currentUser }} </a> <br>
       <a href="#" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-sign-out-alt"></i> Logout</a>
 
     </li>

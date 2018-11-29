@@ -73,6 +73,16 @@ public class DashboardRestService {
     @Autowired
     private OutageDao outageDao;
 
+
+    @GET
+    @Path("/currentuser")
+    @Produces({"text/plain"})
+    public Response getCurrentUser(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
+        String userName = securityContext.getUserPrincipal().getName();
+        return Response.ok().entity(userName).build();
+    }
+
+
     @GET
     @Path("/alarms")
     @Produces({"text/event-stream"})

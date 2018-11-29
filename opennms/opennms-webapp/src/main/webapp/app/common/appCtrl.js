@@ -1,8 +1,19 @@
 ﻿
-app.controller("appCtrl", ['$rootScope', '$scope', '$state', '$location', 'Flash','appSettings',
-function ($rootScope, $scope, $state, $location, Flash,appSettings) {
+app.controller("appCtrl", ['$rootScope', '$scope', '$http', '$state', '$location', 'Flash','appSettings',
+function ($rootScope, $scope, $http, $state, $location, Flash,appSettings) {
   
     var vm = this;
+
+    $scope.currentUser = 'User';
+
+    $scope.loadCurrentUser = function() {
+      $http.get('api/v2/dashboard/currentuser')
+        .then(function(response) {
+          if (response.data) {
+            $scope.currentUser = response.data;
+          }
+        });
+    }
 
     //Main menu items of the dashboard
     vm.menuItems = [
