@@ -12,10 +12,22 @@
                 </div>
                 <div class="card-body">
                   <div class="row mb-1">
-                    <div class="col-md-6">
-                       Filter By: <select class="hselect" data-ng-model="vm.eventsFilter">  
+                    <div class="col-md-3">
+                       Type: <select class="hselect" data-ng-model="vm.eventsFilter">
                             <option value="events">Events</option>
                             <option value="syslogs">Syslogs</option>
+                          </select>
+                    </div>
+                    <div class="col-md-3">
+                       Severity: <select class="hselect" data-ng-model="vm.severityFilter">
+                            <option value="-1">All</option>
+                            <option value="7">Critical</option>
+                            <option value="6">Major</option>
+                            <option value="5">Minor</option>
+                            <option value="4">Warning</option>
+                            <option value="3">Normal</option>
+                            <option value="2">Cleared</option>
+                            <option value="1">Indeterminate</option>
                           </select>
                     </div>
                     <div class="col-md-6 text-right">
