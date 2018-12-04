@@ -1,5 +1,5 @@
 ﻿
-var dashboard = angular.module('dashboard', ['ui.router', 'angularTreeview']);
+var dashboard = angular.module('dashboard', ['ui.router', 'ngMaterial', 'angularTreeview']);
 
 
 dashboard.config(["$stateProvider", function ($stateProvider) {
