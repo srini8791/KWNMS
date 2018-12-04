@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,39 +26,35 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.rest.support;
+package org.opennms.netmgt.dao.api;
 
+import org.opennms.netmgt.model.OnmsFacility;
+import org.opennms.netmgt.model.OnmsRegion;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
 /**
- * This enum contains well-known aliases for search terms that should be
- * reused by different RESTv2 services for consistency.
- * 
- * @author Seth
+ * <p>RegionDao interface.</p>
  */
-public enum Aliases {
-    alarm,
-    assetRecord,
-    category,
-    distPoller,
-    event,
-    eventParameter,
-    ipInterface,
-    location,
-    memo,
-    monitoredService,
-    node,
-    notification,
-    outage,
-    profile,
-    reductionKeyMemo,
-    region,
-    facility,
-    serviceType,
-    snmpInterface;
+public interface FacilityDao extends OnmsDao<OnmsFacility, Integer> {
 
-    public String prop(String propertyName) {
-        return new StringBuilder(this.toString())
-            .append(".")
-            .append(propertyName)
-            .toString(); 
-    }
+    /**
+     * Get a facility based on it's identifier
+     *
+     * @param facilityId facility identifier
+     * @return the node
+     */
+    @Override
+    OnmsFacility get(Integer facilityId);
+
+    /**
+     * Returns a list of facilities ordered by name.
+     *
+     * @return a {@link List} of {@link OnmsFacility} objects.
+     */
+    @Override
+    List<OnmsFacility> findAll();
+
 }

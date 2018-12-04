@@ -31,6 +31,7 @@ package org.opennms.web.rest.v2;
 import org.opennms.netmgt.dao.api.MonitoringLocationDao;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.RegionDao;
+import org.opennms.netmgt.model.OnmsFacility;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsRegion;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
@@ -91,11 +92,11 @@ public class TreeViewRestService {
         List<TreeNodeDTO> regionLocations = new ArrayList<>();
         OnmsRegion region = regionDao.get(regionId);
         if (region != null) {
-            Set<OnmsMonitoringLocation> locations = region.getMonitoringLocations();
+            Set<OnmsFacility> locations = region.getFacilities();
             if (locations != null && !locations.isEmpty()) {
-                for (OnmsMonitoringLocation location : locations) {
-                    TreeNodeDTO locationNode = new TreeNodeDTO(location.getLocationName());
-                    locationNode.addData("id", location.getLocationName());
+                for (OnmsFacility location : locations) {
+                    TreeNodeDTO locationNode = new TreeNodeDTO(location.getName());
+                    locationNode.addData("id", location.getId());
                     locationNode.addData("type", "location");
                     locationNode.addData("lat", location.getLatitude());
                     locationNode.addData("long", location.getLongitude());

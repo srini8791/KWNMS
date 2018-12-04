@@ -40,12 +40,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "regions")
-@XmlRootElement(name = "region")
+@Table(name = "facilities")
+@XmlRootElement(name = "facility")
 @XmlAccessorType(XmlAccessType.NONE)
-public class OnmsRegion implements Serializable {
+public class OnmsFacility implements Serializable {
 
-    private static final long serialVersionUID = -8906476327527789591L;
+    private static final long serialVersionUID = -4522570092361215659L;
 
     @Id
     @Column(name="id")
@@ -58,26 +58,23 @@ public class OnmsRegion implements Serializable {
     @Column(name = "name", nullable = false, unique = true)
     private String m_name;
 
-/* Uncomment when mapped to monitoringLocations via minions
-    @XmlIDREF
-    @XmlElementWrapper(name = "monitoringLocations")
-    @XmlElement(name = "monitoringLocation")
-    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private Set<OnmsMonitoringLocation> m_monitoringLocations = new LinkedHashSet<>();
-*/
+    @XmlAttribute(name = "latitude")
+    @Column(name = "latitude")
+    private Float m_latitude;
 
-    @XmlIDREF
-    @XmlElementWrapper(name = "facilities")
-    @XmlElement(name = "facility")
-    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private Set<OnmsFacility> m_facilities = new LinkedHashSet<>();
+    @XmlAttribute(name = "longitude")
+    @Column(name = "longitude")
+    private Float m_longitude;
 
+    @XmlElement(name = "region")
+    @ManyToOne
+    @JoinColumn(name = "region")
+    @JsonBackReference
+    private OnmsRegion region;
 
-    public OnmsRegion() {}
+    public OnmsFacility() {}
 
-    public OnmsRegion(Integer id, String name) {
+    public OnmsFacility(Integer id, String name) {
         this.m_id = id;
         this.m_name = name;
     }
@@ -118,32 +115,61 @@ public class OnmsRegion implements Serializable {
         m_name = name;
     }
 
+
     /**
-     * <p>getFacilities</p>
+     * <p>getLatitude</p>
      *
-     * @return a {@link Set} object.
+     * @return a {@link Float} object.
      */
-    public Set<OnmsFacility> getFacilities() {
-        return m_facilities;
+    public Float getLatitude() {
+        return m_latitude;
     }
 
     /**
-     * <p>setFacilities</p>
+     * <p>setLatitude</p>
      *
-     * @param facilities a {@link Set} object.
+     * @param latitude a {@link Float} object.
      */
-    public void setFacilities(Set<OnmsFacility> facilities) {
-        m_facilities = facilities;
+    public void setLatitude(Float latitude) {
+        this.m_latitude = latitude;
     }
 
     /**
-     * <p>addMonitoringLocation</p>
+     * <p>getLongitude</p>
      *
-     * @param facility a {@link OnmsMonitoringLocation} object.
+     * @return a {@link Float} object.
+     */
+    public Float getLongitude() {
+        return m_longitude;
+    }
+
+    /**
+     * <p>setLongitude</p>
+     *
+     * @param longitude a {@link Float} object.
+     */
+    public void setLongitude(Float longitude) {
+        this.m_longitude = longitude;
+    }
+
+    /**
+     * <p>getRegion</p>
+     *
+     * @return a {@link OnmsRegion} object.
      * @since 1.8.1
      */
-    public void addFacility(OnmsFacility facility) {
-        getFacilities().add(facility);
+    public OnmsRegion getRegion() {
+        return region;
+    }
+
+    /**
+     * <p>setRegion</p>
+     *
+     * @param region a {@link OnmsRegion} object.
+     * @since 1.8.1
+     */
+    public void setRegion(OnmsRegion region) {
+        region = region;
     }
 
     /**
@@ -162,8 +188,8 @@ public class OnmsRegion implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof OnmsRegion) {
-            OnmsRegion app = (OnmsRegion) obj;
+        if (obj instanceof OnmsFacility) {
+            OnmsFacility app = (OnmsFacility) obj;
             return getName().equals(app.getName());
         }
         return false;
