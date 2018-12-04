@@ -105,6 +105,10 @@ public class ConfigScanResource {
                 //m_node.getAssetRecord().getGeolocation().set
             } else if (KwpConfigurationGroup.WIRELESS_SSID_ALIAS.equals(key)) {
                 m_node.setSsid(value.toString());
+            } else if (KwpConfigurationGroup.WIRELESS_FREQUENCY_ALIAS.equals(key)) {
+                if (value instanceof Integer) {
+                    m_node.setFrequency((Integer) value);
+                }
             } else if (KwpConfigurationGroup.WIRELESS_OPMODE_ALIAS.equals(key)) {
                 m_node.setOpMode((String)value);
             } else if (KwpInventoryGroup.INV_SERIAL_ALIAS.equals(key)) {
@@ -124,15 +128,6 @@ public class ConfigScanResource {
                         m_node.setProductCode("outdoorap");
                     }
                 }
-                /*if(value.endsWith(".2.1")) {
-                    m_node.setProductCode("ptp");
-                } else if(value.endsWith(".2.2")) {
-                    m_node.setProductCode("ptmp");
-                } else if(value.endsWith(".2.3")) {
-                    m_node.setProductCode("indoorap");
-                } else if(value.endsWith(".2.4")) {
-                    m_node.setProductCode("outdoorap");
-                }*/
             } else if (KwpConfigurationGroup.WIRELESS_BANDWIDTH_LIMIT_IO_ALIAS.equals(key)) {
                 Integer iobw = ((Integer)m_attributes.get(KwpConfigurationGroup.WIRELESS_BANDWIDTH_LIMIT_INPUT_ALIAS) +
                         (Integer)m_attributes.get(KwpConfigurationGroup.WIRELESS_BANDWIDTH_LIMIT_OUTPUT_ALIAS));

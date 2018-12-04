@@ -101,6 +101,7 @@
       <column name="opmode"     type="varchar(10)" />
       <column name="bandwidth"  type="varchar(10)" />
       <column name="channel"    type="integer" />
+      <column name="frequency"    type="integer" />
       <column name="profileid"  type="integer" />
       <column name="active"     type="boolean" defaultValueBoolean="true">
         <constraints nullable="false" />

@@ -85,6 +85,10 @@ public final class KwpConfigurationGroup extends AggregateTracker {
     private static final String WIRELESS_ACTIVE_CHANNEL = ".1.3.6.1.4.1.52619.1.1.1.1.1.23.2";
 
     /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
+    public static final String WIRELESS_FREQUENCY_ALIAS = "wirelessActiveChannel";
+    private static final String WIRELESS_FREQUENCY = ".1.3.6.1.4.1.52619.1.1.1.1.1.25.2";
+
+    /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
     public static final String WIRELESS_BANDWIDTH_LIMIT_INPUT_ALIAS = "wirelessUplinkLimit";
     private static final String WIRELESS_BANDWIDTH_LIMIT_INPUT = ".1.3.6.1.4.1.52619.1.1.1.1.1.11.2";
 
@@ -189,6 +193,8 @@ public final class KwpConfigurationGroup extends AggregateTracker {
 
         ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPOCTETSTRING, ETHERNET_SPEED_ALIAS, ETHERNET_SPEED);
 
+        ms_elemList[ndx++] = new NamedSnmpVar(NamedSnmpVar.SNMPINT32, WIRELESS_FREQUENCY_ALIAS, WIRELESS_FREQUENCY);
+
 
         /**
          * <P>
@@ -279,6 +285,11 @@ public final class KwpConfigurationGroup extends AggregateTracker {
 
     public Integer getIOBandwidth() { return  m_store.getInt32(WIRELESS_BANDWIDTH_LIMIT_INPUT) + m_store.getInt32(WIRELESS_BANDWIDTH_LIMIT_OUTPUT);}
 
+
+    public Integer getWirelessFrequency() {
+        return m_store.getInt32(WIRELESS_FREQUENCY);
+    }
+
     /** {@inheritDoc} */
     @Override
     protected void storeResult(SnmpResult res) {
@@ -321,6 +332,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
             sr.setAttribute(WIRELESS_BANDWIDTH_LIMIT_INPUT,getIOBandwidth());
             sr.setAttribute(ETHERNET_MAC_ALIAS, getEthernetMac());
             sr.setAttribute(ETHERNET_SPEED_ALIAS, getEthernetMac());
+            sr.setAttribute(WIRELESS_FREQUENCY_ALIAS, getWirelessFrequency());
 
             /*node.setSysObjectId(sysId);
             node.setSysName(sysName);

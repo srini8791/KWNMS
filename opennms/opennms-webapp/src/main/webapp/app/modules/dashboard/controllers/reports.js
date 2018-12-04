@@ -41,9 +41,10 @@ dashboard.controller("ReportsController", ['$rootScope', '$scope', '$http', '$st
       );
     }
 
-    $scope.reportColumns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+    $scope.reportColumns = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14];
     $scope.removedColumns = [];
-    $scope.reportColumnNames = ["System Name", "IP Address", " Serial Number", " MAC Address", " Model", " Firmware", " Channel", " Bandwidth", " Ethernet Speed", " I/O Bandwidth Limit", " Modulation", " Operation Mode"];
+    $scope.reportColumnNames = ["System Name", "IP Address", " Serial Number", " MAC Address", " Model", " Firmware", " Product Type", " Radio Mode"," Op Mode", " Bandwidth", " Channel", "Frequency"," Ethernet Speed", "Latitude", "Longitude"];
     $scope.removedColumnNames = [];
     $scope.itemToAddBack = '';
 

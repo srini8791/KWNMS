@@ -31,11 +31,9 @@
                     </div>
                    
                   </div>
-                   
 
-                     
 
-                       
+
                         <div class="table-responsive">
                             <table class="table table-bordered"">
                               <thead class="thead-light">
@@ -52,18 +50,29 @@
                                   <a title="remove" data-ng-click="removeColumn(4)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
                                 <th scope="col" data-ng-show="showColumn(5)">Firmware <span >
                                   <a title="remove" data-ng-click="removeColumn(5)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
-                                <th scope="col" data-ng-show="showColumn(6)">Channel <span >
+                                <th scope="col" data-ng-show="showColumn(6)">Product Type <span >
                                   <a title="remove" data-ng-click="removeColumn(6)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
-                                <th scope="col" data-ng-show="showColumn(7)">Bandwidth <span >
-                                  <a  title="remove" data-ng-click="removeColumn(7)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
-                                <th scope="col" data-ng-show="showColumn(8)">Ethernet Speed <span >
+                                <th scope="col" data-ng-show="showColumn(7)">Radio Mode <span >
+                                  <a title="remove" data-ng-click="removeColumn(7)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                <th scope="col" data-ng-show="showColumn(8)">Op Mode <span >
                                   <a title="remove" data-ng-click="removeColumn(8)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
-                                <th scope="col" data-ng-show="showColumn(9)">I/O Bandwidth Limit <span >
-                                  <a title="remove" data-ng-click="removeColumn(9)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
-                                <th scope="col" data-ng-show="showColumn(10)">Modulation <span >
+                                <th scope="col" data-ng-show="showColumn(9)">Bandwidth <span >
+                                  <a  title="remove" data-ng-click="removeColumn(9)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                <th scope="col" data-ng-show="showColumn(10)">Channel <span >
                                   <a title="remove" data-ng-click="removeColumn(10)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                <th scope="col" data-ng-show="showColumn(11)">Frequency <span >
+                                  <a title="remove" data-ng-click="removeColumn(11)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                <th scope="col" data-ng-show="showColumn(12)">Ethernet Speed <span >
+                                  <a title="remove" data-ng-click="removeColumn(12)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                  <th scope="col" data-ng-show="showColumn(13)">Latitude <span >
+                                  <a title="remove" data-ng-click="removeColumn(13)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                  <th scope="col" data-ng-show="showColumn(14)">Longitude <span >
+                                  <a title="remove" data-ng-click="removeColumn(14)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+
+<!--
                                 <th scope="col" data-ng-show="showColumn(11)">Operation Mode <span >
                                   <a title="remove" data-ng-click="removeColumn(11)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+-->
                               </tr>
                               </thead>
                               <tbody class="customtable">
@@ -74,12 +83,15 @@
                                 <td data-ng-show="showColumn(3)">{{node.macAddress}}</td>
                                 <td data-ng-show="showColumn(4)">{{node.assetRecord.modelNumber}}</td>
                                 <td data-ng-show="showColumn(5)">{{node.assetRecord.firmware}}</td>
-                                <td data-ng-show="showColumn(6)">{{node.channel}}</td>
-                                <td data-ng-show="showColumn(7)">{{node.bandwidth}}</td>
-                                <td data-ng-show="showColumn(8)">{{node.assetRecord.ethernetSpeed}}</td>
-                                <td data-ng-show="showColumn(9)">{{node.assetRecord.ioBandwidthLimit}}</td>
-                                <td data-ng-show="showColumn(10)">{{node.assetRecord.modulation}}</td>
-                                <td data-ng-show="showColumn(11)">{{node.opMode}}</td>
+                                <td data-ng-show="showColumn(6)">{{node.productcode}}</td>
+                                <td data-ng-show="showColumn(7)">{{node.radioMode}}</td>
+                                <td data-ng-show="showColumn(8)">{{node.opMode}}</td>
+                                <td data-ng-show="showColumn(9)">{{node.bandwidth}}</td>
+                                <td data-ng-show="showColumn(10)">{{node.channel}}</td>
+                                <td data-ng-show="showColumn(11)">-</td>
+                                <td data-ng-show="showColumn(12)">{{node.assetRecord.ethernetSpeed}}</td>
+                                <td data-ng-show="showColumn(13)">{{node.assetRecord.latitude}}</td>
+                                <td data-ng-show="showColumn(14)">{{node.assetRecord.longitude}}</td>
                               </tr>
                               </tbody>
                             </table>

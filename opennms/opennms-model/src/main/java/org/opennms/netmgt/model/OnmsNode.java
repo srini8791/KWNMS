@@ -168,6 +168,9 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     /** nullable persistent field */
     private String m_productCode;
 
+    /** nullable persistent field */
+    private Integer m_frequency;
+
 
     @Transient
     @XmlTransient
@@ -675,6 +678,21 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     @Column(name="channel")
     public Integer getChannel() {
         return m_channel;
+    }
+
+
+    @XmlElement(name="frequency")
+    @Column(name="frequency")
+    public Integer getFrequency() {
+        return m_frequency;
+    }
+
+    /**
+     * <p>setChannel</p>
+     * @param channel
+     */
+    public void setFrequency(Integer frequency) {
+        this.m_frequency = frequency;
     }
 
     /**
