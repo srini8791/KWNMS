@@ -51,6 +51,7 @@ public class OnmsFacility implements Serializable {
     @Column(name="id")
     @SequenceGenerator(name = "opennmsSequence", sequenceName = "opennmsNxtId")
     @GeneratedValue(generator = "opennmsSequence")
+    @XmlID
     @XmlAttribute(name = "id")
     private Integer m_id;
 

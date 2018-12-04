@@ -19,6 +19,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$http', '
 
 
     $scope.init = function() {
+      $scope.loadProfiles();
       $scope.buildTree();
       $scope.loadNodes("");
       $scope.loadActiveNodesCount();
@@ -186,11 +187,6 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$http', '
   $scope.profileToApply = '';
   $scope.nodesToApply = [];
 
-  $scope.init = function() {
-    $scope.loadProfiles();
-    $scope.loadNodes();
-  };
-
   $scope.loadProfiles = function() {
     var paramObj = { 'params': {'limit': 0} };
     $http.get('api/v2/profiles', paramObj)
@@ -263,16 +259,6 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$http', '
     }).error(function(msg) {
       $scope.showAlert('error', 'Error creating the profile: ' + msg);
     });
-  };
-
-  $scope.loadNodes = function() {
-    $http.get('api/v2/nodes')
-      .success(function(result) {
-        $scope.nodes = result.node;
-      })
-      .error(function(msg) {
-        $scope.showAlert('error', msg);
-      });
   };
 
   $scope.apply = function() {
