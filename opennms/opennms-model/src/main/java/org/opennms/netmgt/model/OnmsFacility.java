@@ -170,7 +170,7 @@ public class OnmsFacility implements Serializable {
      * @since 1.8.1
      */
     public void setRegion(OnmsRegion region) {
-        region = region;
+        this.region = region;
     }
 
     /**

@@ -77,6 +77,10 @@ public class OnmsRegion implements Serializable {
 
     public OnmsRegion() {}
 
+    public OnmsRegion(Integer id) {
+        this.m_id = id;
+    }
+
     public OnmsRegion(Integer id, String name) {
         this.m_id = id;
         this.m_name = name;

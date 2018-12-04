@@ -16,9 +16,15 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
     };
 
     $scope.regions = [];
+    $scope.facilities = [];
     $scope.newRegion = {
       'name': ''
     };
+
+    $scope.newFacility = {
+          'name': '',
+          'region':{'id':''}
+        };
 
     $scope.init = function() {
       $scope.loadRegions();
@@ -50,6 +56,21 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
         $scope.showAlert('error', 'Error creating the region: ' + msg);
       });
     };
+
+    $scope.saveFacility = function() {
+          $http({
+            method: 'POST',
+            url: 'api/v2/facilities',
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.newFacility
+          }).success(function() {
+            $scope.showAlert('success', 'The region has been created successfully.');
+            $scope.newRegion = {};
+            $scope.loadRegions();
+          }).error(function(msg) {
+            $scope.showAlert('error', 'Error creating the region: ' + msg);
+          });
+        };
 
     $scope.showAlert = function(msgType, msg, ev) {
       $mdDialog.show(
