@@ -37,11 +37,11 @@ dashboard.config(["$stateProvider", function ($stateProvider) {
         }
     });
 
-    //Settings page state
+    //Management page state
     $stateProvider.state('app.profiles', {
         url: '/profiles',
         templateUrl: 'app/modules/dashboard/views/profiles.html',
-        controller: 'ProfileController',
+        controller: 'ManagementController',
         controllerAs: 'vm',
         data: {
             pageTitle: 'Profile'

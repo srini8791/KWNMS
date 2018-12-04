@@ -33,6 +33,10 @@ function ($rootScope, $scope, $http, $state, $location, Flash,appSettings) {
             {
                 title: "Topology",
                 state: "topology"
+            },
+            {
+                title: "Profiles",
+                state: "profiles"
             }]
         },
         {
@@ -50,11 +54,6 @@ function ($rootScope, $scope, $http, $state, $location, Flash,appSettings) {
             icon: "cog",
             state: "settings",
             sub: [{
-                title: "Profiles",
-                state: "profiles"
-
-            },
-            {
                 title: "Regions",
                 state: "regions"
 
