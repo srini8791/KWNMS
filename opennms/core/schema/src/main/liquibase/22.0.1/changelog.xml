@@ -103,6 +103,7 @@
       <column name="channel"    type="integer" />
       <column name="frequency"    type="integer" />
       <column name="profileid"  type="integer" />
+      <column name="facility"  type="integer" />
       <column name="active"     type="boolean" defaultValueBoolean="true">
         <constraints nullable="false" />
       </column>
@@ -116,7 +117,9 @@
       <dropColumn tableName="node" columnName="opmode" />
       <dropColumn tableName="node" columnName="bandwidth" />
       <dropColumn tableName="node" columnName="channel" />
+      <dropColumn tableName="node" columnName="frequency" />
       <dropColumn tableName="node" columnName="profileid" />
+      <dropColumn tableName="node" columnName="facility" />
       <dropColumn tableName="node" columnName="active" />
     </rollback>
 

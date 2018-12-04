@@ -205,6 +205,9 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     private OnmsMonitoringLocation m_location;
 
     /** persistent field */
+    private OnmsFacility m_facility;
+
+    /** persistent field */
     private OnmsAssetRecord m_assetRecord;
 
     /** persistent field */
@@ -954,6 +957,25 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     public void setLocation(OnmsMonitoringLocation location) {
         m_location = location;
     }
+
+
+    /**
+     * Facility that this node is located in.
+     */
+    @XmlElement(name="facility")
+    @ManyToOne(optional=false, fetch=FetchType.LAZY)
+    @JoinColumn(name="facility")
+    public OnmsFacility getFacility() {
+        return m_facility;
+    }
+
+    /**
+     * Set the facility that this node is located in.
+     */
+    public void setFacility(OnmsFacility facility) {
+        m_facility = facility;
+    }
+
 
     /**
      * The assert record associated with this node
