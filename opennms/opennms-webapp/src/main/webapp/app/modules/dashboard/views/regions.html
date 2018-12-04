@@ -1,7 +1,8 @@
 ﻿<!-- Main content -->
 <section class="content" id="popupContainer" data-ng-init="init()">
   <div class="row">
-    <div class="col-md-3">
+
+    <div class="col-md-6">
       <div class="card">
           <div class="card-header bg-info text-white"> Regions </div>
           <div class="card-body">
@@ -17,51 +18,42 @@
             <div class="input-group-append">
                 <button type="button" class="btn btn-default" ng-click="saveRegion()" id="save-region" ng-disabled="regionForm.$invalid">
                     Create Region <i class="fa fa-plus-circle"></i>
-                  </button>
-            
+                </button>
             </div>
           </div>
         </form>  
     </div>
-  </div>
 
- 
-  
-  </div>
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header bg-info text-white"> Facilities </div>
-                <div class="card-body">
-                    <div ng-repeat="facility in facilities" class="form-group form-check">
-                        <input type="checkbox" value="{{facility.id}}"/> {{facility.name}}
-                    </div>
-                </div>
-            </div>
-
-            <form method="post" name="facilityForm" novalidate>
-                <div class="mb-3">
-                    <input type="text" id="facility_facilityName" name="facilityName" ng-model="newfacility.name" placeholder="Enter Facility Name" class="form-control" ng-required="true" />
-                    <select ng-model="newfacitliy.region.id">
-                        <option data-ng-repeat="region in regions" id="{{region.id}}">{{region.name}}</option>
-                    </select>
-                    <input type="text" id="facility_latitude" name="facilityLatitude" ng-model="newfacility.latitude" placeholder="Enter Facility Latitude" class="form-control" ng-required="true" />
-                    <input type="text" id="facility_longitude" name="facilityLongitude" ng-model="newfacility.longitude" placeholder="Enter Facility Longitude" class="form-control" ng-required="true" />
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-default" ng-click="saveFacility()" id="save-facility" ng-disabled="facilityForm.$invalid">
-                            Create Facility <i class="fa fa-plus-circle"></i>
-                        </button>
-
-                    </div>
-                </div>
-            </form>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-info text-white"> Facilities </div>
+        <div class="card-body">
+          <div ng-repeat="facility in facilities" class="form-group form-check">
+            <input type="checkbox" value="{{facility.id}}"/> {{facility.name}}
+          </div>
         </div>
+      </div>
+
+      <form method="post" name="facilityForm" novalidate>
+        <div class="mb-3">
+          <input type="text" id="facility_facilityName" name="facilityName" ng-model="newFacility.name" placeholder="Enter Facility Name" class="form-control" ng-required="true" />
+          <select ng-model="newFacility.region.id">
+            <option data-ng-repeat="region in regions" value="{{region.id}}">{{region.name}}</option>
+          </select>
+          <input type="text" id="facility_latitude" name="facilityLatitude" ng-model="newFacility.latitude" placeholder="Enter Facility Latitude" class="form-control" ng-required="true" />
+          <input type="text" id="facility_longitude" name="facilityLongitude" ng-model="newFacility.longitude" placeholder="Enter Facility Longitude" class="form-control" ng-required="true" />
+          <div class="input-group-append">
+            <button type="button" class="btn btn-default" ng-click="saveFacility()" id="save-facility" ng-disabled="facilityForm.$invalid">
+              Create Facility <i class="fa fa-plus-circle"></i>
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
 
 
+  </div>
 
-    </div>
 </section>
 
 <script type="text/javascript" >

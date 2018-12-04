@@ -22,9 +22,10 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
     };
 
     $scope.newFacility = {
-          'name': '',
-          'region':{'id':''}
-        };
+      'region': {
+        'id': ''
+      }
+    };
 
     $scope.init = function() {
       $scope.loadRegions();
