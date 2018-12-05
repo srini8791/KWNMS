@@ -29,6 +29,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
 
     $scope.init = function() {
       $scope.loadRegions();
+      $scope.loadFacilities();
     };
 
     $scope.loadRegions = function() {
@@ -38,6 +39,18 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
           if (response.data) {
             $scope.regions = response.data.region;
             console.log('regions = ' + $scope.regions);
+          }
+        }
+      );
+    }
+
+    $scope.loadFacilities = function() {
+      var paramObj = { 'params': {'limit': 0} };
+      $http.get('api/v2/facilities', paramObj)
+        .then(function(response) {
+          if (response.data) {
+            $scope.facilities = response.data.facility;
+            console.log('facilities = ' + $scope.facilities);
           }
         }
       );
@@ -65,11 +78,11 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
             headers: {'Content-Type': 'application/json'},
             data: $scope.newFacility
           }).success(function() {
-            $scope.showAlert('success', 'The region has been created successfully.');
-            $scope.newRegion = {};
-            $scope.loadRegions();
+            $scope.showAlert('success', 'The facility has been created successfully.');
+            $scope.newFacility = {};
+            $scope.loadFacilities();
           }).error(function(msg) {
-            $scope.showAlert('error', 'Error creating the region: ' + msg);
+            $scope.showAlert('error', 'Error creating the facility: ' + msg);
           });
         };
 

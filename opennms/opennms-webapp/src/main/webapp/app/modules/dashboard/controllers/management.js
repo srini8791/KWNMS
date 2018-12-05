@@ -1,7 +1,7 @@
 ﻿
 
-dashboard.controller("ManagementController", ['$rootScope', '$scope', '$http', '$state', '$location', 'dashboardService', 'Flash',
-  function ($rootScope, $scope, $http, $state, $location, dashboardService, Flash) {
+dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog', '$http', '$state', '$location', 'dashboardService', 'Flash',
+  function ($rootScope, $scope, $mdDialog, $http, $state, $location, dashboardService, Flash) {
     var vm = this;
 
     $scope.limit = 10;

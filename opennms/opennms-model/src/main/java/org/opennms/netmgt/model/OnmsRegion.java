@@ -70,7 +70,7 @@ public class OnmsRegion implements Serializable {
     @XmlIDREF
     @XmlElementWrapper(name = "facilities")
     @XmlElement(name = "facility")
-    @OneToMany(mappedBy = "region", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "region")
     @JsonManagedReference
     private Set<OnmsFacility> m_facilities = new LinkedHashSet<>();
 

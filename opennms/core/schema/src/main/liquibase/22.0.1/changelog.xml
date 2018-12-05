@@ -345,7 +345,7 @@
       </column>
       <column name="latitude" type="DOUBLE PRECISION"/>
       <column name="longitude" type="DOUBLE PRECISION"/>
-      <column name="region" type="integer">
+      <column name="regionid" type="integer">
         <constraints nullable="false" foreignKeyName="fk_facility_region_id" references="regions(id)" deleteCascade="true" />
       </column>
     </createTable>

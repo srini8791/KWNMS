@@ -41,8 +41,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "facilities")
-@XmlRootElement(name = "facility")
-@XmlAccessorType(XmlAccessType.NONE)
 public class OnmsFacility implements Serializable {
 
     private static final long serialVersionUID = -4522570092361215659L;
@@ -51,34 +49,21 @@ public class OnmsFacility implements Serializable {
     @Column(name="id")
     @SequenceGenerator(name = "opennmsSequence", sequenceName = "opennmsNxtId")
     @GeneratedValue(generator = "opennmsSequence")
-    @XmlID
-    @XmlAttribute(name = "id")
     private Integer m_id;
 
-    @XmlAttribute(name = "name")
     @Column(name = "name", nullable = false, unique = true)
     private String m_name;
 
-    @XmlAttribute(name = "latitude")
     @Column(name = "latitude")
     private Float m_latitude;
 
-    @XmlAttribute(name = "longitude")
     @Column(name = "longitude")
     private Float m_longitude;
 
-    @XmlElement(name = "region")
-    @ManyToOne
-    @JoinColumn(name = "region")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "regionId")
     @JsonBackReference
     private OnmsRegion region;
-
-    public OnmsFacility() {}
-
-    public OnmsFacility(Integer id, String name) {
-        this.m_id = id;
-        this.m_name = name;
-    }
 
     /**
      * <p>getId</p>
@@ -157,7 +142,6 @@ public class OnmsFacility implements Serializable {
      * <p>getRegion</p>
      *
      * @return a {@link OnmsRegion} object.
-     * @since 1.8.1
      */
     public OnmsRegion getRegion() {
         return region;
