@@ -198,6 +198,11 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
         return find("from OnmsNode as n where n.location.locationName = ?", location);
     }
 
+    @Override
+    public List<OnmsNode> findByFacilityId(Integer facilityId) {
+        return find("from OnmsNode as n where n.facility.id = ?", facilityId);
+    }
+
     /** {@inheritDoc} */
     @Override
     public List<OnmsNode> findByLabelForLocation(String label, String location) {

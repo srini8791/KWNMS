@@ -620,6 +620,26 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
     }
 
     private OnmsFacility getFacility(String facilityName) {
+        List<OnmsFacility> facilities =  m_facilityDao.findAll();
+        if (facilities != null && facilities.size() > 0) {
+            for (OnmsFacility facility : facilities) {
+                if (facility.getName().equalsIgnoreCase(facilityName)) {
+                    return facility;
+                }
+            }
+        }
+        return null;
+    }
+
+    private OnmsFacility getFacility1(String facilityName) {
+        /*List<OnmsFacility> facilities =  m_facilityDao.findAll();
+        if (facilities != null && facilities.size() > 0) {
+            for (OnmsFacility facility : facilities) {
+                if (facility.getName().equalsIgnoreCase(facilityName)) {
+                    return facility;
+                }
+            }
+        }*/
         return m_facilityDao.findFacilityByName(facilityName);
     }
 

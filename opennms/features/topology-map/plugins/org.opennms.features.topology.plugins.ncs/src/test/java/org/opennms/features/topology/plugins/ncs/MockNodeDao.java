@@ -28,16 +28,12 @@
 
 package org.opennms.features.topology.plugins.ncs;
 
-import java.net.InetAddress;
-import java.util.*;
-
 import org.opennms.core.criteria.Criteria;
 import org.opennms.netmgt.dao.api.NodeDao;
-import org.opennms.netmgt.model.OnmsCategory;
-import org.opennms.netmgt.model.OnmsCriteria;
-import org.opennms.netmgt.model.OnmsIpInterface;
-import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.SurveillanceStatus;
+import org.opennms.netmgt.model.*;
+
+import java.net.InetAddress;
+import java.util.*;
 
 public class MockNodeDao implements NodeDao {
 
@@ -164,6 +160,11 @@ public class MockNodeDao implements NodeDao {
     @Override
     public List<OnmsNode> findByLocation(String location) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<OnmsNode> findByFacilityId(Integer facilityId) {
         return null;
     }
 

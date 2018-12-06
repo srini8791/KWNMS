@@ -131,8 +131,8 @@ public class TreeViewRestService {
     @Path("/{location}/nodes")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getNodes(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
-                               @PathParam("location") final String location) {
-        List<OnmsNode> nodes = nodeDao.findByLocation(location);
+                               @PathParam("location") final Integer facilityId) {
+        List<OnmsNode> nodes = nodeDao.findByFacilityId(facilityId);
         return Response.ok().entity(nodes).build();
     }
 

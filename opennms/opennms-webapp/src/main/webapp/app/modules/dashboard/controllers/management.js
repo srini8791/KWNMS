@@ -111,7 +111,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
 
         // functions related to Map end
 
-    $scope.loadNodes = function(location) {
+    $scope.loadNodes = function(loc) {
       var config = {
         params: {
           'limit': $scope.limit
@@ -119,8 +119,8 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
       };
 
       var url = 'api/v2/nodes';
-      if (location && location != '') {
-        url = 'api/v2/treeview/' + location + '/nodes';
+      if (loc && loc != '') {
+        url = 'api/v2/treeview/' + loc + '/nodes';
       }
       return $http.get(url, config)
         .then(function(response) {

@@ -39,6 +39,7 @@ import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "facilities")
 public class OnmsFacility implements Serializable {
@@ -64,6 +65,15 @@ public class OnmsFacility implements Serializable {
     @JoinColumn(name = "regionId")
     @JsonBackReference
     private OnmsRegion region;
+
+
+    public OnmsFacility() {
+
+    }
+
+    public OnmsFacility(Integer id) {
+        this.m_id = id;
+    }
 
     /**
      * <p>getId</p>

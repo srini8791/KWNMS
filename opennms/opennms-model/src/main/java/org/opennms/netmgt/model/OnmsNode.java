@@ -962,7 +962,7 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
     /**
      * Facility that this node is located in.
      */
-    @XmlElement(name="facility")
+    //@XmlAttribute(name="facility-id")
     @ManyToOne(optional=false, fetch=FetchType.LAZY)
     @JoinColumn(name="facility")
     public OnmsFacility getFacility() {
@@ -1717,6 +1717,10 @@ public class OnmsNode extends OnmsEntity implements Serializable, Comparable<Onm
 
         if (hasNewValue(scannedNode.getChannel(), getChannel())) {
             setChannel(scannedNode.getChannel());
+        }
+
+        if (hasNewValue(scannedNode.getFrequency(), getFrequency())) {
+            setFrequency(scannedNode.getFrequency());
         }
 
         if (hasNewValue(scannedNode.getProductCode(), getProductCode())) {

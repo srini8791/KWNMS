@@ -95,6 +95,14 @@ public interface NodeDao extends LegacyOnmsDao<OnmsNode, Integer> {
      * @return a {@link java.util.Collection} object.
      */
     List<OnmsNode> findByLocation(String location);
+
+    /**
+     * <p>findByLocation</p>
+     *
+     * @param location a {@link java.lang.String} object.
+     * @return a {@link java.util.Collection} object.
+     */
+    List<OnmsNode> findByFacilityId(Integer facilityId);
     
     /**
      * <p>findByLabel</p>

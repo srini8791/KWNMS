@@ -185,6 +185,11 @@ public class MockNodeDao extends AbstractMockDao<OnmsNode, Integer> implements N
     }
 
     @Override
+    public List<OnmsNode> findByFacilityId(Integer facilityId) {
+        return null;
+    }
+
+    @Override
     public List<OnmsNode> findByLabel(final String label) {
         final List<OnmsNode> nodes = new ArrayList<OnmsNode>();
         for (final OnmsNode node : findAll()) {
