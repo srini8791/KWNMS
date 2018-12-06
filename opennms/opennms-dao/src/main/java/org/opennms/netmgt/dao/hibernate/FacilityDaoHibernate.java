@@ -58,6 +58,11 @@ public class FacilityDaoHibernate extends AbstractDaoHibernate<OnmsFacility, Int
         return findUnique("from OnmsFacility f where f.id  = ?", facilityId);
     }
 
+    @Override
+    public OnmsFacility findFacilityByName(String name) {
+        return findUnique("from OnmsFacility f where f.name = ?", name);
+    }
+
 
     /**
      * <p>findAll</p>

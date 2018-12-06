@@ -50,6 +50,14 @@ public interface FacilityDao extends OnmsDao<OnmsFacility, Integer> {
     OnmsFacility get(Integer facilityId);
 
     /**
+     * Find profile by name.
+     *
+     * @param name the facility name
+     * @return the OpenNMS facility entity
+     */
+    OnmsFacility findFacilityByName(String name);
+
+    /**
      * Returns a list of facilities ordered by name.
      *
      * @return a {@link List} of {@link OnmsFacility} objects.

@@ -108,6 +108,9 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
     private ProfileDao m_profileDao;
 
     @Autowired
+    private FacilityDao m_facilityDao;
+
+    @Autowired
     private IpInterfaceDao m_ipInterfaceDao;
 
     @Autowired
@@ -614,6 +617,10 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
             location.setMonitoringArea(locationName);
             return createLocationDefIfNecessary(location);
         }
+    }
+
+    private OnmsFacility getFacility(String facilityName) {
+        return m_facilityDao.findFacilityByName(facilityName);
     }
 
     protected OnmsMonitoringLocation createLocationDefIfNecessary(final OnmsMonitoringLocation location) {
@@ -1281,9 +1288,13 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
                 // Associate the location with the node
                 final OnmsNode node = new OnmsNode(location);
 
+                final OnmsFacility facility = getFacility("Default");
                 final String hostname = getHostnameResolver().getHostname(addr(ipAddress), locationString);
                 node.setLabel(ipAddress);
                 node.setLabelSource(NodeLabelSource.ADDRESS);
+                if (facility != null) {
+                    node.setFacility(facility);
+                }
                 //node.setLabel(hostname);
                 // Modified by Srinivas for displaying ipaddress instead of host name
                 /*if (hostname == null || ipAddress.equals(hostname)) {
