@@ -359,4 +359,26 @@
     </rollback>
   </changeSet>
 
+  <changeSet author="ndarbha" id="22.0.1-set-default-region">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        SELECT COUNT(id) FROM regions WHERE name = 'Default';
+      </sqlCheck>
+    </preConditions>
+    <insert tableName="regions">
+      <column name="name" value="Default"/>
+    </insert>
+  </changeSet>
+
+  <changeSet author="ndarbha" id="22.0.1-set-default-facility">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        SELECT COUNT(id) FROM facilities WHERE name = 'Default';
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      INSERT INTO facilities (name, regionid) VALUES ('Default', (SELECT id FROM regions WHERE name = 'Default'));
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>
