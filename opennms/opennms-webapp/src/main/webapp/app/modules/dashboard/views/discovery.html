@@ -33,7 +33,7 @@
          <div class="card-body">
             <div class="table-responsive">
               <div class="col-md-12 text-right mb-1">
-               Show <select class="hselect" data-ng-model="limit" data-ng-change="loadNodes()">
+               Show <select class="hselect" data-ng-model="limit" data-ng-change="loadManagementNodes()">
                      <option>10</option>
                      <option>20</option>
                      <option>50</option>
@@ -50,27 +50,27 @@
                         <th scope="col">MAC Address</th>
                         <th scope="col">Model</th>
                         <th scope="col">Firmware</th>
+                        <th scope="col">Modulation</th>
                         <th scope="col">Channel</th>
                         <th scope="col">Bandwidth</th>
                         <th scope="col">Ethernet Speed</th>
                         <th scope="col">I/O Bandwidth Limit</th>
-                        <th scope="col">Modulation</th>
                         <th scope="col">Operation Mode</th>
                      </tr>
                   </thead>
                   <tbody class="customtable">
-                     <tr data-ng-repeat="node in vm.nodes">
+                     <tr data-ng-repeat="node in vm.nodes.node">
                         <td>{{node.sysName}}</td>
                         <td>{{node.primaryIP}}</td>
                         <td>{{node.assetRecord.serialNumber}}</td>
                         <td>{{node.macAddress}}</td>
                         <td>{{node.assetRecord.modelNumber}}</td>
                         <td>{{node.assetRecord.firmware}}</td>
+                        <td>{{node.productcode}}</td>
                         <td>{{node.channel}}</td>
                         <td>{{node.bandwidth}}</td>
                         <td>{{node.assetRecord.ethernetSpeed}}</td>
                         <td>{{node.assetRecord.ioBandwidthLimit}}</td>
-                        <td>{{node.assetRecord.modulation}}</td>
                         <td>{{node.opMode}}</td>
                      </tr>
                   </tbody>

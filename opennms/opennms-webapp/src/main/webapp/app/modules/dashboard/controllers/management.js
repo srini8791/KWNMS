@@ -22,6 +22,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
       $scope.loadProfiles();
       $scope.buildTree();
       $scope.loadNodes("");
+      $scope.loadManagementNodes();
       $scope.loadActiveNodesCount();
       $scope.prepareMap();
     }
@@ -131,6 +132,24 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
           }
         }
       );
+    }
+
+    $scope.loadManagementNodes = function() {
+      var config = {
+        params: {
+          'limit': $scope.limit
+        }
+      };
+
+      var url = 'api/v2/nodes';
+
+      $http.get(url, config)
+        .then(function(response) {
+          if (response.data) {
+            $scope.vm.totalNodesCount = response.data.length;
+            $scope.vm.nodes = response.data;
+          }
+        });
     }
 
     $scope.loadActiveNodesCount = function() {
