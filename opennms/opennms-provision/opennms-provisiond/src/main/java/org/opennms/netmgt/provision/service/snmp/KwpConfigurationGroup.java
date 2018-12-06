@@ -85,7 +85,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
     private static final String WIRELESS_ACTIVE_CHANNEL = ".1.3.6.1.4.1.52619.1.1.1.1.1.23.2";
 
     /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
-    public static final String WIRELESS_FREQUENCY_ALIAS = "wirelessActiveChannel";
+    public static final String WIRELESS_FREQUENCY_ALIAS = "wirelessFrequency";
     private static final String WIRELESS_FREQUENCY = ".1.3.6.1.4.1.52619.1.1.1.1.1.25.2";
 
     /** Constant <code>SYS_LOCATION_ALIAS="sysLocation"</code> */
@@ -127,7 +127,7 @@ public final class KwpConfigurationGroup extends AggregateTracker {
      */
     static {
 
-        ms_elemList = new NamedSnmpVar[10];
+        ms_elemList = new NamedSnmpVar[11];
         int ndx = 0;
 
         /**
