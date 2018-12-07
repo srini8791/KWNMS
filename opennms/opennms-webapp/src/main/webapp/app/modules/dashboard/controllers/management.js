@@ -21,7 +21,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     $scope.init = function() {
       $scope.loadProfiles();
       $scope.buildTree();
-      $scope.loadNodes("");
+      $scope.loadAllNodes();
       $scope.loadManagementNodes();
       $scope.loadActiveNodesCount();
       $scope.prepareMap();
@@ -108,6 +108,24 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
                 $scope.markers.push(marker);
             }
         }
+
+    $scope.nodes = [];
+    $scope.loadAllNodes = function() {
+      var config = {
+        params: {
+          'limit': $scope.limit
+        }
+      };
+
+      var url = 'api/v2/nodes';
+      $http.get(url, config)
+        .then(function(response) {
+          if (response.data) {
+            $scope.nodes = response.data.node;
+          }
+        }
+      );
+    }
 
         // functions related to Map end
 
@@ -202,7 +220,6 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     'minimumFirmware': ''
   };
   $scope.nodeProfile = {};
-  $scope.nodes = [];
   $scope.profileToApply = '';
   $scope.nodesToApply = [];
 
