@@ -187,6 +187,9 @@ public abstract class UserManager implements UserConfig {
             if (onmsUser.getRoles() != null) {
                 xmlUser.setRoles(new ArrayList<String>(onmsUser.getRoles()));
             }
+            if (onmsUser.getRegion() != null) {
+                xmlUser.setRegionId(onmsUser.getRegion().getId());
+            }
             
             _writeUser(onmsUser.getUsername(), xmlUser);
         } finally {
