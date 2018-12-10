@@ -129,6 +129,28 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
 
         // functions related to Map end
 
+    $scope.loadNodeById = function(nodeId) {
+      var url = 'api/v2/nodes/' + nodeId;
+      return $http.get(url)
+        .then(function(response) {
+          if (response.data) {
+            return response.data;
+          }
+        }
+      );
+    }
+
+    $scope.loadFacilityNodes = function(facilityId) {
+      var url = url = 'api/v2/treeview/facility/' + facilityId + '/nodes';
+      return $http.get(url)
+        .then(function(response) {
+          if (response.data) {
+            return response.data;
+          }
+        }
+      );
+    }
+
     $scope.loadNodes = function(loc) {
       var config = {
         params: {
@@ -199,12 +221,18 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
             $scope.mytree.currentNode.children = data;
           });
         } else if (nodeType === 'location') { // location -- facility or locations under region
-          $scope.loadNodes($scope.mytree.currentNode.data.id).then(function(data) {
+          $scope.loadFacilityNodes($scope.mytree.currentNode.data.id).then(function(data) {
+            $scope.mytree.currentNode.children = data;
+/*
             $scope.vm.nodes = data;
             $scope.vm.totalNodesCount = data.length;
             $scope.showNodesOnMap();
+*/
           });
-
+        } else if (nodeType === 'node') {
+          $scope.loadNodeById($scope.mytree.currentNode.data.id).then(function(data) {
+            $scope.addNodeOnMap(data);
+          });
         }
       }
     }, false);

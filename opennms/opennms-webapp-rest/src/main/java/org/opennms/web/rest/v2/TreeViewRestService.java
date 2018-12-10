@@ -108,6 +108,26 @@ public class TreeViewRestService {
     }
 
     @GET
+    @Path("/facility/{facilityId}/nodes")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getFacilityNodes(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
+                               @PathParam("facilityId") final Integer facilityId) {
+        List<TreeNodeDTO> facilityNodes = new ArrayList<>();
+        List<OnmsNode> nodes = nodeDao.findByFacilityId(facilityId);
+        if (nodes != null && !nodes.isEmpty()) {
+            for (OnmsNode node : nodes) {
+                TreeNodeDTO locationNode = new TreeNodeDTO(node.getPrimaryIP());
+                locationNode.addData("id", node.getId());
+                locationNode.addData("type", "node");
+                locationNode.addData("lat", node.getAssetRecord().getLatitude());
+                locationNode.addData("long", node.getAssetRecord().getLongitude());
+                facilityNodes.add(locationNode);
+            }
+        }
+        return Response.ok().entity(facilityNodes).build();
+    }
+
+    @GET
     @Path("/location/{location}/nodes")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLocationNodes(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo,
@@ -135,6 +155,7 @@ public class TreeViewRestService {
         List<OnmsNode> nodes = nodeDao.findByFacilityId(facilityId);
         return Response.ok().entity(nodes).build();
     }
+
 
     private Map<String, String> prepareErrorObject(String errorMessage) {
         Map<String, String> object = new HashMap<>();
