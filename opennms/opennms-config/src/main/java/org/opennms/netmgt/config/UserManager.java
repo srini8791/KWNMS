@@ -177,8 +177,14 @@ public abstract class UserManager implements UserConfig {
             _setContact(xmlUser, ContactType.email, onmsUser.getEmail());
             
             final Password pass = new Password();
-            pass.setEncryptedPassword(onmsUser.getPassword());
-            pass.setSalt(onmsUser.getPasswordSalted());
+            if (!onmsUser.getPasswordSalted()) { // encrypt the password
+                String encryptedPassword = encryptedPassword(onmsUser.getPassword(), true);
+                pass.setEncryptedPassword(encryptedPassword);
+                pass.setSalt(true);
+            } else {
+                pass.setEncryptedPassword(onmsUser.getPassword());
+                pass.setSalt(onmsUser.getPasswordSalted());
+            }
             xmlUser.setPassword(pass);
     
             if (onmsUser.getDutySchedule() != null) {
