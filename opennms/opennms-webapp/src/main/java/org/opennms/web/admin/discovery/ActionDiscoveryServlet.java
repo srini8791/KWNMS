@@ -316,7 +316,7 @@ public class ActionDiscoveryServlet extends HttpServlet {
 
             LOG.info("Restart Discovery requested!");  
             sess.removeAttribute(ATTRIBUTE_DISCOVERY_CONFIGURATION);
-            response.sendRedirect(Util.calculateUrlBase( request, "admin/discovery/config-done.jsp" ));
+            response.sendRedirect(Util.calculateUrlBase( request, "index.html#/app/dashboard" ));
             return;
         }
 
