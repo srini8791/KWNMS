@@ -77,35 +77,62 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
         }
     }
 
+
+    $scope.clearMarkers = function() {
+        $scope.setMapOnAll(null);
+    }
+
+    $scope.setMapOnAll = function(map) {
+        for (var i = 0; i < $scope.markers.length; i++) {
+          $scope.markers[i].setMap(map);
+        }
+    }
+
+    $scope.setMapOnSingleMarker = function(nodeId) {
+
+        for (var i = 0; i < $scope.markers.length; i++) {
+            var nId = $scope.markers[i].id;
+            if (nodeId == $scope.markers[i].id) {
+                $scope.markers[i].setMap($scope.map);
+                google.maps.event.trigger($scope.markers[i], 'click');
+            }
+
+        }
+    }
+
     $scope.addNodeOnMap = function(nodeObj) {
             if (nodeObj != null) {
                 var latitude = nodeObj.assetRecord.latitude;
                 var longitude = nodeObj.assetRecord.longitude;
-                if (latitude == 0) {
+                if ((latitude != undefined || latitude != null)&& (longitude != undefined || longitude != null)) {
+                    var myLatlng = new google.maps.LatLng(latitude, longitude);
+                                    var marker = new google.maps.Marker({
+                                        map : $scope.map,
+                                        id : nodeObj.id,
+                                        position: myLatlng,
+                                        title: nodeObj.primaryIP,
+                                        ssid:nodeObj.ssid
+                                    });
+                                    google.maps.event.addListener(marker,'click',function() {
+                                        infoWindow.setContent( '<b>' + marker.title + '</b>'
+                                            +'<p><b>Address:</b>'
+                                            + marker.title
+                                            + '<br/><b>SSID:</b>' + marker.ssid
+                                            + '</p>'
+                                            );
+                                        infoWindow.open($scope.map,marker);
+
+                                    });
+                                    //marker.setMap($scope.map);
+                                    $scope.markers.push(marker);
+                }
+                /*if (latitude == 0) {
                     latitude = 0.0;
                 }
                 if (longitude == 0) {
                     longitude = 0.0;
-                }
-                var myLatlng = new google.maps.LatLng(latitude, longitude);
-                var marker = new google.maps.Marker({
-                    map : $scope.map,
-                    position: myLatlng,
-                    title: nodeObj.primaryIP,
-                    ssid:nodeObj.ssid
-                });
-                google.maps.event.addListener(marker,'click',function() {
-                    infoWindow.setContent( '<b>' + marker.title + '</b>'
-                        +'<p><b>Address:</b>'
-                        + marker.title
-                        + '<br/><b>SSID:</b>' + marker.ssid
-                        + '</p>'
-                        );
-                    infoWindow.open($scope.map,marker);
+                }*/
 
-                });
-                //marker.setMap($scope.map);
-                $scope.markers.push(marker);
             }
         }
 
@@ -221,18 +248,23 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
             $scope.mytree.currentNode.children = data;
           });
         } else if (nodeType === 'location') { // location -- facility or locations under region
-          $scope.loadFacilityNodes($scope.mytree.currentNode.data.id).then(function(data) {
-            $scope.mytree.currentNode.children = data;
-/*
+        $scope.clearMarkers();
+        $scope.markers = [];
+         $scope.loadFacilityNodes($scope.mytree.currentNode.data.id).then(function(data) {
+                     $scope.mytree.currentNode.children = data;
+         });
+         $scope.loadNodes($scope.mytree.currentNode.data.id).then(function(data) {
             $scope.vm.nodes = data;
             $scope.vm.totalNodesCount = data.length;
             $scope.showNodesOnMap();
-*/
-          });
+         });
         } else if (nodeType === 'node') {
-          $scope.loadNodeById($scope.mytree.currentNode.data.id).then(function(data) {
+            $scope.clearMarkers();
+            var id = $scope.mytree.currentNode.data.id;
+            $scope.setMapOnSingleMarker(id);
+          /*$scope.loadNodeById($scope.mytree.currentNode.data.id).then(function(data) {
             $scope.addNodeOnMap(data);
-          });
+          });*/
         }
       }
     }, false);
