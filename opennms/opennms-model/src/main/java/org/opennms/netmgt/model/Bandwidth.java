@@ -46,8 +46,9 @@ public enum Bandwidth {
     BANDWIDTH_5MHZ(1, "5MHz"),
     BANDWIDTH_10MHZ(2, "10MHz"),
     BANDWIDTH_20MHZ(3, "20MHz"),
-    BANDWIDTH_40MHZ(4, "40MHz"),
-    BANDWIDTH_80MHZ(5, "80MHz");
+    BANDWIDTH_40_PLUS_MHZ(4, "40+MHz"),
+    BANDWIDTH_40_MINUS_MHZ(5, "40-MHz"),
+    BANDWIDTH_80MHZ(6, "80MHz");
 
     private static final Map<Integer, Bandwidth> m_idMap;
 

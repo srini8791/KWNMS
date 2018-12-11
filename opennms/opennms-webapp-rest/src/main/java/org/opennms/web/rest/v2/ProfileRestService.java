@@ -301,10 +301,25 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         String tftpAddress = Vault.getProperty("org.opennms.tftp.address");
         final InetAddress tftpaddr = InetAddressUtils.addr(tftpAddress);
 
+
+
         LOG.info("retreiveProfile: nodeId = {}, tftpAddress = {}", nodeId, tftpAddress);
 
         OnmsNode  node = nodeDao.get(nodeId);
         String ipAddress = node.getPrimaryIP().replaceAll("\\.","_") + ".cfg";
+        String tftpRootPath = Vault.getProperty("org.opennms.tftp.rootpath");
+        String filePath = tftpRootPath + File.separator + ipAddress;
+        boolean profileExists = Files.exists(Paths.get(filePath));
+        if (profileExists) {
+            try {
+                Files.delete(Paths.get(filePath));
+                Thread.sleep(2000);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         final InetAddress addr = InetAddressUtils.addr(node.getPrimaryIP());
         final SnmpAgentConfig config = m_accessService.getAgentConfig(addr, node.getLocation().getLocationName());
         SnmpObjId oid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.1.0");
