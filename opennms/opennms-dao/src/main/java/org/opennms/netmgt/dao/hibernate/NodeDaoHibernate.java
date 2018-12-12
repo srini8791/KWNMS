@@ -200,7 +200,7 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
 
     @Override
     public List<OnmsNode> findByFacilityId(Integer facilityId) {
-        return find("from OnmsNode as n where n.facility.id = ?", facilityId);
+        return find("from OnmsNode as n where n.facility.id = ? and productCode IS NOT NULL", facilityId);
     }
 
     /** {@inheritDoc} */
@@ -546,7 +546,7 @@ public class NodeDaoHibernate extends AbstractDaoHibernate<OnmsNode, Integer> im
 
     @Override
     public Integer getActiveNodeCount() {
-        return queryInt("select count(*) from OnmsNode as n where n.active = true");
+        return queryInt("select count(*) from OnmsNode as n where n.active = true and productCode IS NOT NULL");
     }
 
     public Number[] getNodeStatusSummary() {

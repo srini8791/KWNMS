@@ -17,7 +17,8 @@ dashboard.controller("ReportsController", ['$rootScope', '$scope', '$http', '$st
     $scope.loadNodes = function() {
       var config = {
         params: {
-          'limit': $scope.limit
+          'limit': $scope.limit,
+          '_s': 'productCode==ptp,productCode==ptmp,productCode==indoorap,productCode==outdoorap'
         }
       };
 

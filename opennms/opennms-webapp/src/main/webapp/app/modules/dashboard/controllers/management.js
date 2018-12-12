@@ -140,7 +140,8 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     $scope.loadAllNodes = function() {
       var config = {
         params: {
-          'limit': $scope.limit
+          'limit': $scope.limit,
+          '_s': 'productCode==ptp,productCode==ptmp,productCode==indoorap,productCode==outdoorap'
         }
       };
 
@@ -181,7 +182,8 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     $scope.loadNodes = function(loc) {
       var config = {
         params: {
-          'limit': $scope.limit
+          'limit': $scope.limit,
+          '_s': 'productCode==ptp,productCode==ptmp,productCode==indoorap,productCode==outdoorap'
         }
       };
 
@@ -204,7 +206,8 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     $scope.loadManagementNodes = function() {
       var config = {
         params: {
-          'limit': $scope.limit
+          'limit': $scope.limit,
+          '_s': '(productCode==ptp,productCode==ptmp,productCode==indoorap,productCode==outdoorap)'
         }
       };
 
@@ -213,8 +216,8 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
       $http.get(url, config)
         .then(function(response) {
           if (response.data) {
-            $scope.vm.totalNodesCount = response.data.length;
-            $scope.vm.nodes = response.data;
+            $scope.vm.totalNodesCount = response.data.count;
+            $scope.vm.nodes = response.data.node;
           }
         });
     }
@@ -255,7 +258,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
          });
          $scope.loadNodes($scope.mytree.currentNode.data.id).then(function(data) {
             $scope.vm.nodes = data;
-            $scope.vm.totalNodesCount = data.length;
+            //$scope.vm.totalNodesCount = data.length;
             $scope.showNodesOnMap();
          });
         } else if (nodeType === 'node') {
