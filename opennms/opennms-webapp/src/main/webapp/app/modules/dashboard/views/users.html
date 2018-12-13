@@ -23,8 +23,8 @@
                          <td data-ng-bind="user['email']"></td>
                          <td data-ng-bind="user['role']"></td>
                          <td>
-                           <a href="#" class="badge badge-info" > <i class="fa fa-edit"></i>  </a>
-                           <a href="#" class="badge badge-danger" > <i class="fa fa-times"></i>  </a>
+                           <!--<a href="#" class="badge badge-info" ><i class="fa fa-edit"></i></a>-->
+                           <a href="#" class="badge badge-danger" data-ng-click="deleteUserConfirm(user['user-id'])" ><i class="fa fa-trash"></i></a>
                          </td>
                        </tr>
                     </tbody>

@@ -41,10 +41,9 @@ function ($rootScope, $scope, $mdDialog, $http, $state, $location, dashboardServ
     }
 
     $scope.saveUser = function() {
-      var roleData = 'ROLE_USER';
-      console.log($scope.newUser.readOnly);
+      var roleData = 'ROLE_ADMIN';
       if ($scope.newUser.readOnly != undefined) {
-        roleData += ',ROLE_READONLY';
+        roleData = 'ROLE_READONLY';
       }
       $http({
         method: 'POST',
@@ -67,6 +66,18 @@ function ($rootScope, $scope, $mdDialog, $http, $state, $location, dashboardServ
       });
     };
 
+    $scope.deleteUser = function(userName) {
+      $http({
+        method: 'DELETE',
+        url: 'rest/users/' + userName
+      }).success(function() {
+        $scope.showAlert('success', 'The user has been deleted successfully.');
+        $scope.loadUsers();
+      }).error(function(msg) {
+        $scope.showAlert('error', 'Error deleting the user: ' + msg);
+      });
+    }
+
     $scope.showAlert = function(msgType, msg, ev) {
       $mdDialog.show(
         $mdDialog.alert()
@@ -79,6 +90,19 @@ function ($rootScope, $scope, $mdDialog, $http, $state, $location, dashboardServ
           .targetEvent(ev)
       );
     };
+
+    $scope.deleteUserConfirm = function(userName, ev) {
+      var confirm = $mdDialog.confirm()
+            .title('Are you sure you want to delete this user?')
+            .targetEvent(ev)
+            .ok('Yes')
+            .cancel('No');
+
+      $mdDialog.show(confirm).then(function() {
+        $scope.deleteUser(userName);
+      });
+    };
+
 
 
 }]);
