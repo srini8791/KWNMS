@@ -90,7 +90,7 @@
           <div class="card-footer">
             <button type="button" class="btn btn-default" ng-click="saveProfile()" id="save-profile"
                     ng-disabled="profileForm.$invalid">
-              Create Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"><span>
+              Create Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"></span>
             </button>
           </div> <!-- card-footer -->
         </div> <!-- card -->
@@ -118,7 +118,7 @@
               </div> <!-- card-body -->
               <div class="card-footer">
                 <button type="button" class="btn btn-default" ng-click="retrieveProfile(profileToRetrieve)" id="download-profile">
-                  Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"><span>
+                  Retrieve Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-save"></span>
                 </button>
               </div> <!-- card-footer -->
             </div> <!-- card -->
@@ -134,9 +134,9 @@
                 <form method="post" name="applyProfileForm">
                   <div class="form-group">
                     <div class="row">
-                      <label for="input_profileName" class="col-sm-4 control-label">Select Profile</label>
+                      <label for="input_applyProfileName" class="col-sm-4 control-label">Select Profile</label>
                       <div class="col-sm-8">
-                        <select id="input_profileName" name="profileName" ng-model="profileToApply" class="form-control" required>
+                        <select id="input_applyProfileName" name="profileName" ng-model="profileToApply" class="form-control" required>
                           <option ng-repeat="profile in profiles" value="{{profile.id}}">{{profile.name}}</option>
                         </select>
                       </div>
@@ -166,7 +166,7 @@
               </div> <!-- card-body -->
               <div class="card-footer">
                 <button type="button" class="btn btn-default" onClick="javascript:applyProfile()" id="apply-profile">
-                  Apply Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-paste"><span>
+                  Apply Profile&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-paste"></span>
                 </button>
               </div> <!-- card-footer -->
             </div> <!-- card -->
@@ -229,7 +229,7 @@
           </div> <!-- card body -->
           <div class="card-footer">
             <button type="button" class="btn btn-default" ng-click="saveRegion()" id="save-region" ng-disabled="regionForm.$invalid">
-              Create Region<span class="glyphicon glyphicon-plus"><span>
+              Create Region<span class="glyphicon glyphicon-plus"></span>
             </button>
           </div> <!-- card-footer -->
         </div> <!-- card -->

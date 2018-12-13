@@ -38,7 +38,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
         .then(function(response) {
           if (response.data) {
             $scope.regions = response.data.region;
-            console.log('regions = ' + $scope.regions);
+            //console.log('regions = ' + $scope.regions);
           }
         }
       );
@@ -50,7 +50,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
         .then(function(response) {
           if (response.data) {
             $scope.facilities = response.data.facility;
-            console.log('facilities = ' + $scope.facilities);
+            //console.log('facilities = ' + $scope.facilities);
           }
         }
       );
@@ -78,6 +78,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
       }).success(function() {
         $scope.showAlert('success', 'The region has been deleted successfully.');
         $scope.loadRegions();
+        $scope.loadFacilities();
       }).error(function(msg) {
         $scope.showAlert('error', 'Error deleting the region: ' + msg);
       });
@@ -98,6 +99,19 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
           });
         };
 
+    $scope.deleteFacility = function(facilityId) {
+      $http({
+        method: 'DELETE',
+        url: 'api/v2/facilities/' + facilityId
+      }).success(function() {
+        $scope.showAlert('success', 'The facility has been deleted successfully.');
+        $scope.loadFacilities();
+      }).error(function(msg) {
+        $scope.showAlert('error', 'Error deleting the facility: ' + msg);
+      });
+    }
+
+
     $scope.showAlert = function(msgType, msg, ev) {
       $mdDialog.show(
         $mdDialog.alert()
@@ -114,6 +128,7 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
   $scope.deleteRegionConfirm = function(regionId, ev) {
     var confirm = $mdDialog.confirm()
           .title('Are you sure you want to delete this region?')
+          .textContent('Facilities associated with this region will also be deleted.')
           .targetEvent(ev)
           .ok('Yes')
           .cancel('No');
@@ -123,7 +138,18 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
     });
   };
 
+  $scope.deleteFacilityConfirm = function(facilityId, ev) {
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this facility?')
+          .targetEvent(ev)
+          .ok('Yes')
+          .cancel('No');
+
+    $mdDialog.show(confirm).then(function() {
+      $scope.deleteFacility(facilityId);
+    });
+  };
 
 
-  }
-]);
+
+}]);
