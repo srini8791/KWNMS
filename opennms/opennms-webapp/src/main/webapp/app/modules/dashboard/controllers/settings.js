@@ -71,6 +71,18 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
       });
     };
 
+    $scope.deleteRegion = function(regionId) {
+      $http({
+        method: 'DELETE',
+        url: 'api/v2/regions/' + regionId
+      }).success(function() {
+        $scope.showAlert('success', 'The region has been deleted successfully.');
+        $scope.loadRegions();
+      }).error(function(msg) {
+        $scope.showAlert('error', 'Error deleting the region: ' + msg);
+      });
+    }
+
     $scope.saveFacility = function() {
           $http({
             method: 'POST',
@@ -98,6 +110,18 @@ dashboard.controller("SettingsController", ['$rootScope', '$scope', '$mdDialog',
           .targetEvent(ev)
       );
     };
+
+  $scope.deleteRegionConfirm = function(regionId, ev) {
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this region?')
+          .targetEvent(ev)
+          .ok('Yes')
+          .cancel('No');
+
+    $mdDialog.show(confirm).then(function() {
+      $scope.deleteRegion(regionId);
+    });
+  };
 
 
 

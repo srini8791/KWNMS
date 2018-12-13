@@ -7,7 +7,7 @@
           <div class="card-header bg-info text-white"> Regions </div>
           <div class="card-body">
               <div ng-repeat="region in regions" class="form-group form-check">
-                  <input type="checkbox" value="{{region.id}}"/> {{region.name}}                                
+                <button class="btn btn-default" data-ng-click="deleteRegionConfirm(region.id)"><i class="fa fa-trash"></i></button> {{region.name}}
               </div>
           </div>
       </div>
