@@ -381,6 +381,19 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
   };
 
 
+  $scope.deleteProfile = function(profileId) {
+    $http({
+      method: 'DELETE',
+      url: 'api/v2/profiles/' + profileId
+    }).success(function() {
+      $scope.showAlert('success', 'The profile has been deleted successfully.');
+      $scope.loadProfiles();
+    }).error(function(msg) {
+      $scope.showAlert('error', 'Error deleting the profile: ' + msg);
+    });
+  };
+
+
   $scope.showAlert = function(msgType, msg, ev) {
     $mdDialog.show(
       $mdDialog.alert()
@@ -392,6 +405,19 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
         .ok('OK')
         .targetEvent(ev)
     );
+  };
+
+
+  $scope.deleteConfirm = function(profileId, ev) {
+    var confirm = $mdDialog.confirm()
+          .title('Are you sure you want to delete this profile?')
+          .targetEvent(ev)
+          .ok('Yes')
+          .cancel('No');
+
+    $mdDialog.show(confirm).then(function() {
+      $scope.deleteProfile(profileId);
+    });
   };
 
 /* PROFILES -- END */
