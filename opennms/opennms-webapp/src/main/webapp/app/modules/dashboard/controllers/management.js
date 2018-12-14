@@ -155,6 +155,11 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
       );
     }
 
+
+    $scope.showNode = function(nodeId,lastView) {
+            $state.go('app.nodeView',{ "nodeId": nodeId,"lastView":lastView});
+    }
+
         // functions related to Map end
 
     $scope.loadNodeById = function(nodeId) {

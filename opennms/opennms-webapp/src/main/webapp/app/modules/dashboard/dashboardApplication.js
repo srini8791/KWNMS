@@ -102,5 +102,17 @@ dashboard.config(["$stateProvider", function ($stateProvider) {
         }
     });
 
+    //Node view page
+        $stateProvider.state('app.nodeView', {
+            url: '/nodeView',
+            templateUrl: 'app/modules/dashboard/views/node.html',
+            controller: 'NodeViewController',
+            controllerAs: 'vm',
+            params: {nodeId:'',lastView:''},
+            data: {
+                pageTitle: 'Node Views'
+            }
+        });
+
 }]);
 

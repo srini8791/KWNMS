@@ -1,13 +1,16 @@
 ﻿<!-- Main content -->
 <section class="content" id="popupContainer" data-ng-init="init()">
   <div class="row">
-
     <div class="col-md-6">
       <div class="card">
           <div class="card-header bg-info text-white"> Regions </div>
           <div class="card-body">
               <div ng-repeat="region in regions" class="form-group">
-                <button class="btn btn-default" data-ng-click="deleteRegionConfirm(region.id)"><i class="fa fa-trash"></i></button> {{region.name}}
+                  <a href="" ng-click="deleteRegionConfirm(region.id,region.name)" class="badge badge-danger">
+                      <i class="fa fa-trash"></i>
+
+                  </a>
+                 {{region.name}}
               </div>
           </div>
       </div>
@@ -27,9 +30,13 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-header bg-info text-white"> Facilities </div>
-        <div class="card-body">
+       <div class="card-body">
           <div ng-repeat="facility in facilities" class="form-group">
-            <button class="btn btn-default" data-ng-click="deleteFacilityConfirm(facility.id)"><i class="fa fa-trash"></i></button> {{facility.name}} ({{facility.}})
+              <a href="" ng-click="deleteFacilityConfirm(facility.id,facility.name)" class="badge badge-danger">
+                  <i class="fa fa-trash"></i>
+
+              </a> {{facility.name}}
+            <!--<button class="btn btn-default" data-ng-click="deleteFacilityConfirm(facility.id)"><i class="fa fa-trash"></i></button>-->
           </div>
         </div>
       </div>

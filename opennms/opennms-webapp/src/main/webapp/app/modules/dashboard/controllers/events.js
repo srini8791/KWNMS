@@ -34,5 +34,6 @@ function ($rootScope, $scope, $state, $http, $location, dashboardService, Flash)
       );
     }
 
+
 }]);
 

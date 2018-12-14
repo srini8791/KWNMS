@@ -232,7 +232,7 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
           <label for="retries" class="control-label">Retries:</label>
           <input type="text" class="form-control" id="retries" name="retries" value="<%=currConfig.getRetries().orElse(DiscoveryConfigFactory.DEFAULT_RETRIES)%>"/>
         </div> <!-- input-group -->
-        <div class="col-xs-12 input-group">
+        <!-- <div class="col-xs-12 input-group">
           <label for="foreignsource" class="control-label">Foreign Source:</label>
           <select id="foreignsource" class="form-control" name="foreignsource">
             <option value="" <%if (!currConfig.getForeignSource().isPresent()) out.print("selected");%>>None selected</option>
@@ -240,7 +240,9 @@ for (Requisition requisition : reqAccessService.getRequisitions()) {
               <option value="<%=key%>" <%if(key.equals(currConfig.getForeignSource().orElse(null))) out.print("selected");%>><%=foreignsources.get(key)%></option>
             <% } %>
           </select>
-        </div> <!-- input-group -->
+          <input type="hidden" id="foreignsource" name="foreignsource" value=""/>
+        </div> --> <!-- input-group -->
+
         <div class="col-xs-12 input-group">
           <label for="location" class="control-label">Location:</label>
           <select id="location" class="form-control" name="location">

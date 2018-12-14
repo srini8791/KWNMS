@@ -76,7 +76,7 @@
               <div class="card-body">
                   <div class="card events mb-1 border-left event-{{event.severity}}" data-ng-repeat="event in vm.dashboard.events">
                       <div class="card-header">
-                          {{event.ipaddress}}
+                          <a href="" ng-click="showNode(event.nodeId,'app.dashboard')">{{event.ipaddress}}</a>
                          <div class="actions">
                             <span class="text-muted"> {{event.time}}  </span>
                          </div>

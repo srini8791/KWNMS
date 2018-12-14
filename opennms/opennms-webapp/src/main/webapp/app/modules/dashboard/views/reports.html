@@ -68,6 +68,7 @@
                                   <a title="remove" data-ng-click="removeColumn(13)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
                                   <th scope="col" data-ng-show="showColumn(14)">Longitude <span >
                                   <a title="remove" data-ng-click="removeColumn(14)"><i class="fa fa-times-circle" aria-hidden="true"></i></a></span></th>
+                                  <th>#</th>
 
 <!--
                                 <th scope="col" data-ng-show="showColumn(11)">Operation Mode <span >
@@ -78,7 +79,7 @@
                               <tbody class="customtable">
                               <tr data-ng-repeat="node in vm.nodes">
                                 <td data-ng-show="showColumn(0)">{{node.sysName}}</td>
-                                <td data-ng-show="showColumn(1)">{{node.primaryIP}}</td>
+                                <td data-ng-show="showColumn(1)"><a href="" ng-click="showNode(node.id,'app.reports')">{{node.primaryIP}}</a></td>
                                 <td data-ng-show="showColumn(2)">{{node.assetRecord.serialNumber}}</td>
                                 <td data-ng-show="showColumn(3)">{{node.macAddress}}</td>
                                 <td data-ng-show="showColumn(4)">{{node.assetRecord.modelNumber}}</td>
@@ -92,6 +93,14 @@
                                 <td data-ng-show="showColumn(12)">{{node.assetRecord.ethernetSpeed}}</td>
                                 <td data-ng-show="showColumn(13)">{{node.assetRecord.latitude}}</td>
                                 <td data-ng-show="showColumn(14)">{{node.assetRecord.longitude}}</td>
+                                  <td>
+                                  <a href="" ng-click="rescanNode(node.id)" class="badge bage-primary">
+                                  <i class="fa fa-sync"></i>
+                                  </a>
+                                  <a href="" ng-click="deleteConfirm(node.id)" class="badge badge-danger">
+                                      <i class="fa fa-trash"></i>
+                                  </a>
+                                  </td>
                               </tr>
                               </tbody>
                             </table>

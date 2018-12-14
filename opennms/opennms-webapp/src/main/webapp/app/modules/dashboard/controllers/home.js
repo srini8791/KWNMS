@@ -147,6 +147,11 @@ function ($rootScope, $scope, $state, $location, dashboardService, Flash) {
         }
     };
 
+     $scope.showNode = function(nodeId,lastView) {
+        $state.go('app.nodeView',{ "nodeId": nodeId,"lastView":lastView});
+     }
+
+
     // NODES
     vm.dashboard.ptpStatus = [];
     vm.dashboard.ptmpStatus = [];

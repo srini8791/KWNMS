@@ -120,6 +120,7 @@ public class DashboardRestService {
         for (OnmsEvent event : latestEvents) {
             JSONObject eventObj = new JSONObject();
             eventObj.put("id", event.getId());
+            eventObj.put("nodeId", event.getNodeId());
             if (event.getNodeLabel() == null) {
                 String ipAddress = event.getIpAddr() == null ? "" : InetAddressUtils.toIpAddrString(event.getIpAddr());
                 eventObj.put("ipaddress", ipAddress);

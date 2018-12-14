@@ -34,6 +34,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -48,9 +49,12 @@ import org.opennms.core.criteria.restrictions.Restrictions;
 import org.opennms.core.criteria.CriteriaBuilder;
 import org.opennms.netmgt.dao.api.MonitoringLocationDao;
 import org.opennms.netmgt.dao.api.NodeDao;
+import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.events.api.EventProxy;
+import org.opennms.netmgt.events.api.EventProxyException;
 import org.opennms.netmgt.model.OnmsNode;
 import org.opennms.netmgt.model.OnmsNodeList;
+import org.opennms.netmgt.model.events.EventBuilder;
 import org.opennms.netmgt.model.events.EventUtils;
 import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.netmgt.xml.event.Event;
@@ -68,6 +72,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Basic Web Service using REST for {@link OnmsNode} entity
@@ -266,6 +271,26 @@ public class NodeRestService extends AbstractDaoRestService<OnmsNode,SearchBean,
     public Response getActiveNodeCount() {
         return Response.ok(String.valueOf(getDao().getActiveNodeCount())).build();
     }
+
+
+
+    @POST
+    @Path("/rescanNode")
+    public Response rescanNode(@Context SecurityContext securityContext, @Context UriInfo uriInfo,
+                               @RequestBody Integer nodeId) {
+        EventBuilder bldr = new EventBuilder(EventConstants.FORCE_RESCAN_EVENT_UEI, "NodeRescanServlet");
+        bldr.setNodeid(nodeId);
+        bldr.setHost("host");
+
+        try {
+            m_eventProxy.send(bldr.getEvent());
+        } catch (EventProxyException e) {
+            e.printStackTrace();
+        }
+
+        return Response.ok().build();
+    }
+
 
     @GET
     @Path("counts/bychannel")

@@ -26,10 +26,13 @@
                       <td>{{profile.opMode}}</td>
                       <td>{{profile.bandwidth}}</td>
                       <td>{{profile.channel}}</td>
-                      <td><button class="btn btn-default" data-ng-click="deleteConfirm(profile.id)"><i class="fa fa-trash"></i></button></td>
+                       <td><a href="" ng-click="deleteConfirm(profile.id)" class="badge badge-danger">
+                            <i class="fa fa-trash"></i>
+                        </a></td>
+                      <!--<td><button class="btn btn-default" data-ng-click="deleteConfirm(profile.id)"><i class="fa fa-trash"></i></button></td>-->
                     </tr>
                     </tbody>
-                  </table>              
+                  </table>
             </div>
         </div>
         <div class="text-right">

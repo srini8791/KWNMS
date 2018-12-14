@@ -23,7 +23,7 @@
     <!-- dataCard -->
     <div class="card" id="reportCard">
          <div class="card-header bg-info text-white">
-            Sysytem Information
+            System Information
             <div class="actions">
                <span class="badge badge-dark">   Total: {{vm.totalNodesCount}} </span>
                <span class="badge badge-success"> Active: {{vm.activeNodesCount}}  </span>            
@@ -61,7 +61,7 @@
                   <tbody class="customtable">
                      <tr data-ng-repeat="node in vm.nodes">
                         <td>{{node.sysName}}</td>
-                        <td>{{node.primaryIP}}</td>
+                         <td><a href="" ng-click="showNode(node.id,'app.discovery')">{{node.primaryIP}}</a></td>
                         <td>{{node.assetRecord.serialNumber}}</td>
                         <td>{{node.macAddress}}</td>
                         <td>{{node.assetRecord.modelNumber}}</td>

@@ -1,0 +1,136 @@
+<!-- Main content -->
+<section class="content" ng-init="init()">
+
+    <div class="row no-gutter">
+        <div class="col-md-6">
+            <p>Node View</p>
+        </div>
+        <div class="col-md-6 text-right">
+            <a class="badge badge-info" href="" ng-click="rescanNode(vm.node.id)">Rescan</a>
+            <a class="badge badge-info" href="" ng-click="deleteNode(vm.node.id)">Delete Node</a>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white"> System Info </div>
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">MAC Address:</label> {{vm.node.macAddress}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">System Name:</label> {{vm.node.sysName}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">System Location:</label> {{vm.node.sysLocation}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">System Description:</label> {{vm.node.sysDescription}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">Model Number: </label> {{vm.node.assetRecord.modelNumber}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">Serial Number: </label> {{vm.node.assetRecord.serialNumber}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">Latitude: </label> {{vm.node.assetRecord.latitude}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3">Longitude: </label> {{vm.node.assetRecord.longitude}}
+                            <!--<p></p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white"> Wireless Info </div>
+                <div class="card-body">
+                    <div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">SSId: </label> {{vm.node.ssid}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">Radio Mode: </label> {{vm.node.radioMode}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">Operation Mode: </label> {{vm.node.opMode}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">BandWidth: </label> {{vm.node.bandwidth}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">Channel: </label> {{vm.node.channel}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">Frequency: </label> {{vm.node.frequency}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3">Product Type: </label> {{vm.node.productcode}}
+                                <!--<p></p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</section>
+
+
