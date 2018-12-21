@@ -79,32 +79,34 @@ final class NodeInfoScan implements RunInBatch {
     /** {@inheritDoc} */
     @Override
     public void run(BatchTask phase) {
-        
-        phase.getBuilder().addSequence(
-                new RunInBatch() {
-                    @Override
-                    public void run(BatchTask batch) {
-                        collectNodeInfo();
-                    }
-                },new RunInBatch() {
+        if (!m_scanProgress.isAborted()) {
+            phase.getBuilder().addSequence(
+                    new RunInBatch() {
+                        @Override
+                        public void run(BatchTask batch) {
+                            collectNodeInfo();
+                        }
+                    },new RunInBatch() {
 
-                    @Override
-                    public void run(BatchTask batch) {
-                        collectNodeConfigInfo();
-                    }
-                },new RunInBatch() {
+                        @Override
+                        public void run(BatchTask batch) {
+                            collectNodeConfigInfo();
+                        }
+                    },new RunInBatch() {
 
-                    @Override
-                    public void run(BatchTask batch) {
-                        collectInventoryInfo();
-                    }
-                },
-                new RunInBatch() {
-                    @Override
-                    public void run(BatchTask phase) {
-                        doPersistNodeInfo();
-                    }
-                });
+                        @Override
+                        public void run(BatchTask batch) {
+                            collectInventoryInfo();
+                        }
+                    },
+                    new RunInBatch() {
+                        @Override
+                        public void run(BatchTask phase) {
+                            doPersistNodeInfo();
+                        }
+                    });
+        }
+
     }
 
     private InetAddress getAgentAddress() {

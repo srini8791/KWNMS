@@ -69,28 +69,29 @@ public class NodeKwpInfoScan implements RunInBatch {
     @Override
     public void run(BatchTask phase) {
 
-        phase.getBuilder().addSequence(new RunInBatch() {
-            @Override
-            public void run(BatchTask batch) {
-                discoveryKwpService();
-            }
-        }, new RunInBatch() {
-            @Override
-            public void run(BatchTask batch) {
-                retreiveKwpDeviceSysInfo();
-            }
-        }, new RunInBatch() {
-            @Override
-            public void run(BatchTask batch) {
-                retreiveKwpDeviceInventory();
-            }
-        }, new RunInBatch() {
-            @Override
-            public void run(BatchTask batch) {
-                doPersistNodeInfo();
-            }
-        });
-
+        if (!m_scanProgress.isAborted()) {
+            phase.getBuilder().addSequence(new RunInBatch() {
+                @Override
+                public void run(BatchTask batch) {
+                    discoveryKwpService();
+                }
+            }, new RunInBatch() {
+                @Override
+                public void run(BatchTask batch) {
+                    retreiveKwpDeviceSysInfo();
+                }
+            }, new RunInBatch() {
+                @Override
+                public void run(BatchTask batch) {
+                    retreiveKwpDeviceInventory();
+                }
+            }, new RunInBatch() {
+                @Override
+                public void run(BatchTask batch) {
+                    doPersistNodeInfo();
+                }
+            });
+        }
     }
 
     private void discoveryKwpService() {

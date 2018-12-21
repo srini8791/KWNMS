@@ -65,6 +65,7 @@ public class IpInterfaceScan implements RunInBatch {
     private final Integer m_nodeId;
     private final String m_foreignSource;
     private final OnmsMonitoringLocation m_location;
+    private boolean m_continueTask = true;
 
     /**
      * <p>Constructor for IpInterfaceScan.</p>
@@ -81,6 +82,16 @@ public class IpInterfaceScan implements RunInBatch {
         m_foreignSource = foreignSource;
         m_location = location;
         m_provisionService = provisionService;
+
+    }
+
+    public IpInterfaceScan(final Integer nodeId, final InetAddress address, final String foreignSource, final OnmsMonitoringLocation location, final ProvisionService provisionService,boolean continueTask) {
+        m_nodeId = nodeId;
+        m_address = address;
+        m_foreignSource = foreignSource;
+        m_location = location;
+        m_provisionService = provisionService;
+        m_continueTask = continueTask;
     }
 
     /**
@@ -197,14 +208,16 @@ public class IpInterfaceScan implements RunInBatch {
     /** {@inheritDoc} */
     @Override
     public void run(final BatchTask currentPhase) {
-        // This call returns a collection of new ServiceDetector instances
-        final Collection<PluginConfig> detectorConfigs = getProvisionService().getDetectorsForForeignSource(getForeignSource() == null ? "default" : getForeignSource());
+        if (m_continueTask) {
+            // This call returns a collection of new ServiceDetector instances
+            final Collection<PluginConfig> detectorConfigs = getProvisionService().getDetectorsForForeignSource(getForeignSource() == null ? "default" : getForeignSource());
 
-        LOG.info("Detecting services for node {}/{} on address {}: found {} detectors", getNodeId(), getForeignSource(), str(getAddress()), detectorConfigs.size());
+            LOG.info("Detecting services for node {}/{} on address {}: found {} detectors", getNodeId(), getForeignSource(), str(getAddress()), detectorConfigs.size());
 
-        for (final PluginConfig detectorConfig : detectorConfigs) {
-            if (shouldDetect(detectorConfig, getAddress())) {
-                currentPhase.add(createDetectorTask(currentPhase, getProvisionService(), detectorConfig, getNodeId(), getAddress(), getLocation()));
+            for (final PluginConfig detectorConfig : detectorConfigs) {
+                if (shouldDetect(detectorConfig, getAddress())) {
+                    currentPhase.add(createDetectorTask(currentPhase, getProvisionService(), detectorConfig, getNodeId(), getAddress(), getLocation()));
+                }
             }
         }
     }

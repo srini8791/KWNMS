@@ -83,6 +83,7 @@ public class NodeScan implements Scan {
 
     private OnmsNode m_node;
     private boolean m_agentFound = false;
+    private boolean m_continueTask = true;
 
     /**
      * <p>Constructor for NodeScan.</p>
@@ -96,7 +97,8 @@ public class NodeScan implements Scan {
      * @param agentConfigFactory a {@link org.opennms.netmgt.config.api.SnmpAgentConfigFactory} object.
      * @param taskCoordinator a {@link org.opennms.core.tasks.TaskCoordinator} object.
      */
-    public NodeScan(final Integer nodeId, final String foreignSource, final String foreignId, final OnmsMonitoringLocation location, final ProvisionService provisionService, final EventForwarder eventForwarder, final SnmpAgentConfigFactory agentConfigFactory, final TaskCoordinator taskCoordinator) {
+    public NodeScan(final Integer nodeId, final String foreignSource, final String foreignId, final OnmsMonitoringLocation location,
+                    final ProvisionService provisionService, final EventForwarder eventForwarder, final SnmpAgentConfigFactory agentConfigFactory, final TaskCoordinator taskCoordinator) {
         m_nodeId = nodeId;
         m_foreignSource = foreignSource;
         m_foreignId = foreignId;
@@ -107,6 +109,32 @@ public class NodeScan implements Scan {
         m_agentConfigFactory = agentConfigFactory;
         m_taskCoordinator = taskCoordinator;
 
+    }
+
+    /**
+     * <p>Constructor for NodeScan.</p>
+     *
+     * @param nodeId a {@link java.lang.Integer} object.
+     * @param foreignSource a {@link java.lang.String} object.
+     * @param foreignId a {@link java.lang.String} object.
+     * @param location a {@link org.opennms.netmgt.model.monitoringLocation.OnmsMonitoringLocation} object.
+     * @param provisionService a {@link org.opennms.netmgt.provision.service.ProvisionService} object.
+     * @param eventForwarder a {@link org.opennms.netmgt.events.api.EventForwarder} object.
+     * @param agentConfigFactory a {@link org.opennms.netmgt.config.api.SnmpAgentConfigFactory} object.
+     * @param taskCoordinator a {@link org.opennms.core.tasks.TaskCoordinator} object.
+     */
+    public NodeScan(final Integer nodeId, final String foreignSource, final String foreignId, final OnmsMonitoringLocation location,
+                    final ProvisionService provisionService, final EventForwarder eventForwarder, final SnmpAgentConfigFactory agentConfigFactory, final TaskCoordinator taskCoordinator, final boolean continueTask) {
+        m_nodeId = nodeId;
+        m_foreignSource = foreignSource;
+        m_foreignId = foreignId;
+        m_location = location;
+        m_scanStamp = new Date();
+        m_provisionService = provisionService;
+        m_eventForwarder = eventForwarder;
+        m_agentConfigFactory = agentConfigFactory;
+        m_taskCoordinator = taskCoordinator;
+        m_continueTask = continueTask;
     }
 
     /**
@@ -245,35 +273,36 @@ public class NodeScan implements Scan {
     @Override
     public void run(final BatchTask parent) {
         LOG.info("Scanning node {}/{}/{}", m_nodeId, m_foreignSource, m_foreignId);
-
-        parent.getBuilder().addSequence(
-                                        new RunInBatch() {
-                                            @Override
-                                            public void run(final BatchTask phase) {
-                                                loadNode(phase);
-                                            }
-                                        },
-                                        new RunInBatch() {
-                                            @Override
-                                            public void run(final BatchTask phase) {
-                                                detectAgents(phase);
-                                            }
-                                        },
-                                        new RunInBatch() {
-                                            @Override
-                                            public void run(final BatchTask phase) {
-                                                handleAgentUndetected(phase);
-                                            }
-                                        },
-                                        new RunInBatch() {
-                                            @Override
-                                            public void run(final BatchTask phase) {
-                                                scanCompleted(phase);
-                                            }
-                                        }
-                );
-
-
+        if (m_continueTask) {
+            parent.getBuilder().addSequence(
+                    new RunInBatch() {
+                        @Override
+                        public void run(final BatchTask phase) {
+                            loadNode(phase);
+                        }
+                    },
+                    new RunInBatch() {
+                        @Override
+                        public void run(final BatchTask phase) {
+                            detectAgents(phase);
+                        }
+                    },
+                    new RunInBatch() {
+                        @Override
+                        public void run(final BatchTask phase) {
+                            handleAgentUndetected(phase);
+                        }
+                    },
+                    new RunInBatch() {
+                        @Override
+                        public void run(final BatchTask phase) {
+                            scanCompleted(phase);
+                        }
+                    }
+            );
+        } else {
+            abort("Ignoring scan due to non Keywest device");
+        }
     }
 
 
