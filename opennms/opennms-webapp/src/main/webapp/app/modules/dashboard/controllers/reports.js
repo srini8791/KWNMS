@@ -75,6 +75,7 @@ dashboard.controller("ReportsController", ['$rootScope', '$scope', '$mdDialog','
                  }).then(function(response) {
                      console.log(response.data);
                      $scope.message = response.data;
+                     $scope.loadNodes();
                  }, function(response) {
                      //fail case
                      console.log(response);

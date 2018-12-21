@@ -31,7 +31,7 @@
       <event-label>OpenNMS-defined internal event: discovery newSuspect</event-label>
       <descr>&lt;p>Interface %interface% has been discovered and is
             being queued for a services scan.&lt;/p></descr>
-      <logmsg dest="logndisplay">
+      <logmsg dest="logonly">
             A new interface (%interface%) has been discovered and is
             being queued for a services scan.
         </logmsg>

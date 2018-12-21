@@ -99,14 +99,14 @@ public class NewSuspectScan implements Scan {
 		
         final OnmsNode node = m_provisionService.createUndiscoveredNode(addrString, m_foreignSource, m_location);
 
-
+        ScanProgress progress = createScanProgress();
         if (node != null) {
-
         	phase.getBuilder().addSequence(
-        			new NodeInfoScan(node, m_ipAddress, null, node.getLocation(), createScanProgress(), m_agentConfigFactory, m_provisionService, null),
-        			new NodeKwpInfoScan(node,m_ipAddress,null,node.getLocation(),createScanProgress(),m_provisionService,null),
-        			new IpInterfaceScan(node.getId(), m_ipAddress, null, node.getLocation(), m_provisionService),
-				new NodeScan(node.getId(), null, null, node.getLocation(), m_provisionService, m_eventForwarder, m_agentConfigFactory, m_taskCoordinator),
+                    new NodeKWPDiscoveryScan(node, m_ipAddress, null, node.getLocation(), progress, m_agentConfigFactory, m_provisionService, null),
+        			new NodeInfoScan(node, m_ipAddress, null, node.getLocation(), progress, m_agentConfigFactory, m_provisionService, null),
+        			new NodeKwpInfoScan(node,m_ipAddress,null,node.getLocation(),progress,m_provisionService,null),
+        			new IpInterfaceScan(node.getId(), m_ipAddress, null, node.getLocation(), m_provisionService,progress.isAborted() ? false : true),
+				new NodeScan(node.getId(), null, null, node.getLocation(), m_provisionService, m_eventForwarder, m_agentConfigFactory, m_taskCoordinator,progress.isAborted() ? false : true),
 				new RunInBatch() {
 					@Override
 					public void run(BatchTask batch) {

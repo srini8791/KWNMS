@@ -3,7 +3,7 @@
       <uei>uei.opennms.org/provisioner/provisioningAdapterFailed</uei>
       <event-label>OpenNMS-defined Provisioning Adapter Failed message</event-label>
       <descr>A provisioning adapter failed for host %host% with the following condition: %parm[reason]%.&lt;p></descr>
-      <logmsg dest="logndisplay">
+      <logmsg dest="logonly">
             &lt;p>A provisioning adapter failed for host.&lt;/p>
         </logmsg>
       <severity>Major</severity>
@@ -28,7 +28,7 @@
       <descr>A message from the Provisiond NodeScan lifecycle that a NodeScan has Aborted:
             &lt;p>The Node with Id: %nodeid%; ForeignSource: %parm[foreignSource]%; ForeignId:%parm[foreignId]% has
             aborted for the following reason: %parm[reason]% &lt;/p></descr>
-      <logmsg dest="logndisplay">
+      <logmsg dest="logonly">
             &lt;p>The Node with Id: %nodeid%; ForeignSource: %parm[foreignSource]%; ForeignId:%parm[foreignId]% has
             aborted.&lt;/p>
         </logmsg>

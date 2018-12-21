@@ -31,7 +31,7 @@ dashboard.controller("NodeViewController", ['$rootScope', '$scope','$mdDialog', 
             data: node
           }).success(function() {
             $scope.showAlert('success', 'Rescanning of the node initiated');
-             $state.go($state.params.lastView);
+            //$state.go($state.params.lastView);
           }).error(function(msg) {
             $scope.showAlert('error', 'Cannot apply the profile: ' + msg);
           });
@@ -90,9 +90,16 @@ dashboard.controller("NodeViewController", ['$rootScope', '$scope','$mdDialog', 
               .cancel('No');
 
         return confirm;
-       /* $mdDialog.show(confirm).then(function() {
-          $scope.deleteNode(nodeId);
-        });*/
+      };
+
+      $scope.confirm = function(nodeId, ev) {
+          var confirm = $mdDialog.confirm()
+                .title('Are you sure you want to delete this Node?')
+                .targetEvent(ev)
+                .ok('Yes');
+
+
+          return confirm;
       };
 
 

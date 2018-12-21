@@ -1335,8 +1335,8 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
                 iface.setIsSnmpPrimary(PrimaryType.NOT_ELIGIBLE);
                 iface.setIpLastCapsdPoll(now);
 
-                m_nodeDao.save(node);
-                m_nodeDao.flush();
+                //m_nodeDao.save(node);
+                //m_nodeDao.flush();
                 return node;
             }
         }.execute();
@@ -1349,11 +1349,20 @@ public class DefaultProvisionService implements ProvisionService, InitializingBe
 
             // we do this here rather than in the doInsert method because
             // the doInsert may abort
-            node.visit(new AddEventVisitor(m_eventForwarder));
+            //node.visit(new AddEventVisitor(m_eventForwarder));
         }
 
         return node;
 
+    }
+
+    public void addNodeVisitor(OnmsNode node) {
+        if (node != null) {
+
+            // we do this here rather than in the doInsert method because
+            // the doInsert may abort
+            node.visit(new AddEventVisitor(m_eventForwarder));
+        }
     }
 
     private boolean createUpdateRequistion(final String addrString, final OnmsNode node, final String locationName, String m_foreignSource) {
