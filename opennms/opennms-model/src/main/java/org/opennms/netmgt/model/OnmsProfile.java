@@ -74,6 +74,14 @@ public class OnmsProfile implements Serializable {
     @Column(name = "channel")
     private String m_channel;
 
+    @XmlAttribute(name = "nmsserveraddress")
+    @Column(name = "nmsserveraddress")
+    private String m_nmsServerAddress;
+
+    @XmlAttribute(name = "tftpserveraddress")
+    @Column(name = "tftpserveraddress")
+    private String m_tftpServerAddress;
+
     @XmlAttribute(name = "minimumFirmware")
     @Column(name = "min_firmware")
     private String m_minimumFirmware;
@@ -212,6 +220,44 @@ public class OnmsProfile implements Serializable {
     public void setChannel(String channel) {
         this.m_channel = channel;
     }
+
+    /**
+     * <p>getNmsServerAddress</p>
+     *
+     * @return a {@link Integer} object.
+     */
+    public String getNmsServerAddress() {
+        return m_nmsServerAddress;
+    }
+
+    /**
+     * <p>setNmsServerAddress</p>
+     *
+     * @param channel a {@link Integer} object.
+     */
+    public void setNmsServerAddress(String nmsServerAddress) {
+        this.m_nmsServerAddress = nmsServerAddress;
+    }
+
+
+    /**
+     * <p>setNmsServerAddress</p>
+     *
+     * @param channel a {@link Integer} object.
+     */
+    public void setTftpServerAddress(String tftpServerAddress) {
+        this.m_tftpServerAddress = tftpServerAddress;
+    }
+
+    /**
+     * <p>getNmsServerAddress</p>
+     *
+     * @return a {@link Integer} object.
+     */
+    public String getTftpServerAddress() {
+        return m_tftpServerAddress;
+    }
+
 
     /**
      * <p>getMinimumFirmware</p>

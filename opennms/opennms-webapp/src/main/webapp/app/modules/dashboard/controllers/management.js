@@ -285,7 +285,9 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     'opMode': '',
     'bandwidth': '',
     'channel': '',
-    'minimumFirmware': ''
+    'minimumFirmware': '',
+    'nmsServerAddress':'',
+    'tftpServerAddress':''
   };
   $scope.nodeProfile = {};
   $scope.profileToApply = '';

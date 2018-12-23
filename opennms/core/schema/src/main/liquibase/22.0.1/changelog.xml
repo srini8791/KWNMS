@@ -288,6 +288,12 @@
       <column name="min_firmware" type="text">
         <constraints nullable="true" />
       </column>
+      <column name="nmsserveraddress" type="varchar(20)">
+            <constraints nullable="true" />
+      </column>
+      <column name="tftpserveraddress" type="varchar(20)">
+            <constraints nullable="true" />
+      </column>
       <column name="filepath" type="text">
         <constraints nullable="true" />
       </column>
