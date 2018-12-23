@@ -56,11 +56,15 @@ function ($rootScope, $scope, $http, $state, $location, Flash,appSettings) {
             sub: [{
                 title: "Regions",
                 state: "regions"
-
             },
             {
                 title: "Users",
                 state: "users"
+
+            },
+            {
+                title: "Config",
+                state: "config"
 
             }]
         }

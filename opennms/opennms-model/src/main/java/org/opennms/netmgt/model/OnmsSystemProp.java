@@ -53,11 +53,11 @@ public class OnmsSystemProp implements Serializable {
     @XmlAttribute(name = "id")
     private Integer m_id;
 
-    @XmlAttribute(name = "propkey")
+    @XmlAttribute(name = "key")
     @Column(name = "propkey", nullable = false, unique = true)
     private String m_key;
 
-    @XmlAttribute(name = "propvalue")
+    @XmlAttribute(name = "value")
     @Column(name = "propvalue", nullable = false, unique = true)
     private String m_value;
 

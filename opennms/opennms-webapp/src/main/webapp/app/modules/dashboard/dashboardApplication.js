@@ -69,6 +69,17 @@ dashboard.config(["$stateProvider", function ($stateProvider) {
         }
     });
 
+     //Settings page state
+     $stateProvider.state('app.config', {
+        url: '/config',
+        templateUrl: 'app/modules/dashboard/views/config.html',
+        controller: 'ConfigController',
+        controllerAs: 'vm',
+        data: {
+            pageTitle: 'Configuration'
+        }
+    });
+
     //reports page state
     $stateProvider.state('app.reports', {
         url: '/reports',

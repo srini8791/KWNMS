@@ -1,0 +1,90 @@
+﻿<!-- Main content -->
+<section class="content" id="popupContainer" data-ng-init="init()">
+    <div class="row no-gutter">
+      <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">System Properties</div>
+            <div class="card-body">
+                <table class="profiles-table table table-striped">
+                    <thead class="thead-light">
+                    <tr>
+                      <!--<th scope="col">&nbsp;</th>-->
+                      <th scope="col" style="text-align:left">Property Name</th>
+                      <th scope="col" style="text-align:left">Property Value</th>
+                      <th scope="col">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody class="customtable">
+                    <tr ng-repeat="prop in systemProperties">
+                      <td>{{ prop.key }}</td>
+                      <td>{{ prop.value }}</td>
+                       <td>
+                         <a href="" ng-click="deletePropertyConfirm(prop.id)" class="badge badge-danger"><i class="fa fa-trash"></i></a>
+                         &nbsp;
+                         <a href="" ng-click="editSystemProperty(prop.id)" class="badge badge-danger"><i class="fa fa-edit"></i></a>
+                       </td>
+                      <!--<td><button class="btn btn-default" data-ng-click="deleteConfirm(profile.id)"><i class="fa fa-trash"></i></button></td>-->
+                    </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <div class="text-right">
+            <a href="#" ng-click="tab = 1" class="btn btn-default"> <i class="fa fa-plus-circle"></i>Create Property</a>
+        </div>
+      </div> 
+
+
+
+      <div class="col-md-6">        
+          <div class="card" ng-show="tab==1">
+              <div class="card-header bg-info text-white">Create Property</div>
+              <div class="card-body">
+                  <form method="post" name="propForm" novalidate>
+                      <div class="form-group">
+                        <div class="row">
+                          <label for="input_propKey" class="col-sm-4 control-label">Property Key</label>
+                          <input class="form-control" id="input_propKey" ng-model="newSystemProperty.key" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="row">
+                          <label for="input_propValue" class="col-sm-4 control-label">Property Value</label>
+                          <input class="form-control" id="input_propValue" ng-model="newSystemProperty.value" />
+                        </div>
+                      </div>
+                    </form>
+              </div>
+              <div class="card-footer text-center">
+                <button type="button" class="btn btn-default" ng-click="saveSystemProperty()" id="save-prop" ng-disabled="propForm.$invalid">
+                  Create Property&nbsp;&nbsp;&nbsp;<span class="fa fa-plus-circle"></span>
+                </button>
+              </div>
+          </div>
+        <div class="card" ng-show="tab==2">
+          <div class="card-header bg-info text-white">Edit Property</div>
+          <div class="card-body">
+            <form method="post" name="propEditForm" novalidate>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_editPropKey" class="col-sm-4 control-label">Property Key</label>
+                  <input class="form-control" id="input_editPropKey" ng-model="currentSystemProperty.key" />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label for="input_editPropValue" class="col-sm-4 control-label">Property Value</label>
+                  <input class="form-control" id="input_editPropValue" ng-model="currentSystemProperty.value" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer text-center">
+            <button type="button" class="btn btn-default" ng-click="updateSystemProperty(currentSystemProperty.id)" id="update-prop" ng-disabled="propEditForm.$invalid">
+              Update Property&nbsp;&nbsp;&nbsp;<span class="fa fa-plus-circle"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
