@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2006-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,40 +26,42 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.rest.support;
+package org.opennms.netmgt.dao.api;
 
+import org.opennms.netmgt.model.OnmsSystemProp;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
 /**
- * This enum contains well-known aliases for search terms that should be
- * reused by different RESTv2 services for consistency.
- * 
- * @author Seth
+ * <p>SystemPropDao interface.</p>
  */
-public enum Aliases {
-    alarm,
-    assetRecord,
-    category,
-    distPoller,
-    event,
-    eventParameter,
-    ipInterface,
-    location,
-    memo,
-    monitoredService,
-    node,
-    notification,
-    outage,
-    profile,
-    reductionKeyMemo,
-    region,
-    systemProp,
-    facility,
-    serviceType,
-    snmpInterface;
+public interface SystemPropDao extends OnmsDao<OnmsSystemProp, Integer> {
 
-    public String prop(String propertyName) {
-        return new StringBuilder(this.toString())
-            .append(".")
-            .append(propertyName)
-            .toString(); 
-    }
+    /**
+     * Get a system property based on it's ID
+     *
+     * @param propId property identifier
+     * @return the SystemProp
+     */
+    @Override
+    OnmsSystemProp get(Integer propId);
+
+    /**
+     * Returns a list of properties ordered by key.
+     *
+     * @return a {@link List} of {@link OnmsSystemProp} objects.
+     */
+    @Override
+    List<OnmsSystemProp> findAll();
+
+    /**
+     * Get a system property based on it's key
+     *
+     * @param propKey property key
+     * @return the SystemProp
+     */
+    OnmsSystemProp get(String propKey);
+
 }

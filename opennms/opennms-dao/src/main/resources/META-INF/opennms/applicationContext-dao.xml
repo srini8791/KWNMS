@@ -235,6 +235,12 @@
 
   <onmsgi:service interface="org.opennms.netmgt.dao.api.RegionDao" ref="regionDao" />
 
+  <bean id="systemPropDao" class="org.opennms.netmgt.dao.hibernate.SystemPropDaoHibernate">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+  <onmsgi:service interface="org.opennms.netmgt.dao.api.SystemPropDao" ref="systemPropDao" />
+
   <bean id="facilityDao" class="org.opennms.netmgt.dao.hibernate.FacilityDaoHibernate">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>

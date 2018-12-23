@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
+ * Copyright (C) 2008-2014 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,40 +26,31 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.web.rest.support;
+package org.opennms.netmgt.model;
 
-/**
- * This enum contains well-known aliases for search terms that should be
- * reused by different RESTv2 services for consistency.
- * 
- * @author Seth
- */
-public enum Aliases {
-    alarm,
-    assetRecord,
-    category,
-    distPoller,
-    event,
-    eventParameter,
-    ipInterface,
-    location,
-    memo,
-    monitoredService,
-    node,
-    notification,
-    outage,
-    profile,
-    reductionKeyMemo,
-    region,
-    systemProp,
-    facility,
-    serviceType,
-    snmpInterface;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonRootName;
+import org.opennms.core.config.api.JaxbListWrapper;
 
-    public String prop(String propertyName) {
-        return new StringBuilder(this.toString())
-            .append(".")
-            .append(propertyName)
-            .toString(); 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Collection;
+import java.util.List;
+
+@XmlRootElement(name = "systemprops")
+@JsonRootName("systemprops")
+public class OnmsSystemPropList extends JaxbListWrapper<OnmsSystemProp> {
+    private static final long serialVersionUID = 1L;
+
+    public OnmsSystemPropList() { super(); }
+
+    public OnmsSystemPropList(final Collection<? extends OnmsSystemProp> nodes) {
+        super(nodes);
+    }
+
+    @XmlElement(name="systemprop")
+    @JsonProperty("systemprop")
+    public List<OnmsSystemProp> getObjects() {
+        return super.getObjects();
     }
 }
