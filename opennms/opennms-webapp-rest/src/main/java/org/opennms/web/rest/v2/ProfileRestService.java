@@ -36,6 +36,7 @@ import org.opennms.core.utils.InetAddressUtils;
 import org.opennms.netmgt.config.SnmpConfigAccessService;
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.dao.api.ProfileDao;
+import org.opennms.netmgt.dao.api.SystemPropDao;
 import org.opennms.netmgt.events.api.EventConstants;
 import org.opennms.netmgt.events.api.EventProxy;
 import org.opennms.netmgt.model.*;
@@ -91,6 +92,9 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
 
     @Autowired
     private NodeDao nodeDao;
+
+    @Autowired
+    private SystemPropDao propDao;
 
     @Autowired
     private LocationAwareSnmpClient m_locationAwareSnmpClient;
@@ -372,6 +376,19 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
         return Response.ok().build();
     }
 
+
+    @GET
+    @Path("/serveraddress")
+    @Transactional
+    public Response serverAddress(@Context final SecurityContext securityContext, @Context final UriInfo uriInfo) {
+        OnmsSystemProp property = propDao.get("serveraddress");
+        String response = "";
+        if (property != null) {
+            response = property.getValue();
+        }
+        return Response.ok(response).build();
+    }
+
     private CompletableFuture<SnmpValue> asynRerun(final SnmpAgentConfig config) {
         SnmpObjId statusOid = SnmpObjId.get(".1.3.6.1.4.1.52619.1.2.5.4.0");
         CompletableFuture<SnmpValue> future = m_locationAwareSnmpClient.get(config,statusOid).execute();
@@ -394,6 +411,8 @@ public class ProfileRestService extends AbstractDaoRestService<OnmsProfile, Sear
             return response;
         }
     }
+
+
 
     @POST
     @Path("/{nodeId}/testprofile")
