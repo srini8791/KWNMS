@@ -6,8 +6,8 @@
                <p>Discovery Management</p>
          </div>
          <div class="col-md-6 text-right">
-               <a class="badge badge-info"  href="/opennms/admin/discovery/edit-config-2.jsp">Open Discovery Configuration</a>
-               <a class="badge badge-info" href="/opennms/admin/snmpConfig?action=default">Open SNMP Configuration</a>
+               <a class="badge badge-info-thin"  href="/opennms/admin/discovery/edit-config-2.jsp">Open Discovery Configuration</a>
+               <a class="badge badge-info-thin" href="/opennms/admin/snmpConfig?action=default">Open SNMP Configuration</a>
          </div>
       </div>
      
@@ -60,18 +60,18 @@
                   </thead>
                   <tbody class="customtable">
                      <tr data-ng-repeat="node in vm.nodes">
-                        <td>{{node.sysName}}</td>
-                         <td><a href="" ng-click="showNode(node.id,'app.discovery')">{{node.primaryIP}}</a></td>
-                        <td>{{node.assetRecord.serialNumber}}</td>
-                        <td>{{node.macAddress}}</td>
-                        <td>{{node.assetRecord.modelNumber}}</td>
-                        <td>{{node.assetRecord.firmware}}</td>
-                        <td>{{node.productcode}}</td>
-                        <td>{{node.channel}}</td>
-                        <td>{{node.bandwidth}}</td>
-                        <td>{{node.assetRecord.ethernetSpeed}}</td>
-                        <td>{{node.assetRecord.ioBandwidthLimit}}</td>
-                        <td>{{node.opMode}}</td>
+                        <td align="center">{{node.sysName}}</td>
+                         <td align="center"><a href="" ng-click="showNode(node.id,'app.discovery')">{{node.primaryIP}}</a></td>
+                        <td align="center">{{node.assetRecord.serialNumber}}</td>
+                        <td align="center">{{node.macAddress}}</td>
+                        <td align="center">{{node.assetRecord.modelNumber}}</td>
+                        <td align="center">{{node.assetRecord.firmware}}</td>
+                        <td align="center">{{node.productcode}}</td>
+                        <td align="center">{{node.channel}}</td>
+                        <td align="center">{{node.bandwidth}}</td>
+                        <td align="center">{{node.assetRecord.ethernetSpeed}}</td>
+                        <td align="center">{{node.assetRecord.ioBandwidthLimit}}</td>
+                        <td align="center">{{node.opMode}}</td>
                      </tr>
                   </tbody>
                </table>

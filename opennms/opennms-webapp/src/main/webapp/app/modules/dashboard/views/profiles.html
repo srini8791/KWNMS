@@ -21,12 +21,12 @@
                     <tbody class="customtable">
                     <tr ng-repeat="profile in profiles">
                       <!--<td><input type="checkbox" value="{{profile.id}}"/></td>-->
-                      <td>{{profile.name}}</td>
-                      <td>{{profile.ssid}}</td>
-                      <td>{{profile.opMode}}</td>
-                      <td>{{profile.bandwidth}}</td>
-                      <td>{{profile.channel}}</td>
-                       <td><a href="" ng-click="deleteConfirm(profile.id)" class="badge badge-danger">
+                      <td align="center">{{profile.name}}</td>
+                      <td align="center">{{profile.ssid}}</td>
+                      <td align="center">{{profile.opMode}}</td>
+                      <td align="center">{{profile.bandwidth}}</td>
+                      <td align="center">{{profile.channel}}</td>
+                       <td align="center"><a href="" ng-click="deleteConfirm(profile.id)" class="badge badge-danger">
                             <i class="fa fa-trash"></i>
                         </a></td>
                       <!--<td><button class="btn btn-default" data-ng-click="deleteConfirm(profile.id)"><i class="fa fa-trash"></i></button></td>-->
@@ -102,7 +102,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group">
+                     <!-- <div class="form-group">
                           <div class="row">
                               <label for="input_channel" class="col-sm-4 control-label">NMS Server Address</label>
                               <div class="col-sm-8">
@@ -117,7 +117,7 @@
                                   <input id="input_tftpServerAddress" name="tftpServerAddress" ng-model="newProfile.tftpServerAddress" class="form-control" />
                               </div>
                           </div>
-                      </div>
+                      </div>-->
                       <div class="form-group">
                         <div class="row">
                           <label for="input_minimumFirmware" class="col-sm-4 control-label">Minimum Firmware Version</label>

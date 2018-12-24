@@ -54,10 +54,10 @@
                         </thead>
                         <tbody class="customtable">
                           <tr data-ng-repeat="event in vm.events">
-                            <td class="events border-left event-{{ event.severity }}">{{ event.id }}</td>
-                            <td>{{ event.severity }}</td>
-                            <td>{{ event.time | date: 'yyyy-MM-dd HH:mm:ss.sss' }}</td>
-                            <td>{{ event.nodeLabel && event.nodeLabel || event.ipAddress }}</td>
+                            <td class="events border-left event-{{ event.severity }}" align="center">{{ event.id }}</td>
+                            <td align="center">{{ event.severity }}</td>
+                            <td align="center">{{ event.time | date: 'yyyy-MM-dd HH:mm:ss.sss' }}</td>
+                            <td align="center">{{ event.nodeLabel && event.nodeLabel || event.ipAddress }}</td>
                             <td>{{ event.logMessage }}</td>
                           </tr>
                         </tbody>

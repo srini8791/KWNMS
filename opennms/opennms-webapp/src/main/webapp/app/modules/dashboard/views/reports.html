@@ -78,21 +78,21 @@
                               </thead>
                               <tbody class="customtable">
                               <tr data-ng-repeat="node in vm.nodes">
-                                <td data-ng-show="showColumn(0)">{{node.sysName}}</td>
-                                <td data-ng-show="showColumn(1)"><a href="" ng-click="showNode(node.id,'app.reports')">{{node.primaryIP}}</a></td>
-                                <td data-ng-show="showColumn(2)">{{node.assetRecord.serialNumber}}</td>
-                                <td data-ng-show="showColumn(3)">{{node.macAddress}}</td>
-                                <td data-ng-show="showColumn(4)">{{node.assetRecord.modelNumber}}</td>
-                                <td data-ng-show="showColumn(5)">{{node.assetRecord.firmware}}</td>
-                                <td data-ng-show="showColumn(6)">{{node.productcode}}</td>
-                                <td data-ng-show="showColumn(7)">{{node.radioMode}}</td>
-                                <td data-ng-show="showColumn(8)">{{node.opMode}}</td>
-                                <td data-ng-show="showColumn(9)">{{node.bandwidth}}</td>
-                                <td data-ng-show="showColumn(10)">{{node.channel}}</td>
-                                <td data-ng-show="showColumn(11)">{{node.frequency}}</td>
-                                <td data-ng-show="showColumn(12)">{{node.assetRecord.ethernetSpeed}}</td>
-                                <td data-ng-show="showColumn(13)">{{node.assetRecord.latitude}}</td>
-                                <td data-ng-show="showColumn(14)">{{node.assetRecord.longitude}}</td>
+                                <td data-ng-show="showColumn(0)" align="center">{{node.sysName}}</td>
+                                <td data-ng-show="showColumn(1)" align="center"><a href="" ng-click="showNode(node.id,'app.reports')">{{node.primaryIP}}</a></td>
+                                <td data-ng-show="showColumn(2)" align="center">{{node.assetRecord.serialNumber}}</td>
+                                <td data-ng-show="showColumn(3)" align="center">{{node.macAddress}}</td>
+                                <td data-ng-show="showColumn(4)" align="center">{{node.assetRecord.modelNumber}}</td>
+                                <td data-ng-show="showColumn(5)" align="center">{{node.assetRecord.firmware}}</td>
+                                <td data-ng-show="showColumn(6)" align="center">{{node.productcode}}</td>
+                                <td data-ng-show="showColumn(7)" align="center">{{node.radioMode}}</td>
+                                <td data-ng-show="showColumn(8)" align="center">{{node.opMode}}</td>
+                                <td data-ng-show="showColumn(9)" align="center">{{node.bandwidth}}</td>
+                                <td data-ng-show="showColumn(10)" align="center">{{node.channel}}</td>
+                                <td data-ng-show="showColumn(11)" align="center">{{node.frequency}}</td>
+                                <td data-ng-show="showColumn(12)" align="center">{{node.assetRecord.ethernetSpeed}}</td>
+                                <td data-ng-show="showColumn(13)" align="center">{{node.assetRecord.latitude}}</td>
+                                <td data-ng-show="showColumn(14)" align="center">{{node.assetRecord.longitude}}</td>
                                   <td>
                                   <a href="" ng-click="rescanNode(node.id)" class="badge bage-primary">
                                   <i class="fa fa-sync"></i>

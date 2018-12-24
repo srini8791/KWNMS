@@ -74,11 +74,11 @@ public class OnmsProfile implements Serializable {
     @Column(name = "channel")
     private String m_channel;
 
-    @XmlAttribute(name = "nmsserveraddress")
+    @XmlAttribute(name = "nmsServerAddress")
     @Column(name = "nmsserveraddress")
     private String m_nmsServerAddress;
 
-    @XmlAttribute(name = "tftpserveraddress")
+    @XmlAttribute(name = "tftpServerAddress")
     @Column(name = "tftpserveraddress")
     private String m_tftpServerAddress;
 

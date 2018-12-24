@@ -8,6 +8,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
     $scope.vm.nodes = [];
     $scope.vm.totalNodesCount = 0;
     $scope.vm.activeNodesCount = 0;
+    $scope.vm.serveraddress = '';
 
     // variables related to map
     // start
@@ -19,6 +20,7 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
 
 
     $scope.init = function() {
+      //$scope.getServerAddress();
       $scope.loadProfiles();
       $scope.buildTree();
       $scope.loadAllNodes();
@@ -292,6 +294,17 @@ dashboard.controller("ManagementController", ['$rootScope', '$scope', '$mdDialog
   $scope.nodeProfile = {};
   $scope.profileToApply = '';
   $scope.nodesToApply = [];
+
+  $scope.getServerAddress = function() {
+      /*var paramObj = { 'params': {'limit': 0} };*/
+      $http.get('api/v2/profiles/serveraddress')
+        .success(function(result) {
+          $scope.vm.serveraddress = result;
+        });
+        /*.error(function(msg) {
+          $scope.showAlert('error', msg);
+        });*/
+    };
 
   $scope.loadProfiles = function() {
     var paramObj = { 'params': {'limit': 0} };

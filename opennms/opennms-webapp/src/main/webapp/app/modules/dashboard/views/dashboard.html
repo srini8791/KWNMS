@@ -7,21 +7,21 @@
           <div class="card">
               <div class="card-body">
                   <div class="row">
-                    <div class="col-md-2">
+                    <div class="text-danger col-md-2">
                         <p> Outage</p>
-                        <h3 class="text-warning">{{ vm.dashboard.outagesCount }}</h3>
+                        <h3 class="text-danger">{{ vm.dashboard.outagesCount }}</h3>
                     </div>
-                    <div class="col-md-2">
+                    <div class="text-secondary col-md-2">
                         <p> Disconnected</p>
-                        <h3 class="text-danger">{{ vm.dashboard.inactiveNodes }}</h3>
+                        <h3 class="text-secondary">{{ vm.dashboard.inactiveNodes }}</h3>
                     </div>
-                    <div class="col-md-2 ">
+                    <div class="text-secondary col-md-2 ">
                         <p> Good</p>
-                        <h3 class="text-success">{{ vm.dashboard.activeNodes }}</h3>
+                        <h3 class="text-secondary">{{ vm.dashboard.activeNodes }}</h3>
                     </div>
-                    <div class="col-md-2 ">
+                    <div class="text-secondary col-md-2 ">
                         <p> Unassigned</p>
-                        <h3 class="text-dark">{{ vm.dashboard.unprovisionedNodes }}</h3>
+                        <h3 class="text-secondary">{{ vm.dashboard.unprovisionedNodes }}</h3>
                     </div>
                 </div>
               </div>
@@ -35,7 +35,7 @@
                           <div class="row">
                               <div class="col-md-4 border-right text-dark text-center">
                                   <h6 class="card-subtitle">Total</h6>
-                                  <h3 class="card-text ">{{data.total}}</h3>  
+                                  <h3 class="card-text ">{{data.total}}</h3>
                               </div>
                               <div class="col-md-4 border-right text-center">
                                   <h6 class="card-subtitle">Down </h6>

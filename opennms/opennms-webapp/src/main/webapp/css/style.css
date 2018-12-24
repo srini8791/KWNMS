@@ -295,7 +295,7 @@ position: fixed;
 right: 0;
 bottom: 0;
 width: calc(100% - 90px);
-height: 50px;
+height: 10px;
 background-color: #e9ecef;
 }
 footer.sticky-footer .copyright {
@@ -316,7 +316,7 @@ width: calc(100% - 50px);
 }
 }
 .navbar{
-background-color: #3b6879 !important;
+background-color: #663399 !important;
 padding: 0px 20px 5px 0px;
 height: 45px;
 }

@@ -33,7 +33,7 @@ dashboard.controller("NodeViewController", ['$rootScope', '$scope','$mdDialog', 
             $scope.showAlert('success', 'Rescanning of the node initiated');
             //$state.go($state.params.lastView);
           }).error(function(msg) {
-            $scope.showAlert('error', 'Cannot apply the profile: ' + msg);
+            $scope.showAlert('error', 'Failed to resan the node: ' + msg);
           });
     }
 

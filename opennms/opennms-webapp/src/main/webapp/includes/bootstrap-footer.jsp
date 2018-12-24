@@ -65,12 +65,13 @@
     </c:when>
 
     <c:otherwise>
-        <!-- Footer -->
+        <!-- Footer
 
         <footer id="footer">
+        <!--
             <p>
-                OpenNMS <a href="about/index.jsp">Copyright</a> &copy; 2002-2018
-                <a href="http://www.opennms.com/">The OpenNMS Group, Inc.</a>
+                KeywestNMS <a href="about/index.jsp">Copyright</a> &copy; 2002-2018
+                <a href="">The OpenNMS Group, Inc.</a>
                 OpenNMS&reg; is a registered trademark of
                 <a href="http://www.opennms.com">The OpenNMS Group, Inc.</a>
                 <%
@@ -79,6 +80,7 @@
                     }
                 %>
             </p>
+            -->
         </footer>
     </c:otherwise>
 </c:choose>

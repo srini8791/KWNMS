@@ -18,8 +18,11 @@ hr {
 .wselect{width:150px;}
 .hselect{height:20px;}
 .bg-info, .badge-info {
-    background-color: #3b6879 !important;
-}
+    background-color: #663399 !important;
+}.badge-info-thin {
+     font-weight: 100;
+     background-color: #CCC !important;
+ }
 
 .bg-warning, .badge-warning {
     background-color: #FF6501 !important;
@@ -31,8 +34,8 @@ hr {
     font-size: 0.75rem;
 }
 .btn-default {
-    color: #fff;
-    background-color: #3b6879;
+    /*color: #fff;*/
+    background-color: #CCC;
     border-color: #3b6879;
 }
 
@@ -127,7 +130,7 @@ label{
 
 .card-header  {
     font-size: 12px !important;
-    font-weight: 700;
+    font-weight: 100;
 }
 .card-body{
     font-size:12px;
