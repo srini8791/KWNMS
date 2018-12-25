@@ -28,15 +28,14 @@
 
 package org.opennms.netmgt.model;
 
-import org.codehaus.jackson.annotate.JsonManagedReference;
-import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.springframework.core.style.ToStringCreator;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "systemprops")
@@ -58,7 +57,7 @@ public class OnmsSystemProp implements Serializable {
     private String m_key;
 
     @XmlAttribute(name = "value")
-    @Column(name = "propvalue", nullable = false, unique = true)
+    @Column(name = "propvalue", nullable = false)
     private String m_value;
 
     /**
