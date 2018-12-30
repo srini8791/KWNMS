@@ -1,12 +1,12 @@
 package com.kw.demo;
 
 import com.hsq.kw.packet.KeywestLTVPacket;
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 
 public class ResponseHandler {
 
-	public KwpPacket sendConfigResponse() {
-		KwpPacket packet = new KwpPacket((byte)1,(byte)3,(byte)1);
+	public KeywestPacket sendConfigResponse() {
+		KeywestPacket packet = new KeywestPacket((byte)1,(byte)3,(byte)1);
 		byte[] b = {0,0,0,0};
 		packet.addLTVToPacket(new KeywestLTVPacket((byte)1, b));
 		packet.addLTVToPacket(new KeywestLTVPacket((byte)2, "SifyWERTYU"));
@@ -16,8 +16,8 @@ public class ResponseHandler {
 		return packet;
 	}
 	
-	public KwpPacket sendConfigRequest() {
-		KwpPacket packet = new KwpPacket((byte)1,(byte)1,(byte)1);
+	public KeywestPacket sendConfigRequest() {
+		KeywestPacket packet = new KeywestPacket((byte)1,(byte)1,(byte)1);
 		return packet;
 	}
 	

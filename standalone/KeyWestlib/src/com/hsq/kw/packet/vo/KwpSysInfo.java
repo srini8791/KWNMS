@@ -1,6 +1,6 @@
 package com.hsq.kw.packet.vo;
 
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 
 public class KwpSysInfo {
 
@@ -14,7 +14,7 @@ public class KwpSysInfo {
     public static final byte GEOLONGITUDE_MODE = 7;
 
     // request/response packet
-    KwpPacket packet = null;
+    KeywestPacket packet = null;
 
     // Variables
     private String sysId;
@@ -26,13 +26,13 @@ public class KwpSysInfo {
 
 
 
-    public KwpPacket getPacket() {
+    public KeywestPacket getPacket() {
 		return packet;
 	}
 
 
 
-	public void setPacket(KwpPacket packet) {
+	public void setPacket(KeywestPacket packet) {
 		this.packet = packet;
 	}
 
@@ -110,7 +110,7 @@ public class KwpSysInfo {
 
 
 
-	public void handleResponses(KwpPacket response) {
+	public void handleResponses(KeywestPacket response) {
         this.packet = response;
         this.sysId = packet.getStringValueFromLTVByType(SYSID_TYPE);
         this.sysName = packet.getStringValueFromLTVByType(SYSNAME_TYPE);

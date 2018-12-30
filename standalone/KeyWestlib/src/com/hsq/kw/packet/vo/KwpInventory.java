@@ -1,6 +1,6 @@
 package com.hsq.kw.packet.vo;
 
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 
 public class KwpInventory {
 
@@ -13,7 +13,7 @@ public class KwpInventory {
 
 
     // variables
-    private KwpPacket packet;
+    private KeywestPacket packet;
     private String serialNumber;
     private String modelNumber;
     private String firmwareVersion;
@@ -22,13 +22,13 @@ public class KwpInventory {
 
 
     
-    public KwpPacket getPacket() {
+    public KeywestPacket getPacket() {
 		return packet;
 	}
 
 
 
-	public void setPacket(KwpPacket packet) {
+	public void setPacket(KeywestPacket packet) {
 		this.packet = packet;
 	}
 
@@ -94,7 +94,7 @@ public class KwpInventory {
 
 
 
-	public void handleResponses(KwpPacket response) {
+	public void handleResponses(KeywestPacket response) {
         this.packet = response;
         this.serialNumber = packet.getStringValueFromLTVByType(SERIAL_NUMBER_TYPE);
         this.modelNumber = packet.getStringValueFromLTVByType(MODEL_NUMBER_TYPE);

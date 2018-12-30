@@ -1,7 +1,7 @@
 package com.hsq.kw.packet.vo;
 
 import com.hsq.kw.packet.KeywestLTVPacket;
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 import com.hsq.kw.packet.util.ConversionUtil;
 
 public class LinkTest {
@@ -17,12 +17,12 @@ public class LinkTest {
 	private int direction;
 	private int duration;
 	
-	private KwpPacket packet = null;
+	private KeywestPacket packet = null;
 	
 	public LinkTest() {
 	}
 	
-	public LinkTest(KwpPacket packet) {
+	public LinkTest(KeywestPacket packet) {
 		this.startStop = packet.getLTVPacketByType(START_STOP).getUnsignedToInt();
 		this.macAddr = packet.getMacAddressFromLTV(REMOTE_MAC);
 		this.direction = packet.getLTVPacketByType(DIRECTION).getUnsignedToInt();
@@ -30,7 +30,7 @@ public class LinkTest {
 	}
 	
 	public LinkTest(int status, String macAddress,int direction, int duration) {
-		packet = new KwpPacket((byte)1, (byte)3, (byte)4);
+		packet = new KeywestPacket((byte)1, (byte)3, (byte)4);
 		this.startStop = status;
 		this.macAddr = macAddress;
 		this.direction = direction;
@@ -69,7 +69,7 @@ public class LinkTest {
 		this.duration = duration;
 	}
 	
-	public KwpPacket buildPacketFromUI() {
+	public KeywestPacket buildPacketFromUI() {
 		this.packet.getLTVPacket().clear();
 		this.packet.addLTVToPacket(new KeywestLTVPacket(START_STOP, ConversionUtil.intToSingleByte(startStop)));
 		this.packet.addLTVToPacket(new KeywestLTVPacket(REMOTE_MAC, ConversionUtil.convertMACToBytes(macAddr)));

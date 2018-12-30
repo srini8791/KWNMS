@@ -108,7 +108,7 @@ public class ConversionUtil {
 			StringBuilder sb = new StringBuilder();
 			for (byte b : arr) {
 				if (sb.length() > 0)
-					sb.append(':');
+					sb.append(":");
 				sb.append(String.format("%02x", b));
 			}
 			return sb.toString();
@@ -142,7 +142,7 @@ public class ConversionUtil {
 	}
 
 	public static byte[] coverMACToBytes(String mac) {
-		mac = mac.replace(":", "");
+		mac = mac.replaceAll(":", "");
 		byte[] bytes = new byte[6];
 		for (int i = 0; i < bytes.length; i++) {
 			bytes[i] = Byte.parseByte(mac.substring(i * 2, (i + 1) * 2));

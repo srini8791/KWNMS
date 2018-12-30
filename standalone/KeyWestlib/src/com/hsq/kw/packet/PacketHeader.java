@@ -61,7 +61,7 @@ public class PacketHeader {
 	 * 
 	 */
 	public PacketHeader(byte[] headerData) throws Exception {
-		if (headerData == null || headerData.length != KwpPacket.SIZE_OF_HEADER) {
+		if (headerData == null || headerData.length != KeywestPacket.SIZE_OF_HEADER) {
 			throw new Exception("Invalid header");
 		}
 		id = headerData[0];

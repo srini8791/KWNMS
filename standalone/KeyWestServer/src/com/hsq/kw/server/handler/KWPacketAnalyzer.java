@@ -1,22 +1,22 @@
 package com.hsq.kw.server.handler;
 
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 import com.hsq.kw.packet.PacketHeader;
 import com.hsq.kw.packet.util.KeywestConstants;
 import com.hsq.kw.server.test.ResponseHandler;
 
 public class KWPacketAnalyzer {
 
-	private KwpPacket packet = null;
+	private KeywestPacket packet = null;
 
-	public KWPacketAnalyzer(KwpPacket packet) {
+	public KWPacketAnalyzer(KeywestPacket packet) {
 		this.packet = packet;
 	}
 
-	public KwpPacket analyzeAndReturn() {
+	public KeywestPacket analyzeAndReturn() {
 		PacketHeader header = packet.getHeader();
 		ResponseHandler rHandler = new ResponseHandler();
-		KwpPacket returnPacket = null;
+		KeywestPacket returnPacket = null;
 		if (header.getType() == 1) {
 			switch (header.getSubType()) {
 			case KeywestConstants.CONFIG_GET_REQUEST:

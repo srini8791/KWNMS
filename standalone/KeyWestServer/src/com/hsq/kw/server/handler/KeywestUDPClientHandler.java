@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 import com.hsq.kw.server.KeywestServerHandler;
 
 public class KeywestUDPClientHandler implements Runnable {
@@ -27,10 +27,10 @@ public class KeywestUDPClientHandler implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("Separate thread has been started to handle the client" + this);
-		KwpPacket packet = new KwpPacket(this.data);
+		KeywestPacket packet = new KeywestPacket(this.data);
 		System.out.println("extracted packet from the client" + packet);
 		KWPacketAnalyzer analizer = new KWPacketAnalyzer(packet);
-		KwpPacket returnPacket = analizer.analyzeAndReturn();
+		KeywestPacket returnPacket = analizer.analyzeAndReturn();
 		byte[] returnData;
 		try {
 			returnData = returnPacket.toByteArray();

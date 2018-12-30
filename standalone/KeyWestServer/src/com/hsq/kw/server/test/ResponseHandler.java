@@ -1,7 +1,7 @@
 package com.hsq.kw.server.test;
 
 import com.hsq.kw.packet.KeywestLTVPacket;
-import com.hsq.kw.packet.KwpPacket;
+import com.hsq.kw.packet.KeywestPacket;
 import com.hsq.kw.packet.util.ConversionUtil;
 import com.hsq.kw.packet.util.KeywestConstants;
 import com.hsq.kw.packet.vo.Configuration;
@@ -27,7 +27,7 @@ public class ResponseHandler {
 		}
 	}
 
-	public KwpPacket sendConfigResponse() {
+	public KeywestPacket sendConfigResponse() {
 		String ip = properties.getProperty("config.ip");
 		String ssid = properties.getProperty("config.ssid");
 		int mode = Integer.parseInt(properties.getProperty("config.mode"));
@@ -36,7 +36,7 @@ public class ResponseHandler {
 		short channel = Short.parseShort(properties.getProperty("config.channel"));
 		String macaddress = properties.getProperty("config.macaddress");
 
-		KwpPacket packet = new KwpPacket((byte)1,(byte)KeywestConstants.CONFIG_GET_RESPONSE,(byte)1);
+		KeywestPacket packet = new KeywestPacket((byte)1,(byte)KeywestConstants.CONFIG_GET_RESPONSE,(byte)1);
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.IPADDRESS_TYPE, ConversionUtil.convertIPAddressToBytes(ip)));
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.SSID_TYPE, ssid));
 		packet.addLTVToPacket(new KeywestLTVPacket(Configuration.MODE_TYPE, ConversionUtil.intToShortBytes(mode)));
@@ -47,7 +47,7 @@ public class ResponseHandler {
 		return packet;
 	}
 	
-	public KwpPacket sendSysinfoResponse() {
+	public KeywestPacket sendSysinfoResponse() {
 		String sysid = properties.getProperty("sysinfo.sysid");
 		String sysname = properties.getProperty("sysinfo.sysname");
 		String syscontact = properties.getProperty("sysinfo.syscontact");
@@ -55,7 +55,7 @@ public class ResponseHandler {
 		String geolat = properties.getProperty("sysinfo.geolat");
 		String geolong = properties.getProperty("sysinfo.geolong");
 
-		KwpPacket packet = new KwpPacket((byte)1,(byte)KeywestConstants.CONFIG_GET_RESPONSE,(byte)2);
+		KeywestPacket packet = new KeywestPacket((byte)1,(byte)KeywestConstants.CONFIG_GET_RESPONSE,(byte)2);
 		packet.addLTVToPacket(new KeywestLTVPacket(KwpSysInfo.SYSID_TYPE, sysid));
 		packet.addLTVToPacket(new KeywestLTVPacket(KwpSysInfo.SYSNAME_TYPE, sysname));
 		packet.addLTVToPacket(new KeywestLTVPacket(KwpSysInfo.SYSCONTACT_TYPE, syscontact));
@@ -65,14 +65,14 @@ public class ResponseHandler {
 		return packet;
 	}
 	
-	public KwpPacket sendInventoryResponse() {
+	public KeywestPacket sendInventoryResponse() {
 		String bandwidthlimit = properties.getProperty("inventory.bandwidthlimit");
 		String ethspeed = properties.getProperty("inventory.ethspeed");
 		String firmware = properties.getProperty("inventory.firmware");
 		String modelnumber = properties.getProperty("inventory.modelnumber");
 		String serialnumber = properties.getProperty("inventory.serialnumber");
 
-		KwpPacket packet = new KwpPacket((byte)1,(byte)KeywestConstants.CONFIG_GET_RESPONSE,(byte)3);
+		KeywestPacket packet = new KeywestPacket((byte)1,(byte)KeywestConstants.CONFIG_GET_RESPONSE,(byte)3);
 		packet.addLTVToPacket(new KeywestLTVPacket(KwpInventory.BANDWIDTH_LIMIT_TYPE, bandwidthlimit));
 		packet.addLTVToPacket(new KeywestLTVPacket(KwpInventory.ETH_SPEED_TYPE, ethspeed));
 		packet.addLTVToPacket(new KeywestLTVPacket(KwpInventory.FIRMWARE_VERSION_TYPE, firmware));
@@ -82,12 +82,12 @@ public class ResponseHandler {
 		
 	}
 	
-	public KwpPacket sendKeywestLinkData() {
+	public KeywestPacket sendKeywestLinkData() {
 		return null;
 	}
 	
-	public KwpPacket sendSetConfigResponse() {
-		KwpPacket packet = new KwpPacket((byte)1,(byte)1,(byte)1);
+	public KeywestPacket sendSetConfigResponse() {
+		KeywestPacket packet = new KeywestPacket((byte)1,(byte)1,(byte)1);
 		byte[] b = {1};
 		packet.addLTVToPacket(new KeywestLTVPacket((byte)1, b));
 		return packet;
